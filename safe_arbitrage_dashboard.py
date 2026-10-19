@@ -68,7 +68,7 @@ st.markdown("---")
 
 # --- แถบสถิติภาพรวมเว็บไซต์ (Analytics Metric Cards) ---
 total_views = sum([a["views"] for a in st.session_state.articles_db])
-total_likes = sum([a["likes"] = = a.get("likes", 0) for a in st.session_state.articles_db]) # safety sum
+total_likes = sum([a.get("likes", 0) for a in st.session_state.articles_db])  # แก้ไขจุดที่ Error เรียบร้อย
 estimated_earnings = total_views * 0.05  # จำลองรายได้เฉลี่ย 0.05 บาทต่อวิว
 
 m1, m2, m3, m4 = st.columns(4)
@@ -127,13 +127,18 @@ else:
     for idx, art in enumerate(filtered_articles):
         col = cols[idx % 2]
         with col:
-            # ใช้ container สร้างการ์ดบทความที่ดูสะอาดตา
             with st.container(border=True):
                 st.markdown(f"### {art['title']}")
                 st.markdown(f"🏷️ **{art['category']}** &nbsp;|&nbsp; ⏱️ อ่าน: {art['read_time']} &nbsp;|&nbsp; 👀 {art['views']:,} วิว")
                 st.write(art['summary'])
                 
-                # ปุ่มกดอ่านและปุ่มกดไลก์
                 b1, b2 = st.columns([2, 1])
                 with b1:
-                    if st.button(f"📖 อ่านต่อ (ID: {art['id']})", key=f"read_{art['id']}
+                    if st.button(f"📖 อ่านต่อ (ID: {art['id']})", key=f"read_{art['id']}"):
+                        st.info(art['content'])
+                with b2:
+                    if st.button(f"❤️ ถูกใจ ({art['likes']})", key=f"like_{art['id']}"):
+                        art['likes'] += 1
+                        st.rerun()
+                
+            st.markdown("")
