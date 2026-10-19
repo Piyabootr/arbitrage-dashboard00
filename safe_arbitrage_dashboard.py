@@ -178,4 +178,45 @@ with st.sidebar.expander(lang["write_expander"]):
             st.rerun()
 
 # --- กรองข้อมูลตามการค้นหาและหมวดหมู่ ---
-filtered_posts = st.session_state
+filtered_posts = st.session_state.articles_db
+if search_query:
+    filtered_posts = [p for p in filtered_posts if search_query.lower() in p['title'].lower() or search_query.lower() in p['summary'].lower()]
+if selected_cat != lang["all_cat"]:
+    filtered_posts = [p for p in filtered_posts if p['category'] == selected_cat]
+
+# --- แสดงผลเนื้อหาแบบ Grid (2 คอลัมน์ ทันสมัย) ---
+st.subheader(lang["section_title"])
+
+if not filtered_posts:
+    st.warning("ไม่พบเนื้อหาที่ค้นหา กรุณาลองใหม่อีกครั้ง")
+else:
+    cols = st.columns(2)
+    for idx, post in enumerate(filtered_posts):
+        col = cols[idx % 2]
+        with col:
+            with st.container(border=True):
+                st.markdown(f"### {post['title']}")
+                st.markdown(f"🏷️ **{post['category']}** &nbsp;|&nbsp; ⏱️ {post['read_time']} &nbsp;|&nbsp; 👀 {post['views']:,} วิว")
+                st.write(post['summary'])
+                
+                b1, b2 = st.columns([2, 1])
+                with b1:
+                    if st.button(f"{lang['btn_read']} (ID: {post['id']})", key=f"read_{post['id']}"):
+                        st.info(post['content'])
+                with b2:
+                    if st.button(f"{lang['btn_like']} ({post['likes']})", key=f"like_{post['id']}"):
+                        post['likes'] += 1
+                        st.rerun()
+                
+            st.markdown("")
+
+# --- แถบจำลองป้ายโฆษณา Google AdSense (Footer Banner) ---
+st.markdown(
+    f"""
+    <div style="background-color: #f0f2f6; padding: 15px; text-align: center; border-radius: 8px; margin-top: 30px; border: 1px dashed #cbd5e0;">
+        <span style="color: #718096; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">[ Google AdSense - In-Article Native Ad ]</span>
+        <p style="margin: 5px 0; font-weight: bold; color: #4a5568;">{lang['footer_banner']}</p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
