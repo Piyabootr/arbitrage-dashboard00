@@ -89,8 +89,7 @@ class SafeDataClient:
         self.session = self._create_resilient_session()
         self.user_agents = [
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36",
-            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36"
         ]
 
     def _create_resilient_session(self) -> requests.Session:
@@ -137,8 +136,8 @@ def run_safe_batch_scan(items: list, min_delay: float, max_delay: float, proxy: 
 st.set_page_config(page_title="Safe Price & Arbitrage Dashboard", layout="wide")
 
 # --- Sidebar: ตัวเลือกภาษาและตั้งค่าความปลอดภัย ---
-st.sidebar.selectbox("🌐 Language / ภาษา", ["English", "ไทย"], key="lang_select")
-lang = LANG_DICT[st.session.get("lang_select", "English")]
+selected_lang = st.sidebar.selectbox("🌐 Language / ภาษา", ["English", "ไทย"], index=0)
+lang = LANG_DICT.get(selected_lang, LANG_DICT["English"])
 
 st.sidebar.header(lang["sidebar_sec"])
 min_delay = st.sidebar.slider(lang["min_delay"], 1.0, 10.0, 2.0, 0.5)
