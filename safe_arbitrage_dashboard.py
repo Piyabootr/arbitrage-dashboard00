@@ -1,388 +1,190 @@
-import time
-import random
-import requests
-from requests.adapters import HTTPAdapter
-from urllib3.util.retry import Retry
-import pandas as pd
 import streamlit as st
+import pandas as pd
 import plotly.express as px
+import time
 
 # ==========================================
-# 0. พจนานุกรมแปลภาษา (Localization / Dictionary)
+# 0. ระบบพจนานุกรมแปลภาษา (Localization)
 # ==========================================
 LANG_DICT = {
     "English": {
-        "title": "⚡ Multi-Platform Arbitrage & Intelligence Hub",
-        "caption": "Comprehensive price disparity monitoring, multi-category inventory, and real-time risk analytics.",
-        "sidebar_sec": "🛡️ Security & Rate Limit",
-        "min_delay": "Min Delay per Item (seconds)",
-        "max_delay": "Max Delay per Item (seconds)",
-        "proxy_info": "Proxy URL (Optional)",
-        "cache_info": "💡 Auto-Cache 10m enabled to prevent duplicate requests.",
-        "profit_sec": "💰 Business & Profit Settings",
-        "min_margin": "Min Required Margin (%)",
-        "platform_fee": "Platform Fee (%)",
-        "custom_sec": "➕ Add Custom Product to Scan",
-        "c_sku": "SKU Code",
-        "c_name": "Product Name",
-        "c_cat": "Category",
-        "c_plat": "Platform",
-        "c_cost": "Base Cost (THB)",
-        "c_market": "Market Price (THB)",
-        "btn_add": "Add to Active Catalog",
-        "search_label": "🔍 Search Product or SKU",
+        "title": "🔥 Daily Best Deal Aggregator Hub",
+        "caption": "Your automated platform for curated discounted products, flash sales, and top affiliate earnings.",
+        "sidebar_sec": "⚙️ Affiliate Configuration",
+        "aff_id": "Your Affiliate ID / Tracking Code",
+        "min_disc": "Minimum Discount Filter (%)",
+        "search_label": "🔍 Search Deals by Name or SKU",
         "filter_cat": "Filter by Category",
         "all_cat": "All Categories",
-        "filter_platform": "Filter by Platform",
-        "all_platforms": "All Platforms",
-        "btn_fetch": "🔄 Run Multi-Platform Scan",
-        "btn_clear": "🗑️ Clear Cache & Reset",
-        "btn_download": "📥 Download Full Report (CSV)",
-        "spinner": "Scanning multi-platform markets securely...",
-        "kpi_total": "Total Analyzed",
-        "kpi_target": "Profitable Opportunities",
-        "kpi_profit": "Max Net Profit",
-        "kpi_status": "System Security",
-        "tab_table": "📋 Master Intelligence Table",
-        "tab_chart1": "📈 Profit & Margin Breakdown",
-        "tab_chart2": "📊 Cost vs Market Price Comparison",
-        "col_sku": "SKU",
-        "col_name": "Product Name",
-        "col_cat": "Category",
-        "col_platform": "Platform",
-        "col_cost": "Cost (THB)",
-        "col_market": "Market Price (THB)",
-        "col_fee": "Fee (THB)",
-        "col_profit": "Net Profit (THB)",
-        "col_margin": "Net Margin (%)",
-        "col_risk": "Risk Level",
-        "col_advice": "Action",
-        "status_profitable": "🔥 High Margin",
-        "status_low": "⚠️ Low Margin",
-        "status_wait": "💡 Stable"
+        "filter_plat": "Filter by Platform",
+        "all_plat": "All Platforms",
+        "kpi_total": "Total Active Deals",
+        "kpi_high": "High Discount (>30%)",
+        "kpi_max": "Max Savings Available",
+        "tab_grid": "🛍️ Deal Showcase",
+        "tab_table": "📋 Master Table View",
+        "tab_chart": "📊 Discount Analysis Chart",
+        "btn_buy": "🛒 Buy Now (Earn Commission)",
+        "badge_disc": "DISCOUNT",
+        "footer": "💡 Tip: Share your personalized links on social media to earn automated commissions without holding stock."
     },
     "ไทย": {
-        "title": "⚡ ศูนย์กลางวิเคราะห์ส่วนต่างราคาและโอกาสทางธุรกิจ (Multi-Platform Hub)",
-        "caption": "ระบบตรวจสอบราคาสินค้าหลากหลายหมวดหมู่ วิเคราะห์ความเสี่ยง และประมวลผลกำไรแบบเรียลไทม์",
-        "sidebar_sec": "🛡️ ตั้งค่าความปลอดภัย (Rate Limit & Proxy)",
-        "min_delay": "หน่วงเวลาต่ำสุดต่อรายการ (วินาที)",
-        "max_delay": "หน่วงเวลาสูงสุดต่อรายการ (วินาที)",
-        "proxy_info": "Proxy URL (ตัวเลือกเสริม)",
-        "cache_info": "💡 เปิดใช้งาน Auto-Cache 10 นาที ป้องกันการส่งซ้ำ",
-        "profit_sec": "💰 ตั้งค่าเป้าหมายธุรกิจและกำไร",
-        "min_margin": "กำไรขั้นต่ำที่ต้องการ (%)",
-        "platform_fee": "หักค่าธรรมเนียมแพลตฟอร์ม (%)",
-        "custom_sec": "➕ เพิ่มสินค้าเองเพื่อสแกน",
-        "c_sku": "รหัส SKU",
-        "c_name": "ชื่อสินค้า",
-        "c_cat": "หมวดหมู่สินค้า",
-        "c_plat": "แพลตฟอร์ม",
-        "c_cost": "ราคาทุน (บาท)",
-        "c_market": "ราคาขายตลาด (บาท)",
-        "btn_add": "เพิ่มเข้าสู่ระบบสแกน",
-        "search_label": "🔍 ค้นหาชื่อสินค้า หรือ SKU",
+        "title": "🔥 เว็บไซต์รวบรวมดีลและสินค้าลดราคารายวัน",
+        "caption": "แพลตฟอร์มรวบรวมสินค้าแฟลชเซลและดีลเด็ดประจำวัน พร้อมระบบสร้างลิงก์นายหน้าอัตโนมัติ",
+        "sidebar_sec": "⚙️ ตั้งค่าระบบ Affiliate",
+        "aff_id": "รหัส Affiliate ID ของคุณ (เช่น my_shop_001)",
+        "min_disc": "กรองส่วนลดขั้นต่ำ (%)",
+        "search_label": "🔍 ค้นหาดีลสินค้า หรือรหัส SKU",
         "filter_cat": "กรองตามหมวดหมู่",
         "all_cat": "ทุกหมวดหมู่",
-        "filter_platform": "กรองตามแพลตฟอร์ม",
-        "all_platforms": "ทุกแพลตฟอร์ม",
-        "btn_fetch": "🔄 รันสแกนหลายแพลตฟอร์ม",
-        "btn_clear": "🗑️ ล้างแคชและรีเซ็ต",
-        "btn_download": "📥 ดาวน์โหลดรายงานทั้งหมด (CSV)",
-        "spinner": "กำลังสแกนตลาดหลากหลายแพลตฟอร์มภายใต้ระบบป้องกันความปลอดภัย...",
-        "kpi_total": "สินค้าทั้งหมด",
-        "kpi_target": "เข้าเกณฑ์ทำกำไร",
-        "kpi_profit": "กำไรสุทธิสูงสุด",
-        "kpi_status": "สถานะระบบ",
-        "tab_table": "📋 ตารางวิเคราะห์ข้อมูลเชิงลึก",
-        "tab_chart1": "📈 กราฟกระจายตัวกำไรและอัตรากำไร",
-        "tab_chart2": "📊 เปรียบเทียบต้นทุนกับราคาตลาด",
-        "col_sku": "รหัส SKU",
-        "col_name": "ชื่อสินค้า",
-        "col_cat": "หมวดหมู่",
-        "col_platform": "ช่องทาง",
-        "col_cost": "ราคาทุน (บาท)",
-        "col_market": "ราคาตลาด (บาท)",
-        "col_fee": "ค่าธรรมเนียม (บาท)",
-        "col_profit": "กำไรสุทธิ (บาท)",
-        "col_margin": "อัตรากำไร (%)",
-        "col_risk": "ระดับความเสี่ยง",
-        "col_advice": "คำแนะนำ",
-        "status_profitable": "🔥 กำไรสูงน่าลงทุน",
-        "status_low": "⚠️ กำไรน้อยระวัง",
-        "status_wait": "💡 ทรงตัว"
+        "filter_plat": "กรองตามแพลตฟอร์ม",
+        "all_plat": "ทุกแพลตฟอร์ม",
+        "kpi_total": "ดีลทั้งหมดในระบบ",
+        "kpi_high": "ดีลลดแรง (>30%)",
+        "kpi_max": "ส่วนลดสูงสุดในระบบ",
+        "tab_grid": "🛍️ แกลเลอรีดีลเด็ด",
+        "tab_table": "📋 ตารางสรุปข้อมูลดีล",
+        "tab_chart": "📊 กราฟวิเคราะห์ส่วนลด",
+        "btn_buy": "🛒 สั่งซื้อสินค้า (สร้างรายได้)",
+        "badge_disc": "ส่วนลด",
+        "footer": "💡 คำแนะนำ: คัดลอกลิงก์ไปแชร์ลงโซเชียลเพื่อสร้างรายได้แบบ Passive Income โดยไม่ต้องสต็อกสินค้า"
     }
 }
 
 # ==========================================
-# 1. โมดูลจัดการการเชื่อมต่อแบบปลอดภัย
+# 1. ตั้งค่าหน้าเว็บ Streamlit
 # ==========================================
-class SafeDataClient:
-    def __init__(self, min_delay: float = 1.5, max_delay: float = 3.0, proxy_url: str = ""):
-        self.min_delay = min_delay
-        self.max_delay = max_delay
-        self.proxy_url = proxy_url
-        self.session = self._create_resilient_session()
+st.set_page_config(page_title="Deal Aggregator Hub", layout="wide")
 
-    def _create_resilient_session(self) -> requests.Session:
-        session = requests.Session()
-        retry_strategy = Retry(
-            total=3,
-            backoff_factor=2,
-            status_forcelist=[429, 500, 502, 503, 504],
-            allowed_methods=["HEAD", "GET", "OPTIONS"]
-        )
-        adapter = HTTPAdapter(max_retries=retry_strategy)
-        session.mount("http://", adapter)
-        session.mount("https://", adapter)
-        return session
-
-    def fetch_item_data(self, item: dict) -> dict:
-        delay = random.uniform(self.min_delay, self.max_delay)
-        time.sleep(delay)
-        fluctuation = random.uniform(-0.02, 0.02)
-        live_supplier_price = round(item["base_cost"] * (1 + fluctuation), 2)
-
-        return {
-            "sku": item["sku"],
-            "name": item["name"],
-            "category": item["category"],
-            "platform": item["platform"],
-            "supplier_price": live_supplier_price,
-            "market_price": item["market_price"],
-            "status": "200 OK"
-        }
-
-@st.cache_data(ttl=600)
-def run_safe_batch_scan(items: tuple, min_delay: float, max_delay: float, proxy: str):
-    client = SafeDataClient(min_delay=min_delay, max_delay=max_delay, proxy_url=proxy)
-    results = []
-    for item in items:
-        res = client.fetch_item_data(item)
-        results.append(res)
-    return results
-
-# ==========================================
-# 2. ตั้งค่าหน้าตา Streamlit Dashboard
-# ==========================================
-st.set_page_config(page_title="Multi-Platform Arbitrage Hub", layout="wide")
-
-# --- Initial Session State สำหรับรายการสินค้า ---
-if "custom_catalog" not in st.session_state:
-    st.session_state.custom_catalog = [
-        {"sku": "GAD-101", "name": "NVMe SSD 1TB Gen4", "category": "Gadgets & IT", "platform": "Shopee API", "base_cost": 1490.0, "market_price": 2290.0},
-        {"sku": "GAD-102", "name": "Mechanical Keyboard Wireless", "category": "Gadgets & IT", "platform": "Lazada API", "base_cost": 850.0, "market_price": 1290.0},
-        {"sku": "GAD-103", "name": "USB-C GaN Charger 65W", "category": "Gadgets & IT", "platform": "Amazon PA-API", "base_cost": 520.0, "market_price": 990.0},
-        {"sku": "HOM-201", "name": "Smart Air Purifier HEPA", "category": "Home & Living", "platform": "TikTok Shop", "base_cost": 2100.0, "market_price": 3490.0},
-        {"sku": "HOM-202", "name": "Robot Vacuum Cleaner Auto", "category": "Home & Living", "platform": "Shopee API", "base_cost": 4500.0, "market_price": 6900.0},
-        {"sku": "BEA-301", "name": "Ionic Hair Dryer Pro", "category": "Beauty & Health", "platform": "Lazada API", "base_cost": 1250.0, "market_price": 2190.0},
-        {"sku": "FAS-401", "name": "Minimalist Crossbody Bag", "category": "Fashion & Lifestyle", "platform": "TikTok Shop", "base_cost": 290.0, "market_price": 790.0},
-        {"sku": "GAM-501", "name": "Ergonomic Gaming Chair", "category": "Gaming", "platform": "Shopee API", "base_cost": 3200.0, "market_price": 5200.0}
-    ]
-
-# --- Sidebar: ควบคุมระบบและเพิ่มสินค้า ---
+# --- Sidebar: ตั้งค่าระบบภาษาและ Affiliate ID ---
 selected_lang = st.sidebar.selectbox("🌐 Language / ภาษา", ["ไทย", "English"], index=0)
 lang = LANG_DICT.get(selected_lang, LANG_DICT["ไทย"])
 
 st.sidebar.markdown("---")
 st.sidebar.header(lang["sidebar_sec"])
-min_delay = st.sidebar.slider(lang["min_delay"], 0.5, 5.0, 1.0, 0.5)
-max_delay = st.sidebar.slider(lang["max_delay"], 1.0, 8.0, 2.5, 0.5)
-if max_delay < min_delay:
-    max_delay = min_delay + 0.5
+user_aff_id = st.sidebar.text_input(lang["aff_id"], "my_affiliate_id_99")
+min_discount_filter = st.sidebar.slider(lang["min_disc"], 0, 50, 20, 5)
 
-proxy_input = st.sidebar.text_input(lang["proxy_info"], placeholder="http://user:pass@ip:port")
-st.sidebar.info(lang["cache_info"])
+# --- ฐานข้อมูลดีลสินค้าตัวอย่าง (สามารถเพิ่มเองได้ตลอด) ---
+if "deals_catalog" not in st.session_state:
+    st.session_state.deals_catalog = [
+        {"sku": "DEAL-001", "name": "Wireless Noise Cancelling Earbuds Pro", "category": "Gadgets & IT", "platform": "Shopee", "original_price": 1590.0, "sale_price": 990.0, "image_url": "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=500"},
+        {"sku": "DEAL-002", "name": "Smart Watch Fitness & Heart Rate", "category": "Gadgets & IT", "platform": "Lazada", "original_price": 2490.0, "sale_price": 1490.0, "image_url": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500"},
+        {"sku": "DEAL-003", "name": "Minimalist Crossbody Canvas Bag", "category": "Fashion", "platform": "TikTok Shop", "original_price": 690.0, "sale_price": 350.0, "image_url": "https://images.unsplash.com/photo-1544816155-12df9643f363?w=500"},
+        {"sku": "DEAL-004", "name": "Automatic Robotic Vacuum Cleaner", "category": "Home & Living", "platform": "Shopee", "original_price": 4900.0, "sale_price": 2990.0, "image_url": "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=500"},
+        {"sku": "DEAL-005", "name": "Ergonomic Office Chair Mesh", "category": "Home & Living", "platform": "Lazada", "original_price": 3500.0, "sale_price": 2190.0, "image_url": "https://images.unsplash.com/photo-1580481077494-e3299ac25e94?w=500"},
+        {"sku": "DEAL-006", "name": "Collagen Peptide Premium Formula", "category": "Beauty & Health", "platform": "TikTok Shop", "original_price": 1200.0, "sale_price": 690.0, "image_url": "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500"}
+    ]
 
-st.sidebar.markdown("---")
-st.sidebar.header(lang["profit_sec"])
-min_margin_pct = st.sidebar.slider(lang["min_margin"], 5, 50, 20, 5)
-platform_fee_pct = st.sidebar.slider(lang["platform_fee"], 0.0, 15.0, 8.5, 0.5)
-
-# --- ส่วนหัวหลัก ---
+# --- ส่วนหัวหลักของเว็บไซต์ ---
 st.title(lang["title"])
 st.caption(lang["caption"])
+st.markdown("---")
 
-# --- ฟอร์มเพิ่มสินค้าเองแบบมืออาชีพใน Expander ---
-with st.expander(lang["custom_sec"]):
-    with st.form("add_product_form"):
-        col_a, col_b, col_c = st.columns(3)
-        with col_a:
-            new_sku = st.text_input(lang["c_sku"], "NEW-999")
-            new_name = st.text_input(lang["c_name"], "Smart Watch Ultra")
-        with col_b:
-            new_cat = st.selectbox(lang["c_cat"], ["Gadgets & IT", "Home & Living", "Beauty & Health", "Fashion & Lifestyle", "Gaming"])
-            new_plat = st.selectbox(lang["c_plat"], ["Shopee API", "Lazada API", "TikTok Shop", "Amazon PA-API"])
-        with col_c:
-            new_cost = st.number_input(lang["c_cost"], min_value=10.0, value=1000.0, step=50.0)
-            new_market = st.number_input(lang["c_market"], min_value=10.0, value=1800.0, step=50.0)
-        
-        submitted = st.form_submit_button(lang["btn_add"])
-        if submitted:
-            st.session_state.custom_catalog.append({
-                "sku": new_sku,
-                "name": new_name,
-                "category": new_cat,
-                "platform": new_plat,
-                "base_cost": float(new_cost),
-                "market_price": float(new_market)
-            })
-            st.success("Successfully added new product to catalog!")
-            st.rerun()
+# --- คำนวณส่วนลดและอัตราประหยัดของแต่ละดีล ---
+processed_deals = []
+for d in st.session_state.deals_catalog:
+    orig = d["original_price"]
+    sale = d["sale_price"]
+    discount_pct = round(((orig - sale) / orig) * 100, 1)
+    savings = orig - sale
+    
+    # สร้างลิงก์พ่วง Affiliate ID อัตโนมัติ
+    aff_link = f"https://marketplace-sample.com/product/{d['sku']}?aff_id={user_aff_id}"
 
-# --- แถบคอนโทรลกลาง ---
-c1, c2, c3 = st.columns([1.5, 1.5, 3])
-with c1:
-    trigger = st.button(lang["btn_fetch"], type="primary")
-with c2:
-    if st.button(lang["btn_clear"]):
-        st.cache_data.clear()
-        st.rerun()
-
-# แปลง list เป็น tuple เพื่อให้ cache ทำงานได้เสถียร
-catalog_tuple = tuple(st.session_state.custom_catalog)
-
-# ประมวลผลข้อมูล
-with st.spinner(lang["spinner"]):
-    raw_results = run_safe_batch_scan(catalog_tuple, min_delay, max_delay, proxy_input)
-
-# คำนวณผลลัพธ์
-table_rows = []
-high_profit_count = 0
-max_profit_val = 0
-
-for r in raw_results:
-    cost = r["supplier_price"]
-    sell = r["market_price"]
-    fee = sell * (platform_fee_pct / 100.0)
-    net_profit = sell - cost - fee
-    margin_pct = (net_profit / sell) * 100.0
-
-    is_target = margin_pct >= min_margin_pct
-    if is_target:
-        high_profit_count += 1
-    if net_profit > max_profit_val:
-        max_profit_val = net_profit
-
-    # กำหนดระดับความเสี่ยงตามอัตรากำไร
-    if margin_pct >= 30:
-        risk_level = "Low Risk (AAA)"
-        advice = lang["status_profitable"]
-    elif margin_pct >= min_margin_pct:
-        risk_level = "Medium Risk (AA)"
-        advice = lang["status_profitable"]
-    elif margin_pct > 10:
-        risk_level = "Moderate Risk (A)"
-        advice = lang["status_low"]
-    else:
-        risk_level = "High Risk (B)"
-        advice = lang["status_wait"]
-
-    table_rows.append({
-        "sku": r["sku"],
-        lang["col_name"]: r["name"],
-        lang["col_cat"]: r["category"],
-        lang["col_platform"]: r["platform"],
-        lang["col_cost"]: cost,
-        lang["col_market"]: sell,
-        lang["col_fee"]: round(fee, 2),
-        lang["col_profit"]: round(net_profit, 2),
-        lang["col_margin"]: round(margin_pct, 1),
-        lang["col_risk"]: risk_level,
-        lang["col_advice"]: advice
+    processed_deals.append({
+        "sku": d["sku"],
+        "name": d["name"],
+        "category": d["category"],
+        "platform": d["platform"],
+        "original_price": orig,
+        "sale_price": sale,
+        "discount_pct": discount_pct,
+        "savings": savings,
+        "image_url": d["image_url"],
+        "aff_link": aff_link
     })
 
-df_out = pd.DataFrame(table_rows)
+df_deals = pd.DataFrame(processed_deals)
 
-st.markdown("---")
+# --- แผงควบคุมการค้นหาและกรองข้อมูล ---
+col_s1, col_s2, col_s3 = st.columns([2, 1.5, 1.5])
+with col_s1:
+    search_text = st.text_input(lang["search_label"], "")
+with col_s2:
+    cats = [lang["all_cat"]] + list(df_deals["category"].unique())
+    selected_cat = st.selectbox(lang["filter_cat"], cats)
+with col_s3:
+    plats = [lang["all_plat"]] + list(df_deals["platform"].unique())
+    selected_plat = st.selectbox(lang["filter_plat"], plats)
 
-# --- แสดงผล KPI เมตริกแบบมืออาชีพ ---
-k1, k2, k3, k4 = st.columns(4)
-k1.metric(lang["kpi_total"], f"{len(df_out)} รายการ", "Active SKUs")
-k2.metric(lang["kpi_target"], f"{high_profit_count} รายการ", f"Target >={min_margin_pct}%")
-k3.metric(lang["kpi_profit"], f"{max_profit_val:,.2f} THB", "Top Performer")
-k4.metric(lang["kpi_status"], "🟢 Protected & Active", "Rate-Limiter ON")
-
-st.markdown("---")
-
-# --- ระบบกรองข้อมูลขั้นสูง (Search, Category Filter, Platform Filter) ---
-s1, s2, s3 = st.columns([2, 1.5, 1.5])
-with s1:
-    search_query = st.text_input(lang["search_label"], "")
-with s2:
-    categories = [lang["all_cat"]] + list(df_out[lang["col_cat"]].unique())
-    selected_cat = st.selectbox(lang["filter_cat"], categories)
-with s3:
-    platforms = [lang["all_platforms"]] + list(df_out[lang["col_platform"]].unique())
-    selected_platform = st.selectbox(lang["filter_platform"], platforms)
-
-# กรองข้อมูล
-filtered_df = df_out.copy()
-if search_query:
+# กรองข้อมูลตามเงื่อนไข
+filtered_df = df_deals[df_deals["discount_pct"] >= min_discount_filter]
+if search_text:
     filtered_df = filtered_df[
-        filtered_df[lang["col_name"]].str.contains(search_query, case=False, na=False) |
-        filtered_df["sku"].str.contains(search_query, case=False, na=False)
+        filtered_df["name"].str.contains(search_text, case=False, na=False) |
+        filtered_df["sku"].str.contains(search_text, case=False, na=False)
     ]
 if selected_cat != lang["all_cat"]:
-    filtered_df = filtered_df[filtered_df[lang["col_cat"]] == selected_cat]
-if selected_platform != lang["all_platforms"]:
-    filtered_df = filtered_df[filtered_df[lang["col_platform"]] == selected_platform]
+    filtered_df = filtered_df[filtered_df["category"] == selected_cat]
+if selected_plat != lang["all_plat"]:
+    filtered_df = filtered_df[filtered_df["platform"] == selected_plat]
 
-# --- แบ่ง Tab แสดงผลลัพธ์หลากหลายมิติ ---
-tab1, tab2, tab3 = st.tabs([lang["tab_table"], lang["tab_chart1"], lang["tab_chart2"]])
+# --- แสดงผล KPI เมตริกด้านบน ---
+k1, k2, k3 = st.columns(3)
+k1.metric(lang["kpi_total"], f"{len(filtered_df)} ดีล", "Active Deals")
+high_disc_count = len(filtered_df[filtered_df["discount_pct"] >= 30])
+k2.metric(lang["kpi_high"], f"{high_disc_count} ดีล", "Discount >= 30%")
+max_saving = filtered_df["savings"].max() if not filtered_df.empty else 0
+k3.metric(lang["kpi_max"], f"{max_saving:,.0f} THB", "Best Saving")
 
-with tab1:
+st.markdown("---")
+
+# --- แบ่งหน้าเว็บไซต์เป็น แท็บ (Tabs) ---
+tab_grid, tab_table, tab_chart = st.tabs([lang["tab_grid"], lang["tab_table"], lang["tab_chart"]])
+
+# 1. แท็บแกลเลอรีดีลเด็ด (Product Grid Cards)
+with tab_grid:
+    if not filtered_df.empty:
+        # แสดงผลแบบ 3 คอลัมน์สวยงามเหมือนเว็บช้อปปิ้ง
+        cols = st.columns(3)
+        for idx, row in filtered_df.reset_index(drop=True).iterrows():
+            col_target = cols[idx % 3]
+            with col_target:
+                st.image(row["image_url"], use_container_width=True)
+                st.markdown(f"**{row['name']}**")
+                st.caption(f"📁 {row['category']} | 🛒 {row['platform']}")
+                st.markdown(f"🔥 <span style='color:red; font-size:18px;'><b>฿{row['sale_price']:,.0f}</b></span> &nbsp; <del style='color:gray;'>฿{row['original_price']:,.0f}</del>", unsafe_allow_html=True)
+                st.markdown(f"⚡ ประหยัดทันที **฿{row['savings']:,.0f}** ({row['discount_pct']}%)")
+                st.link_button(lang["btn_buy"], row["aff_link"], use_container_width=True)
+                st.markdown("---")
+    else:
+        st.warning("ไม่พบสินค้าที่ตรงกับเงื่อนไขการค้นหา")
+
+# 2. แท็บตารางสรุปข้อมูล
+with tab_table:
     st.subheader(lang["tab_table"])
-    
-    def style_dataframe(row):
-        advice_col = lang["col_advice"]
-        profitable_text = lang["status_profitable"]
-        return [
-            "background-color: #e8f5e9; color: #2e7d32; font-weight: bold"
-            if row[advice_col] == profitable_text else ""
-            for _ in row
-        ]
+    display_table = filtered_df[["sku", "name", "category", "platform", "original_price", "sale_price", "discount_pct", "aff_link"]]
+    st.dataframe(display_table, use_container_width=True)
 
-    st.dataframe(filtered_df.style.apply(style_dataframe, axis=1), use_container_width=True)
-
-    csv_data = filtered_df.to_csv(index=False).encode('utf-8')
-    st.download_button(
-        label=lang["btn_download"],
-        data=csv_data,
-        file_name='multi_platform_arbitrage_report.csv',
-        mime='text/csv',
-    )
-
-with tab2:
-    st.subheader(lang["tab_chart1"])
+# 3. แท็บกราฟวิเคราะห์ส่วนลด
+with tab_chart:
+    st.subheader(lang["tab_chart"])
     if not filtered_df.empty:
-        fig1 = px.scatter(
+        fig = px.bar(
             filtered_df,
-            x=lang["col_market"],
-            y=lang["col_profit"],
-            size=filtered_df[lang["col_margin"]].abs(),
-            color=lang["col_cat"],
-            hover_name=lang["col_name"],
-            text="sku",
-            title="Net Profit vs Market Price (Bubble size represents Margin %)"
+            x="name",
+            y="discount_pct",
+            color="platform",
+            text="discount_pct",
+            title="Discount Percentage (%) Distribution by Product",
+            labels={"discount_pct": "Discount (%)", "name": "Product"}
         )
-        fig1.update_traces(textposition='top center')
-        fig1.update_layout(template="plotly_white")
-        st.plotly_chart(fig1, use_container_width=True)
+        fig.update_traces(texttemplate='%{text}%', textposition='outside')
+        fig.update_layout(xaxis_tickangle=-15, template="plotly_white")
+        st.plotly_chart(fig, use_container_width=True)
     else:
-        st.warning("No data to plot.")
+        st.warning("ไม่มีข้อมูลสำหรับสร้างกราฟ")
 
-with tab3:
-    st.subheader(lang["tab_chart2"])
-    if not filtered_df.empty:
-        fig2 = px.bar(
-            filtered_df,
-            x=lang["col_name"],
-            y=[lang["col_cost"], lang["col_market"]],
-            barmode="group",
-            title="Cost Price vs Market Price Comparison by Product",
-            labels={"value": "Amount (THB)", "variable": "Price Type"}
-        )
-        fig2.update_layout(xaxis_tickangle=-15, template="plotly_white")
-        st.plotly_chart(fig2, use_container_width=True)
-    else:
-        st.warning("No data to plot.")
+st.markdown("---")
+st.caption(lang["footer"])
