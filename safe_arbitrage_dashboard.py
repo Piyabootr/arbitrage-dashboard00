@@ -7,15 +7,81 @@ import pandas as pd
 import streamlit as st
 
 # ==========================================
+# 0. พจนานุกรมแปลภาษา (Localization / Dictionary)
+# ==========================================
+LANG_DICT = {
+    "English": {
+        "title": "🛡️ Arbitrage & Price Monitor (Safe API & Rate-Limited Edition)",
+        "caption": "Dashboard for price disparity monitoring with rate limiter, backoff, and caching.",
+        "sidebar_sec": "🛡️ Security & Rate Limit",
+        "min_delay": "Min Delay per Item (seconds)",
+        "max_delay": "Max Delay per Item (seconds)",
+        "proxy_info": "Proxy URL (Optional)",
+        "cache_info": "💡 Auto-Cache 10m enabled to prevent duplicate requests.",
+        "profit_sec": "💰 Profit Target Settings",
+        "min_margin": "Min Required Margin (%)",
+        "platform_fee": "Platform Fee (%)",
+        "btn_fetch": "🔄 Fetch Latest Data (Safe Fetch)",
+        "btn_clear": "🗑️ Clear Cache & Re-fetch",
+        "spinner": "Fetching data under rate limits...",
+        "kpi_total": "Total Items Checked",
+        "kpi_target": "Meeting Profit Target",
+        "kpi_delay": "Delay Range",
+        "kpi_status": "Protection Status",
+        "table_title": "📊 Price Disparity & Data Fetch Status Table",
+        "col_sku": "SKU",
+        "col_name": "Product Name",
+        "col_platform": "Data Source",
+        "col_cost": "Cost (THB)",
+        "col_market": "Market Price (THB)",
+        "col_fee": "Fee (THB)",
+        "col_profit": "Net Profit (THB)",
+        "col_margin": "Net Margin (%)",
+        "col_delay": "Delay Used (s)",
+        "col_status": "Connection Status",
+        "col_advice": "Recommendation",
+        "status_profitable": "🔥 Profitable",
+        "status_wait": "Hold"
+    },
+    "ไทย": {
+        "title": "🛡️ ระบบตรวจสอบส่วนต่างราคาและราคาลดพิเศษ (Safe API & Rate-Limited)",
+        "caption": "แดชบอร์ดตรวจสอบส่วนต่างราคาพร้อมระบบควบคุมความถี่ (Rate Limiter, Backoff & Caching)",
+        "sidebar_sec": "🛡️ ตั้งค่าความปลอดภัย (Rate Limit & Proxy)",
+        "min_delay": "หน่วงเวลาต่ำสุดต่อรายการ (วินาที)",
+        "max_delay": "หน่วงเวลาสูงสุดต่อรายการ (วินาที)",
+        "proxy_info": "Proxy URL (ตัวเลือกเสริม)",
+        "cache_info": "💡 เปิดใช้งาน Auto-Cache 10 นาที เพื่อป้องกันการส่ง Request ซ้ำ",
+        "profit_sec": "💰 ตั้งค่าเป้าหมายกำไร",
+        "min_margin": "กำไรขั้นต่ำที่ต้องการ (%)",
+        "platform_fee": "หักค่าธรรมเนียมแพลตฟอร์ม (%)",
+        "btn_fetch": "🔄 ดึงข้อมูลล่าสุด (Safe Fetch)",
+        "btn_clear": "🗑️ ล้าง Cache เพื่อดึงใหม่ทันที",
+        "spinner": "กำลังดึงข้อมูลภายใต้เงื่อนไข Rate Limit...",
+        "kpi_total": "รายการที่ตรวจสอบ",
+        "kpi_target": "เข้าเกณฑ์กำไรสุทธิ",
+        "kpi_delay": "ช่วงเวลาหน่วงต่อคำขอ",
+        "kpi_status": "สถานะการป้องกัน",
+        "table_title": "📊 ตารางวิเคราะห์ส่วนต่างราคาและสถานะการดึงข้อมูล",
+        "col_sku": "รหัส SKU",
+        "col_name": "ชื่อสินค้า",
+        "col_platform": "ช่องทางข้อมูล",
+        "col_cost": "ราคาทุน (บาท)",
+        "col_market": "ราคาตลาด (บาท)",
+        "col_fee": "ค่าธรรมเนียม (บาท)",
+        "col_profit": "กำไรสุทธิ (บาท)",
+        "col_margin": "กำไรสุทธิ (%)",
+        "col_delay": "เวลาหน่วงที่ใช้ (วินาที)",
+        "col_status": "สถานะการเชื่อมต่อ",
+        "col_advice": "คำแนะนำ",
+        "status_profitable": "🔥 ทำกำไรได้",
+        "status_wait": "รอก่อน"
+    }
+}
+
+# ==========================================
 # 1. โมดูลจัดการการเชื่อมต่อแบบปลอดภัย (Safe Request Engine)
 # ==========================================
 class SafeDataClient:
-    """
-    คลาสสำหรับจัดการการดึงข้อมูลอย่างเป็นมิตรกับเซิร์ฟเวอร์ปลายทาง:
-    - มีระบบ Rate Limiting (หน่วงเวลาอัตโนมัติ)
-    - มีระบบ Exponential Backoff (รอเมื่อเซิร์ฟเวอร์ตอบกลับช้าหรือติด Limit 429)
-    - หมุนเวียน User-Agent มาตรฐาน
-    """
     def __init__(self, min_delay: float = 2.0, max_delay: float = 5.0, proxy_url: str = ""):
         self.min_delay = min_delay
         self.max_delay = max_delay
@@ -29,10 +95,9 @@ class SafeDataClient:
 
     def _create_resilient_session(self) -> requests.Session:
         session = requests.Session()
-        # ตั้งค่า Auto-Retry เมื่อเกิด Error 429 (Too Many Requests) หรือ 5xx
         retry_strategy = Retry(
             total=3,
-            backoff_factor=2,  # รอ 2s, 4s, 8s ตามลำดับ
+            backoff_factor=2,
             status_forcelist=[429, 500, 502, 503, 504],
             allowed_methods=["HEAD", "GET", "OPTIONS"]
         )
@@ -42,18 +107,8 @@ class SafeDataClient:
         return session
 
     def fetch_item_data(self, item: dict) -> dict:
-        # 1. Rate Limiting: หน่วงเวลาแบบสุ่มเพื่อไม่ให้เกิด Traffic Spike
         delay = random.uniform(self.min_delay, self.max_delay)
         time.sleep(delay)
-
-        # 2. ตั้งค่า Header และ Proxy (หากระบุ)
-        headers = {
-            "User-Agent": random.choice(self.user_agents),
-            "Accept-Language": "th-TH,th;q=0.9,en;q=0.8",
-        }
-        proxies = {"http": self.proxy_url, "https": self.proxy_url} if self.proxy_url else None
-
-        # จำลองการอัปเดตราคาแบบ Real-time พร้อมบันทึกเวลาหน่วงที่ใช้จริง
         fluctuation = random.uniform(-0.05, 0.05)
         live_supplier_price = round(item["base_cost"] * (1 + fluctuation), 2)
 
@@ -67,11 +122,7 @@ class SafeDataClient:
             "status": "200 OK (Safe)"
         }
 
-
-# ==========================================
-# 2. ระบบ Caching ป้องกันการยิงคำขอซ้ำซ้อน
-# ==========================================
-@st.cache_data(ttl=600)  # เก็บ Cache ไว้ 10 นาที (600 วินาที) ไม่ดึงซ้ำถ้าไม่จำเป็น
+@st.cache_data(ttl=600)
 def run_safe_batch_scan(items: list, min_delay: float, max_delay: float, proxy: str):
     client = SafeDataClient(min_delay=min_delay, max_delay=max_delay, proxy_url=proxy)
     results = []
@@ -80,29 +131,32 @@ def run_safe_batch_scan(items: list, min_delay: float, max_delay: float, proxy: 
         results.append(res)
     return results
 
-
 # ==========================================
-# 3. ส่วนหน้าตา Streamlit Dashboard
+# 2. ตั้งค่าหน้าตา Streamlit Dashboard
 # ==========================================
 st.set_page_config(page_title="Safe Price & Arbitrage Dashboard", layout="wide")
 
-st.title("🛡️ Arbitrage & Price Monitor (Safe API & Rate-Limited Edition)")
-st.caption("แดชบอร์ดตรวจสอบส่วนต่างราคาพร้อมระบบควบคุมความถี่ (Rate Limiter, Backoff & Caching)")
+# --- Sidebar: ตัวเลือกภาษาและตั้งค่าความปลอดภัย ---
+st.sidebar.selectbox("🌐 Language / ภาษา", ["English", "ไทย"], key="lang_select")
+lang = LANG_DICT[st.session.get("lang_select", "English")]
 
-# --- Sidebar: ตั้งค่าระบบป้องกันการโดนบล็อก ---
-st.sidebar.header("🛡️ ตั้งค่าความปลอดภัย (Rate Limit & Proxy)")
-min_delay = st.sidebar.slider("หน่วงเวลาต่ำสุดต่อรายการ (วินาที)", 1.0, 10.0, 2.0, 0.5)
-max_delay = st.sidebar.slider("หน่วงเวลาสูงสุดต่อรายการ (วินาที)", 2.0, 15.0, 4.5, 0.5)
+st.sidebar.header(lang["sidebar_sec"])
+min_delay = st.sidebar.slider(lang["min_delay"], 1.0, 10.0, 2.0, 0.5)
+max_delay = st.sidebar.slider(lang["max_delay"], 2.0, 15.0, 4.5, 0.5)
 if max_delay < min_delay:
     max_delay = min_delay + 1.0
 
-proxy_input = st.sidebar.text_input("Proxy URL (ตัวเลือกเสริม)", placeholder="http://user:pass@ip:port")
-st.sidebar.info("💡 ระบบเปิดใช้งาน Auto-Cache 10 นาที เพื่อป้องกันการส่ง Request ซ้ำโดยไม่จำเป็น")
+proxy_input = st.sidebar.text_input(lang["proxy_info"], placeholder="http://user:pass@ip:port")
+st.sidebar.info(lang["cache_info"])
 
 st.sidebar.markdown("---")
-st.sidebar.header("💰 ตั้งค่าเป้าหมายกำไร")
-min_margin_pct = st.sidebar.slider("กำไรขั้นต่ำที่ต้องการ (%)", 5, 50, 20, 5)
-platform_fee_pct = st.sidebar.slider("หักค่าธรรมเนียมแพลตฟอร์ม (%)", 0.0, 15.0, 8.5, 0.5)
+st.sidebar.header(lang["profit_sec"])
+min_margin_pct = st.sidebar.slider(lang["min_margin"], 5, 50, 20, 5)
+platform_fee_pct = st.sidebar.slider(lang["platform_fee"], 0.0, 15.0, 8.5, 0.5)
+
+# --- ส่วนหัวของหน้าเว็บ ---
+st.title(lang["title"])
+st.caption(lang["caption"])
 
 # --- ข้อมูลรายการสินค้าสำหรับตรวจสอบ ---
 catalog = [
@@ -115,17 +169,17 @@ catalog = [
 # --- ปุ่มสั่งทำงานและล้าง Cache ---
 col_btn1, col_btn2 = st.columns([1, 4])
 with col_btn1:
-    trigger = st.button("🔄 ดึงข้อมูลล่าสุด (Safe Fetch)")
+    trigger = st.button(lang["btn_fetch"])
 with col_btn2:
-    if st.button("🗑️ ล้าง Cache เพื่อดึงใหม่ทันที"):
+    if st.button(lang["btn_clear"]):
         st.cache_data.clear()
         st.rerun()
 
 # ประมวลผลข้อมูล
-with st.spinner("กำลังดึงข้อมูลภายใต้เงื่อนไข Rate Limit..."):
+with st.spinner(lang["spinner"]):
     raw_results = run_safe_batch_scan(catalog, min_delay, max_delay, proxy_input)
 
-# คำนวณกำไรหลังหักค่าธรรมเนียมแพลตฟอร์ม
+# คำนวณกำไรหลังหักค่าธรรมเนียม
 table_rows = []
 high_profit_count = 0
 
@@ -141,35 +195,37 @@ for r in raw_results:
         high_profit_count += 1
 
     table_rows.append({
-        "รหัส SKU": r["sku"],
-        "ชื่อสินค้า": r["name"],
-        "ช่องทางข้อมูล": r["platform"],
-        "ราคาทุน (บาท)": f"{cost:,.2f}",
-        "ราคาตลาด (บาท)": f"{sell:,.2f}",
-        "ค่าธรรมเนียม (บาท)": f"{fee:,.2f}",
-        "กำไรสุทธิ (บาท)": f"{net_profit:,.2f}",
-        "กำไรสุทธิ (%)": round(margin_pct, 1),
-        "เวลาหน่วงที่ใช้ (วินาที)": r["delay_used"],
-        "สถานะการเชื่อมต่อ": r["status"],
-        "คำแนะนำ": "🔥 ทำกำไรได้" if is_target else "รอก่อน"
+        lang["col_sku"]: r["sku"],
+        lang["col_name"]: r["name"],
+        lang["col_platform"]: r["platform"],
+        lang["col_cost"]: f"{cost:,.2f}",
+        lang["col_market"]: f"{sell:,.2f}",
+        lang["col_fee"]: f"{fee:,.2f}",
+        lang["col_profit"]: f"{net_profit:,.2f}",
+        lang["col_margin"]: round(margin_pct, 1),
+        lang["col_delay"]: r["delay_used"],
+        lang["col_status"]: r["status"],
+        lang["col_advice"]: lang["status_profitable"] if is_target else lang["status_wait"]
     })
 
 # แสดงผล KPI ด้านบน
 m1, m2, m3, m4 = st.columns(4)
-m1.metric("รายการที่ตรวจสอบ", f"{len(table_rows)} รายการ")
-m2.metric("เข้าเกณฑ์กำไรสุทธิ", f"{high_profit_count} รายการ")
-m3.metric("ช่วงเวลาหน่วงต่อคำขอ", f"{min_delay} - {max_delay} วินาที")
-m4.metric("สถานะการป้องกัน", "เปิดใช้งาน (Retry + Cache)")
+m1.metric(lang["kpi_total"], f"{len(table_rows)}")
+m2.metric(lang["kpi_target"], f"{high_profit_count}", delta=f">={min_margin_pct}%")
+m3.metric(lang["kpi_delay"], f"{min_delay} - {max_delay} s")
+m4.metric(lang["kpi_status"], "Active (Retry + Cache)")
 
 st.markdown("---")
-st.subheader("📊 ตารางวิเคราะห์ส่วนต่างราคาและสถานะการดึงข้อมูล")
+st.subheader(lang["table_title"])
 
 df_out = pd.DataFrame(table_rows)
 
 def style_opportunity(row):
+    advice_col = lang["col_advice"]
+    profitable_text = lang["status_profitable"]
     return [
         "background-color: #d4edda; color: #155724; font-weight: bold"
-        if row["คำแนะนำ"] == "🔥 ทำกำไรได้" else ""
+        if row[advice_col] == profitable_text else ""
         for _ in row
     ]
 
