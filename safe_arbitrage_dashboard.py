@@ -2,99 +2,166 @@ import streamlit as st
 import pandas as pd
 
 # ตั้งค่าหน้าเว็บให้เป็นแบบ Wide Layout
-st.set_page_config(page_title="Pro Blog & AdSense Hub", layout="wide")
+st.set_page_config(page_title="Pro Content & Stories Hub", layout="wide")
 
-# --- Initial Session State สำหรับบทความ ---
+# ==========================================
+# 0. พจนานุกรมแปลภาษา (Localization / Dictionary)
+# ==========================================
+LANG_DICT = {
+    "English": {
+        "title": "💡 Pro Content, Knowledge & Stories Hub",
+        "caption": "Professional blogging platform featuring real knowledge articles, moral fairy tales, and automated AdSense analytics.",
+        "top_banner": "🔥 Special Promotion: Boost your online earnings today with our exclusive toolkits!",
+        "stat_views": "Total Views",
+        "stat_likes": "Total Likes",
+        "stat_earnings": "Est. AdSense Earnings",
+        "stat_posts": "Total Posts",
+        "sidebar_search": "🔍 Search & Filter",
+        "search_label": "Search title or content",
+        "cat_label": "📂 Select Category",
+        "all_cat": "All Categories",
+        "cat_knowledge": "Knowledge & Tech",
+        "cat_stories": "Fairy Tales & Stories",
+        "cat_finance": "Finance & Business",
+        "write_expander": "✍️ Publish New Post",
+        "w_title": "Post Title",
+        "w_cat": "Category",
+        "w_time": "Reading Time",
+        "w_summary": "Short Summary",
+        "w_content": "Full Content",
+        "w_btn": "Publish Content",
+        "success_msg": "Content published successfully!",
+        "section_title": "📰 Recommended Articles & Stories",
+        "btn_read": "📖 Read Full Story",
+        "btn_like": "❤️ Like",
+        "footer_banner": "Support our platform by sharing these insightful articles and stories with your friends!"
+    },
+    "ไทย": {
+        "title": "💡 ศูนย์รวมบทความสาระน่ารู้และนิทานออนไลน์ (Pro Hub)",
+        "caption": "แพลตฟอร์มบล็อกระดับมืออาชีพ รวบรวมบทความสาระความรู้จริง นิทานสอนใจ และระบบวิเคราะห์รายได้ AdSense แบบเรียลไทม์",
+        "top_banner": "🔥 โปรโมชันพิเศษประจำวัน: ยกระดับรายได้ออนไลน์ของคุณด้วยแพ็กเกจเครื่องมืออัจฉริยะ!",
+        "stat_views": "ยอดเข้าชมรวม",
+        "stat_likes": "ยอดถูกใจรวม",
+        "stat_earnings": "รายได้ AdSense ประเมิน",
+        "stat_posts": "บทความและนิทานทั้งหมด",
+        "sidebar_search": "🔍 ค้นหาและกรองข้อมูล",
+        "search_label": "ค้นหาชื่อเรื่องหรือเนื้อหา",
+        "cat_label": "📂 เลือกหมวดหมู่",
+        "all_cat": "ทั้งหมด",
+        "cat_knowledge": "สาระน่ารู้ & เทคโนโลยี",
+        "cat_stories": "นิทาน & เรื่องเล่าสอนใจ",
+        "cat_finance": "การเงิน & ธุรกิจ",
+        "write_expander": "✍️ เขียนบทความหรือนิทานใหม่",
+        "w_title": "หัวข้อเรื่อง",
+        "w_cat": "หมวดหมู่",
+        "w_time": "เวลาที่ใช้ในการอ่าน",
+        "w_summary": "คำโปรยย่อ (Summary)",
+        "w_content": "เนื้อหาเต็ม (Full Content)",
+        "w_btn": "เผยแพร่ผลงาน",
+        "success_msg": "เผยแพร่เนื้อหาสำเร็จเรียบร้อย!",
+        "section_title": "📰 บทความและนิทานแนะนำล่าสุด",
+        "btn_read": "📖 อ่านเนื้อหาเต็ม",
+        "btn_like": "❤️ ถูกใจ",
+        "footer_banner": "สนับสนุนเว็บไซต์ของเราโดยการแชร์บทความหรือนิทานดีๆ นี้ให้คนที่คุณรักอ่าน!"
+    }
+}
+
+# --- Sidebar: เลือกภาษา ---
+selected_lang = st.sidebar.selectbox("🌐 Language / ภาษา", ["ไทย", "English"], index=0)
+lang = LANG_DICT.get(selected_lang, LANG_DICT["ไทย"])
+
+# --- Initial Session State สำหรับบทความและนิทาน (เนื้อหาจริง) ---
 if "articles_db" not in st.session_state:
     st.session_state.articles_db = [
         {
             "id": 1,
-            "title": "5 วิธีประหยัดเงินในยุคดิจิทัลที่คุณก็ทำได้ทันที",
-            "category": "การเงิน",
+            "title": "นิทานอีสป: ราชสีห์กับหนู (The Lion and the Mouse)",
+            "category": "นิทาน & เรื่องเล่าสอนใจ",
             "read_time": "3 นาที",
-            "views": 1420,
-            "likes": 85,
-            "summary": "เรียนรู้เทคนิคการบริหารเงินง่าย ๆ ที่ช่วยให้คุณเหลือเงินเก็บเพิ่มขึ้นโดยไม่ต้องอด",
-            "content": "เนื้อหาบทความฉบับเต็ม: การประหยัดเงินในยุคดิจิทัลเริ่มต้นจากการเช็กแอปพลิเคชันการใช้จ่าย ตัดรายจ่ายที่ไม่จำเป็นออก และตั้งค่าหักเงินเก็บอัตโนมัติทุกครั้งที่เงินเดือนออก..."
+            "views": 3420,
+            "likes": 412,
+            "summary": "นิทานคลาสสิกสอนใจว่า 'คนตัวเล็กก็อาจมีประโยชน์ต่อคนตัวใหญ่ได้ในยามคับขัน'",
+            "content": "กาลครั้งหนึ่งนานมาแล้ว มีราชสีห์ตัวใหญ่หลับพักผ่อนอยู่ในป่า มีหนูตัวน้อยวิ่งมาไต่บนหลังของราชสีห์จนมันตื่นขึ้นมาด้วยความโกรธและใช้กรงเล็บตะปบไว้ หนูจึงร้องขอชีวิตและสัญญาว่า หากรอดไปได้จะตอบแทนบุญคุณแน่นอน ราชสีห์หัวเราะและปล่อยตัวไป ต่อมาไม่นาน ราชสีห์ติดตาข่ายนายพราน ร้องคำรามลั่นป่า หนูตัวน้อยได้ยินจึงรีบวิ่งมาแทะเชือกตาข่ายจนขาด ทำให้ราชสีห์รอดชีวิตมาได้ นิทานเรื่องนี้สอนให้รู้ว่า: เมตตาธรรมค้ำจุนโลก และไม่มีใครเล็กเกินกว่าที่จะช่วยเหลือผู้อื่น"
         },
         {
             "id": 2,
-            "title": "เจาะลึกเทรนด์ AI มาแรงในปี 2026 มีอะไรต้องรู้บ้าง",
-            "category": "เทคโนโลยี",
-            "read_time": "5 นาที",
-            "views": 3890,
-            "likes": 240,
-            "summary": "อัปเดตเทคโนโลยีปัญญาประดิษฐ์ที่จะเข้ามาเปลี่ยนวิถีชีวิตและการทำงานของเรา",
-            "content": "เนื้อหาบทความฉบับเต็ม: เทคโนโลยี AI ในปัจจุบันก้าวไปไกลมาก ทั้งระบบอัตโนมัติ หุ่นยนต์อัจฉริยะ และเครื่องมือช่วยทำงานที่ช่วยประหยัดเวลาได้มากกว่า 50%..."
+            "title": "5 สาระน่ารู้รอบตัว: ทำไมเราถึงหาวเมื่อเห็นคนอื่นหาว?",
+            "category": "สาระน่ารู้ & เทคโนโลยี",
+            "read_time": "4 นาที",
+            "views": 5120,
+            "likes": 680,
+            "summary": "ไขข้อข้องใจทางวิทยาศาสตร์ว่าทำไมอาการ 'หาว' ถึงแพร่เชื้อใส่กันได้รวดเร็วนัก",
+            "content": "อาการหาวติดต่อกัน (Contagious Yawning) เป็นปรากฏการณ์ทางชีววิทยาที่เกี่ยวข้องกับ 'ความเห็นอกเห็นใจ' (Empathy) และระบบเซลล์ประสาทกระจกเงา (Mirror Neurons) ในสมอง เมื่อเราเห็นคนอื่นหาว สมองส่วนที่ควบคุมความรู้สึกร่วมจะทำงานกระตุ้นให้เราหาวตามโดยอัตโนมัติ ซึ่งมักเกิดขึ้นกับคนใกล้ชิดหรือคนที่มีความผูกพันกันสูง นอกจากนี้ยังเป็นกลไกช่วยปรับอุณหภูมิในสมองให้ตื่นตัวอยู่เสมออีกด้วย"
         },
         {
             "id": 3,
-            "title": "ไอเดียแต่งห้องทำงานมินิมอล นั่งทำงานได้ทั้งวันไม่มีเบื่อ",
-            "category": "ไลฟ์สไตล์",
+            "title": "นิทานสอนใจ: เด็กเลี้ยงแกะผู้สูญเสียความน่าเชื่อถือ",
+            "category": "นิทาน & เรื่องเล่าสอนใจ",
             "read_time": "4 นาที",
-            "views": 2150,
-            "likes": 112,
-            "summary": "แชร์ไอเดียจัดโต๊ะทำงานและแต่งห้องโทนสีสบายตา เพิ่ม Productive ให้ตัวเอง",
-            "content": "เนื้อหาบทความฉบับเต็ม: การจัดแสงไฟในห้องทำงานและการเลือกใช้โทนสีไม้ธรรมชาติหรือสีขาว จะช่วยลดความเครียดและเพิ่มสมาธิในการทำงานได้เป็นอย่างดี..."
+            "views": 2890,
+            "likes": 310,
+            "summary": "เรื่องราวเตือนใจเกี่ยวกับการพูดโกหกและผลกระทบที่ตามมาเมื่อไม่มีใครเชื่อใจอีก",
+            "content": "เด็กชายเลี้ยงแกะคนหนึ่งนึกสนุก อยากแกล้งชาวบ้านจึงตะโกนลั่นว่า 'ช่วยด้วย! หมาป่ามากินแกะแล้ว!' ชาวบ้านรีบวิ่งถือไม้มาช่วยแต่กลับพบว่าเด็กชายหัวเราะชอบใจที่หลอกได้สำเร็จ วันต่อมาเขาทำแบบเดิมอีก ชาวบ้านก็เริ่มไม่พอใจ จนกระทั่งวันหนึ่งมีหมาป่าบุกมาจริงๆ เขาร้องตะโกนขอความช่วยเหลือสุดเสียง แต่ไม่มีชาวบ้านคนไหนออกมาช่วยเลยเพราะคิดว่าเขาโกหกอีก แกะจึงถูกหมาป่ากินจนหมดฝูง นิทานเรื่องนี้สอนให้รู้ว่า: คนโกหกย่อมไม่มีใครเชื่อถือ แม้ในเวลาที่เขาพูดความจริง"
         },
         {
             "id": 4,
-            "title": "เคล็ดลับดูแลสุขภาพฉบับคนทำงานนั่งโต๊ะ (Office Syndrome)",
-            "category": "สุขภาพ",
-            "read_time": "4 นาที",
-            "views": 950,
-            "likes": 45,
-            "summary": "ท่าบริหารร่างกายง่ายๆ คลายอาการปวดหลังและคอบ่าไหล่ระหว่างวัน",
-            "content": "เนื้อหาบทความฉบับเต็ม: การนั่งทำงานหน้าจอคอมพิวเตอร์นานเกินไปทำให้เกิดอาการกล้ามเนื้ออักเสบเรื้อรัง ควรลุกขึ้นยืดเหยียดกล้ามเนื้อทุกๆ 1 ชั่วโมง..."
+            "title": "เทคนิคบริหารการเงินฉบับคนรุ่นใหม่: กฎ 50/30/20",
+            "category": "การเงิน & ธุรกิจ",
+            "read_time": "5 นาที",
+            "views": 4150,
+            "likes": 520,
+            "summary": "วิธีแบ่งเงินเดือนง่ายๆ ที่ช่วยให้คุณมีเงินเก็บและอิสรภาพทางการเงินโดยไม่เครียด",
+            "content": "กฎการจัดสรรเงิน 50/30/20 คิดค้นโดย Elizabeth Warren เป็นแนวทางแบ่งรายได้สุทธิออกเป็น 3 ส่วนหลัก: 1) 50% สำหรับค่าใช้จ่ายจำเป็น (ค่าเช่าบ้าน, ค่าอาหาร, ค่าเดินทาง) 2) 30% สำหรับความสุขส่วนตัว (ช้อปปิ้ง, ท่องเที่ยว, สังสรรค์) และ 3) 20% สำหรับการออมเงินและลงทุนเพื่ออนาคต การบริหารตามสัดส่วนนี้ช่วยให้ชีวิตมีความสมดุลและสร้างความมั่งคั่งได้ระยะยาว"
         }
     ]
 
 # --- แถบจำลองป้ายโฆษณา Google AdSense (Top Banner) ---
 st.markdown(
-    """
+    f"""
     <div style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 12px; text-align: center; border-radius: 8px; margin-bottom: 20px; border: 1px dashed #a0aec0;">
         <span style="color: #718096; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">[ Google AdSense - Responsive Leaderboard Ad ]</span>
-        <h4 style="color: #2d3748; margin: 5px 0;">🔥 แพ็กเกจเครื่องมือสร้างรายได้ออนไลน์ สมัครวันนี้รับโบนัสพิเศษฟรี!</h4>
+        <h4 style="color: #2d3748; margin: 5px 0;">{lang['top_banner']}</h4>
     </div>
     """,
     unsafe_allow_html=True
 )
 
 # --- ส่วนหัวหลักของเว็บไซต์ ---
-st.title("💡 Pro Blog & Content Intelligence Hub")
-st.caption("แพลตฟอร์มบทความคุณภาพสูง ระบบวิเคราะห์ยอดวิว และพื้นที่สร้างรายได้จาก Google AdSense แบบ Passive Income")
+st.title(lang["title"])
+st.caption(lang["caption"])
 
 st.markdown("---")
 
 # --- แถบสถิติภาพรวมเว็บไซต์ (Analytics Metric Cards) ---
 total_views = sum([a["views"] for a in st.session_state.articles_db])
-total_likes = sum([a.get("likes", 0) for a in st.session_state.articles_db])  # แก้ไขจุดที่ Error เรียบร้อย
-estimated_earnings = total_views * 0.05  # จำลองรายได้เฉลี่ย 0.05 บาทต่อวิว
+total_likes = sum([a.get("likes", 0) for a in st.session_state.articles_db])
+estimated_earnings = total_views * 0.05  # จำลองรายได้ 0.05 บาทต่อวิว
 
 m1, m2, m3, m4 = st.columns(4)
-m1.metric("📊 ยอดเข้าชมรวม (Total Views)", f"{total_views:,} วิว", "+12% สัปดาห์นี้")
-m2.metric("❤️ ยอดถูกใจรวม (Total Likes)", f"{total_likes:,} ไลฟ์", "Engagement สูง")
-m3.metric("💰 รายได้ AdSense ประเมิน", f"{estimated_earnings:,.2f} THB", "Passive Income")
-m4.metric("📚 บทความทั้งหมด", f"{len(st.session_state.articles_db)} เรื่อง", "Active Posts")
+m1.metric(lang["stat_views"], f"{total_views:,} วิว", "+15% สัปดาห์นี้")
+m2.metric(lang["stat_likes"], f"{total_likes:,} ไลฟ์", "Engagement สูง")
+m3.metric(lang["stat_earnings"], f"{estimated_earnings:,.2f} THB", "Passive Income")
+m4.metric(lang["stat_posts"], f"{len(st.session_state.articles_db)} เรื่อง", "Active Posts")
 
 st.markdown("---")
 
 # --- Sidebar: ค้นหาและหมวดหมู่ ---
-st.sidebar.header("🔍 ค้นหาและกรองข้อมูล")
-search_query = st.sidebar.text_input("ค้นหาชื่อบทความ", "")
-selected_cat = st.sidebar.selectbox("📂 เลือกหมวดหมู่บทความ", ["ทั้งหมด", "การเงิน", "เทคโนโลยี", "ไลฟ์สไตล์", "สุขภาพ"])
+st.sidebar.header(lang["sidebar_search"])
+search_query = st.sidebar.text_input(lang["search_label"], "")
+selected_cat = st.sidebar.selectbox(lang["cat_label"], [lang["all_cat"], lang["cat_knowledge"], lang["cat_stories"], lang["cat_finance"]])
 
 st.sidebar.markdown("---")
-# --- ฟอร์มเพิ่มบทความใหม่ (เขียนบล็อกเองได้สดๆ) ---
-with st.sidebar.expander("✍️ เขียนบทความใหม่"):
-    with st.form("new_article_form"):
-        new_title = st.text_input("หัวข้อบทความ", "เทคนิคลงทุนฉบับมือใหม่")
-        new_cat = st.selectbox("หมวดหมู่", ["การเงิน", "เทคโนโลยี", "ไลฟ์สไตล์", "สุขภาพ"])
-        new_time = st.text_input("เวลาที่ใช้, อ่าน", "3 นาที")
-        new_summary = st.text_area("คำโปรยย่อ", "สรุปสาระสำคัญสั้นๆ...")
-        new_content = st.text_area("เนื้อหาบทความเต็ม", "รายละเอียดเนื้อหา...")
+
+# --- ฟอร์มเพิ่มบทความหรือนิทานใหม่ ---
+with st.sidebar.expander(lang["write_expander"]):
+    with st.form("new_post_form"):
+        new_title = st.text_input(lang["w_title"], "นิทานกระต่ายกับเต่า ภาคใหม่")
+        new_cat = st.selectbox(lang["w_cat"], [lang["cat_knowledge"], lang["cat_stories"], lang["cat_finance"]])
+        new_time = st.text_input(lang["w_time"], "3 นาที")
+        new_summary = st.text_area(lang["w_summary"], "สรุปย่อสั้นๆ...")
+        new_content = st.text_area(lang["w_content"], "เนื้อหาเต็ม...")
         
-        submitted = st.form_submit_button("เผยแพร่บทความ")
+        submitted = st.form_submit_button(lang["w_btn"])
         if submitted:
             new_id = len(st.session_state.articles_db) + 1
             st.session_state.articles_db.insert(0, {
@@ -107,38 +174,8 @@ with st.sidebar.expander("✍️ เขียนบทความใหม่")
                 "summary": new_summary,
                 "content": new_content
             })
-            st.success("เผยแพร่บทความสำเร็จ!")
+            st.success(lang["success_msg"])
             st.rerun()
 
-# --- กรองข้อมูลบทความตามการค้นหาและหมวดหมู่ ---
-filtered_articles = st.session_state.articles_db
-if search_query:
-    filtered_articles = [a for a in filtered_articles if search_query.lower() in a['title'].lower() or search_query.lower() in a['summary'].lower()]
-if selected_cat != "ทั้งหมด":
-    filtered_articles = [a for a in filtered_articles if a['category'] == selected_cat]
-
-# --- แสดงผลบทความแบบ Grid (2 คอลัมน์ ดูทันสมัย) ---
-st.subheader("📰 บทความแนะนำล่าสุด")
-
-if not filtered_articles:
-    st.warning("ไม่พบบทความที่ค้นหา กรุณาลองใหม่อีกครั้ง")
-else:
-    cols = st.columns(2)
-    for idx, art in enumerate(filtered_articles):
-        col = cols[idx % 2]
-        with col:
-            with st.container(border=True):
-                st.markdown(f"### {art['title']}")
-                st.markdown(f"🏷️ **{art['category']}** &nbsp;|&nbsp; ⏱️ อ่าน: {art['read_time']} &nbsp;|&nbsp; 👀 {art['views']:,} วิว")
-                st.write(art['summary'])
-                
-                b1, b2 = st.columns([2, 1])
-                with b1:
-                    if st.button(f"📖 อ่านต่อ (ID: {art['id']})", key=f"read_{art['id']}"):
-                        st.info(art['content'])
-                with b2:
-                    if st.button(f"❤️ ถูกใจ ({art['likes']})", key=f"like_{art['id']}"):
-                        art['likes'] += 1
-                        st.rerun()
-                
-            st.markdown("")
+# --- กรองข้อมูลตามการค้นหาและหมวดหมู่ ---
+filtered_posts = st.session_state
