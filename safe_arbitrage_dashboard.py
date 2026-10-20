@@ -3,7 +3,7 @@ from datetime import datetime
 
 # =========================================================
 # QELVYQ | Knowledge in Real Time
-# Run with: streamlit run qelvyq_dashboard.py
+# Run with: streamlit run safe_arbitrage_dashboard.py
 # =========================================================
 st.set_page_config(
     page_title="QELVYQ — Knowledge in Real Time",
@@ -12,7 +12,7 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ---------- Theme / layout styling (ปรับแต่งดีไซน์การ์ดแนวนอน) ----------
+# ---------- Theme / layout styling ----------
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
@@ -43,7 +43,7 @@ div[data-testid="stTextInput"] input, div[data-testid="stSelectbox"] div[data-ba
 .section-head h3 { margin:0; font-size:20px; font-weight:750; }
 .section-sub { color:#7589a7; font-size:12px; margin:3px 0 13px; }
 
-/* ดีไซน์การ์ดแนวนอนแบบใหม่ */
+/* ดีไซน์การ์ดแนวนอน */
 .horizontal-card { background:#fff; border:1px solid #e0eafa; border-radius:15px; padding:15px; box-shadow:0 4px 16px rgba(18,55,102,.045); margin-bottom:14px; display:flex; gap:20px; align-items:center; }
 .h-card-img { width:130px; height:110px; object-fit:cover; border-radius:12px; border:1px solid #e8eef8; flex-shrink:0; }
 .h-card-content { flex-grow:1; }
@@ -238,7 +238,7 @@ elif st.session_state.current_page == "Analytics":
     c3.metric("Verified Nodes", "1,240", "+12 active")
     st.stop()
 
-elif st.session_state.current_page, st.session_state.current_page == ("Bookmarks", "Bookmarks"):
+elif st.session_state.current_page == "Bookmarks":
     st.markdown("## 🔖 Your Saved Bookmarks")
     saved_items = [i for i in st.session_state.master_db if i['id'] in st.session_state.bookmarks]
     if not saved_items:
@@ -293,7 +293,6 @@ else:
         cat_color = "#0878e8" if item["category"] == "Business" else "#7c3aed" if item["category"] == "AI" else "#059669"
         img_url = item.get("image", "https://images.unsplash.com/photo-1585829365295-ab7cd400c167?auto=format&fit=crop&w=700&q=80")
         
-        # HTML structure for horizontal card layout matching reference image
         st.markdown(f"""
         <div class="horizontal-card">
             <img src="{img_url}" class="h-card-img">
@@ -312,7 +311,6 @@ else:
         </div>
         """, unsafe_allow_html=True)
         
-        # Action button styled nicely below/within layout context
         col_btn1, col_btn2, col_btn3 = st.columns([2, 2, 6])
         with col_btn1:
             if st.button(f"📖 Read (ID: {item['id']})", key=f"btn_read_{item['id']}"):
