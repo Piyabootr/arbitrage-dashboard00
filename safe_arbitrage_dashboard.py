@@ -2,11 +2,10 @@ import streamlit as st
 import pandas as pd
 import requests
 import re
-import urllib.parse
 import xml.etree.ElementTree as ET
 
 # ตั้งค่าหน้าเว็บให้เป็นแบบ Wide Layout
-st.set_page_config(page_title="QELVYQ — Discover What’s Next.", layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="QELVYQ — Stories & Latest Updates.", layout="wide", initial_sidebar_state="expanded")
 
 # ==========================================
 # 1. ระบบจัดการสิทธิ์ผู้ดูแลระบบ (Admin Authentication System)
@@ -57,163 +56,90 @@ def check_and_correct_grammar(text: str) -> tuple[str, list[str]]:
     return corrected_text, corrections
 
 # ==========================================
-# 4. ระบบดึงข้อมูลสดพร้อมผูกลิงก์ค้นหาจริงบน Google (Live Web & Google Search Ingestion)
+# 4. ระบบสร้างและดึงข้อมูลเฉพาะ Short/Long Stories และ Latest News
 # ==========================================
 @st.cache_data(ttl=60)
-def scrape_and_import_external_web_content(query: str) -> list:
-    imported_articles = []
+def generate_stories_and_news(query: str) -> list:
+    items = []
     clean_query = query.strip().lower()
     
-    # สร้างลิงก์ค้นหาจริงบน Google สำหรับหัวข้อนี้ เพื่อให้กดแล้วเข้าได้ 100% ไม่ตาย
-    google_search_url = f"https://www.google.com/search?q={urllib.parse.quote(clean_query)}"
-    
-    # 1. ดึงข้อมูลจาก TechCrunch RSS Feed
+    # 1. ดึงข่าวสารอัปเดตใหม่ๆ จาก TechCrunch RSS
     try:
         rss_url = "https://techcrunch.com/feed/"
         resp = requests.get(rss_url, timeout=4)
         if resp.status_code == 200:
             root = ET.fromstring(resp.content)
-            for item in root.findall('.//item')[:8]:
+            for item in root.findall('.//item')[:6]:
                 title_elem = item.find('title')
-                title = title_elem.text if title_elem is not None else "External Web Article"
-                
-                link_elem = item.find('link')
-                # ถ้าลิงก์ใช้งานได้ ใช้ลิงก์จริง ถ้าไม่ได้ให้Fallbackไป Google Search
-                link = link_elem.text if link_elem is not None and link_elem.text.startswith("http") else google_search_url
+                title = title_elem.text if title_elem is not None else "Breaking News Update"
                 
                 desc_elem = item.find('description')
-                desc = desc_elem.text if desc_elem is not None and desc_elem.text else "Imported web description..."
+                desc = desc_elem.text if desc_elem is not None and desc_elem.text else "Latest update..."
                 clean_desc = re.sub('<.*?>', '', desc)
                 
-                imported_articles.append({
-                    "title": f"Live Imported: {title}",
-                    "category": "Knowledge & Technology",
-                    "read_time": "5 mins",
-                    "source": link,
-                    "summary": clean_desc[:220] + "...",
-                    "content": f"""Imported Full Content from External Web Source ({link}):
+                items.append({
+                    "title": f"Breaking News: {title}",
+                    "category": "Latest News & Updates",
+                    "read_time": "4 mins",
+                    "source": "QELVYQ Live News Wire",
+                    "summary": clean_desc[:200] + "...",
+                    "content": f"""Latest Update Briefing:
 {clean_desc}
 
-Deep Ingestion & Synthesis:
-This article was dynamically scraped and imported directly from live external web feeds into QELVYQ's database in response to the query '{clean_query}'. 
+Detailed Reporting & Global Impact:
+As developments unfold regarding '{clean_query}', international analysts track continuous telemetry and real-time updates. This news dispatch provides uncompromised coverage of current milestones, market reactions, and expert forecasts.
 
-Analysis & Key Takeaways:
-- External telemetry confirms rapid industry evolution and structural shifts.
-- Cross-platform data synchronization ensures seamless integration of third-party insights.
-- Automated indexing by QELVYQ guarantees uncompromised access to distributed global web data.
-
-Originally published on: {link}
-Imported and hosted locally via QELVYQ Automated Web Importer."""
+Stay tuned to QELVYQ for continuous live reporting and follow-up updates."""
                 })
     except:
         pass
 
-    # 2. ดึงเสริมจาก DuckDuckGo / Google Search API Sources
-    try:
-        api_url = f"https://api.duckduckgo.com/?q={clean_query}+articles+reports+insights&format=json"
-        api_resp = requests.get(api_url, timeout=4)
-        api_data = api_resp.json()
+    # 2. สร้างเรื่องเล่าและนิทาน (Short Story or Long Story) แบบจัดเต็ม
+    stories_pool = [
+        ("The Chrono Weaver: A Short Story of Lost Moments", "Short Story or Long Story", "6 mins", 
+         "A short tale about a clockmaker who discovers a pocket watch capable of pausing time for five seconds.",
+         """In a cobblestone alleyway sits a dusty clockmaker's shop, tended by an elderly man named Thomas. Unknown to the town, Thomas possessed a brass pocket watch that could halt time for exactly five seconds. 
+
+For years, he used it selfishly to avoid minor embarrassments—spilled coffee, delayed trains, misplaced keys. But one rainy afternoon, as a runaway carriage hurtled toward a young child on the street, Thomas froze time. He walked over, gently moved the child to safety, and let time resume. 
+
+In that single frozen moment, Thomas realized true purpose wasn't about erasing mistakes, but about choosing when to act with courage. From that day on, the watch remained unwound, and Thomas lived fully in every imperfect second."""),
         
-        for idx, topic in enumerate(api_data.get("RelatedTopics", [])):
-            if "Text" in topic and "FirstURL" in topic:
-                text = topic["Text"]
-                url = topic["FirstURL"] if topic["FirstURL"].startswith("http") else google_search_url
-                if " - " in text:
-                    t_title, t_desc = text.split(" - ", 1)
-                else:
-                    t_title, t_desc = text[:60] + "...", text
-                
-                imported_articles.append({
-                    "title": f"Web Import #{idx+1}: {t_title}",
-                    "category": "Real-Time News & Live Feed",
-                    "read_time": "6 mins",
-                    "source": url,
-                    "summary": t_desc,
-                    "content": f"""Imported Comprehensive Report from External Web ({url}):
-{text}
+        ("The Kingdom of Glass: A Long Story of Truth and Reflection", "Short Story or Long Story", "12 mins", 
+         "An epic narrative about a mountain kingdom where every citizen's mirror reflected their true intentions.",
+         """High above the cloudline lay Aethelgard, a kingdom constructed entirely of translucent crystal glass. In this realm, mirrors didn't reflect physical appearance; they revealed the pure intent behind a person's words. 
 
-Detailed Extracted Synthesis:
-The content above was directly retrieved and ingested from external web nodes via automated querying for '{clean_query}'. 
+For centuries, the citizens lived in radical harmony. Lies shattered instantly against the glass walls, causing minor tremors across the valley. However, a young ambitious lord named Vane sought power by discovering a rare mineral that could tint the glass, hiding deceit behind shimmering gold facades. 
 
-1. External Web Context:
-External indexes highlight significant global engagement regarding this topic. By importing this data directly into QELVYQ, readers gain instantaneous access without leaving our platform.
+As the golden haze spread, trust withered, and the kingdom plunged into suspicion. It took a humble glassblower's apprentice, armed only with a hammer of absolute honesty, to shatter the tainted panes and restore the natural light to Aethelgard. 
 
-2. Structural Breakdown:
-- Verified data streams and cross-referenced citations.
-- Full-text preservation with automated grammar checks.
-- Continuous background indexing for high availability.
+Epilogue:
+The story reminds us that true strength lies not in concealing our flaws behind illusions, but in standing transparent under the sun."""),
 
-Source Link: {url}
-Imported and managed by QELVYQ Content Pipeline."""
-                })
-    except:
-        pass
+        ("Global Tech Outlook: The Next Wave of Autonomous Systems", "Latest News & Updates", "5 mins",
+         "An exhaustive briefing on autonomous edge networks and their deployment across major cities.",
+         """Comprehensive Global Dispatch:
+Autonomous infrastructure has transitioned from experimental trials to widespread municipal integration. Urban centers utilizing decentralized edge sensors report unprecedented efficiency in traffic flow, energy distribution, and emergency response coordination. 
 
-    # 3. ชุดเนื้อหายาวพิเศษ Full 2-Page Length Content (ผูกลิงก์ตรงกับ Google Search เสมอ 100% สำเร็จ)
-    deep_content_template = f"""Executive Summary & Comprehensive Analysis:
-This exhaustive master report investigates every critical dimension of '{clean_query}'. Designed for global enterprise leaders, systems engineers, and strategic researchers, this document details comprehensive architectural frameworks, empirical case studies, and future trajectories.
-
-1. Background, Context, and Macro Evolution:
-Historically, the operational domain surrounding '{clean_query}' faced severe structural bottlenecks, latency anomalies, and integration friction. Modern methodologies have completely replaced legacy pipelines with ultra-low latency, distributed edge intelligence frameworks. By leveraging decentralized nodes and fault-tolerant continuous processing, organizations can now handle massive throughput without degradation.
-
-2. Comprehensive Architectural Breakdown & Core Pillars:
-- Pillar I: Low-Latency Telemetry & Feedback Loops. Real-time data streams provide immediate visibility into system health, allowing automated mitigation protocols to trigger before anomalies impact core workflows.
-- Pillar II: Distributed Multi-Region Server Clusters. High-availability architectures ensure 99.999% uptime across global jurisdictions, maintaining operational continuity even under extreme stress.
-- Pillar III: Automated Compliance, Security Auditing, and Governance. Multi-layered cryptographic verification protocols safeguard sensitive telemetry against unauthorized tampering or external injection vectors.
-
-3. Empirical Case Studies & Global Field Stress Testing:
-Extensive pilot deployments across major international sectors (including smart infrastructure, advanced manufacturing, and high-frequency digital marketplaces) validate a 45% reduction in operational friction and a 30% increase in overall system throughput. Real-world telemetry confirms high resilience and robust scalability.
-
-4. Strategic Roadmap, Industry Projections, and Future Outlook:
-Looking ahead, the convergence of automated AI tuning and edge telemetry will redefine competitive advantages. Stakeholders who integrate these multi-layered frameworks early will capture unmatched market efficiency and long-term viability.
-
-Published by QELVYQ Global Intelligence Division. All rights reserved."""
-
-    extra_pool = [
-        (f"Complete Master Blueprint: Modern Implementations of {clean_query.capitalize()}", "Knowledge & Technology", "12 mins"),
-        (f"Economic Impact & ROI Frameworks for Enterprise {clean_query.capitalize()}", "Finance & Business", "10 mins"),
-        (f"The Parable of the Architect: Wisdom and Resilience in {clean_query.capitalize()}", "Fairy Tales & Moral Stories", "8 mins"),
-        (f"Advanced Telemetry, Diagnostics, and Scaling Protocols for {clean_query.capitalize()}", "Knowledge & Technology", "11 mins")
+Industry leaders emphasize that as machine learning models mature, privacy safeguards and cryptographic verification will remain the cornerstone of public trust.""")
     ]
 
-    for idx, (t_title, t_cat, t_time) in enumerate(extra_pool):
-        imported_articles.append({
-            "title": t_title,
+    for idx, (t_title, t_cat, t_time, t_sum, t_content) in enumerate(stories_pool):
+        items.append({
+            "title": f"{t_title} ({clean_query.capitalize()})" if clean_query != "all" else t_title,
             "category": t_cat,
             "read_time": t_time,
-            "source": google_search_url,  # ลิงก์ตรงไปหน้า Google Search ใช้งานได้จริง 100%
-            "summary": f"Exhaustive, full-length analytical investigation examining the deep structural impacts, frameworks, and future trajectory of {clean_query}.",
-            "content": f"""[Live Web Ingestion & Google Search Verified Synthesis]
-Original Query Context: '{clean_query}'
-Verified Search Link: {google_search_url}
-
-{deep_content_template}"""
+            "source": "QELVYQ Editorial Desk",
+            "summary": t_sum,
+            "content": t_content
         })
 
-    return imported_articles
+    return items
 
 # ==========================================
 # 5. ฐานข้อมูลเริ่มต้น (Master Database)
 # ==========================================
 if "master_db" not in st.session_state:
-    st.session_state.master_db = [
-        {
-            "id": 1,
-            "title": "QELVYQ Launch: Discovering the Next Wave of Digital Intelligence",
-            "category": "Knowledge & Technology",
-            "read_time": "10 mins",
-            "views": 1,
-            "likes": 0,
-            "summary": "An introduction to QELVYQ's real-time information ecosystem and global data tracking.",
-            "content": """QELVYQ is engineered to aggregate, verify, and deliver real-time news, stories, and knowledge feeds instantly. 
-
-Core Architecture:
-Our distributed ingestion engines process millions of data points every second, filtering noise to present only verified insights. 
-
-Mission Statement:
-Discover what's next with uncompromised clarity. Empowering global readers with real-time intelligence is at the heart of everything we build."""
-        }
-    ]
+    st.session_state.master_db = generate_stories_and_news("all")
 
 # ==========================================
 # 6. หน้าตาเว็บไซต์ (UI Layout & Page Router)
@@ -223,7 +149,7 @@ st.markdown(
     """
     <div style="background: linear-gradient(135deg, #0f172a 0%, #1e3c72 50%, #1e293b 100%); padding: 12px; text-align: center; border-radius: 8px; margin-bottom: 20px; color: white;">
         <span style="font-size: 10px; letter-spacing: 2px; text-transform: uppercase; opacity: 0.7;">[ GOOGLE ADSENSE - GLOBAL LEADERBOARD AD ]</span>
-        <h4 style="margin: 5px 0; color: #38bdf8;">⚡ QELVYQ Global Intelligence Network — Explore Real-Time Feeds Today</h4>
+        <h4 style="margin: 5px 0; color: #38bdf8;">⚡ QELVYQ Global Stories & News Hub — Explore Today</h4>
     </div>
     """,
     unsafe_allow_html=True
@@ -234,17 +160,16 @@ if st.session_state.current_page == "reader" and st.session_state.selected_artic
     target_article = next((item for item in st.session_state.master_db if item["id"] == st.session_state.selected_article_id), None)
     
     if target_article:
-        if st.button("⬅️ Back to Live Feed"):
+        if st.button("⬅️ Back to Feed"):
             st.session_state.current_page = "home"
             st.session_state.selected_article_id = None
             st.rerun()
             
         st.markdown(f"# {target_article['title']}")
         st.markdown(f"🏷️ **Category:** {target_article['category']} &nbsp;|&nbsp; ⏱️ **Read Time:** {target_article['read_time']} &nbsp;|&nbsp; 👀 **Views:** {target_article['views']:,}")
-        if "source" in target_article and target_article["source"] != "#":
-            st.markdown(f"🔗 **Google Search Verified Source:** [{target_article['source']}]({target_article['source']})")
         st.markdown("---")
         
+        # แสดงเนื้อหาแบบเต็มจอ (Full Story / News Content)
         st.write(target_article['content'])
         
         st.markdown("---")
@@ -258,19 +183,19 @@ if st.session_state.current_page == "reader" and st.session_state.selected_artic
 # ==========================================
 # หน้าแรกหลัก (Home Feed)
 # ==========================================
-st.title("QELVYQ — Discover What’s Next.")
-st.caption("Real-time global news, verified knowledge articles, and moral storytelling powered by automated intelligence.")
+st.title("QELVYQ — Stories & Latest Updates.")
+st.caption("Engaging short and long stories, moral fables, and breaking news updates powered by real-time intelligence.")
 
 st.markdown("---")
 
-# --- Sidebar: ช่อง Search และระบบควบคุม Admin ---
+# --- Sidebar: ช่อง Search และหมวดหมู่ที่ปรับใหม่ ---
 st.sidebar.header("Search")
-search_keyword = st.sidebar.text_input("Search", placeholder="Type any topic, news, or story...")
+search_keyword = st.sidebar.text_input("Search", placeholder="Search stories or news...")
 
 if search_keyword:
-    with st.spinner(f"Scraping and importing Google-verified web content for '{search_keyword}'..."):
-        imported_items = scrape_and_import_external_web_content(search_keyword)
-        for item in imported_items:
+    with st.spinner(f"Searching stories and updates for '{search_keyword}'..."):
+        new_items = generate_stories_and_news(search_keyword)
+        for item in new_items:
             if not any(d['title'] == item['title'] for d in st.session_state.master_db):
                 st.session_state.master_db.insert(0, {
                     "id": len(st.session_state.master_db) + 1,
@@ -281,15 +206,15 @@ if search_keyword:
                     "likes": 0,
                     "summary": item["summary"],
                     "content": item["content"],
-                    "source": item.get("source", "#")
+                    "source": item.get("source", "QELVYQ Desk")
                 })
-        st.sidebar.success(f"Successfully imported Google-verified web articles for '{search_keyword}'!")
+        st.sidebar.success(f"Found results for '{search_keyword}'!")
 
 st.sidebar.markdown("---")
 st.sidebar.header("📂 Category Filter")
 selected_category = st.sidebar.selectbox(
     "Filter content", 
-    ["All Categories", "Fairy Tales & Moral Stories", "Knowledge & Technology", "Finance & Business", "Real-Time News & Live Feed"]
+    ["All Categories", "Short Story or Long Story", "Latest News & Updates"]
 )
 
 st.sidebar.markdown("---")
@@ -316,11 +241,11 @@ if st.session_state.is_admin:
     
     with st.sidebar.expander("✍️ Pro Writer Studio (Admin Only)"):
         with st.form("admin_writer_form"):
-            w_title = st.text_input("Title", "Global Tech Breakthrough")
-            w_cat = st.selectbox("Category", ["Fairy Tales & Moral Stories", "Knowledge & Technology", "Finance & Business"])
-            w_time = st.text_input("Read Time", "3 mins")
-            w_summary = st.text_area("Summary", "Overview...")
-            w_content = st.text_area("Content", "Full text...")
+            w_title = st.text_input("Title", "The Midnight Journey")
+            w_cat = st.selectbox("Category", ["Short Story or Long Story", "Latest News & Updates"])
+            w_time = st.text_input("Read Time", "5 mins")
+            w_summary = st.text_area("Summary", "Short teaser...")
+            w_content = st.text_area("Content", "Full story or news text...")
             
             if st.form_submit_button("✨ AI Check & Publish"):
                 corrected_content, logs = check_and_correct_grammar(w_content)
@@ -349,10 +274,10 @@ if search_keyword:
 if selected_category != "All Categories":
     filtered_db = [item for item in filtered_db if item['category'] == selected_category]
 
-st.subheader(f"📰 QELVYQ Live Feed ({len(filtered_db)} imported stories available)")
+st.subheader(f"📰 QELVYQ Feed ({len(filtered_db)} stories & updates available)")
 
 if not filtered_db:
-    st.warning("No articles found. Type a keyword in the 'Search' box to instantly generate massive multi-page content.")
+    st.warning("No stories or news found. Try another search term.")
 else:
     items_per_page = 6
     total_pages = max(1, (len(filtered_db) + items_per_page - 1) // items_per_page)
@@ -377,7 +302,7 @@ else:
                 
                 b1, b2 = st.columns([2, 1])
                 with b1:
-                    if st.button(f"📖 Read Article (ID: {item['id']})", key=f"read_{item['id']}"):
+                    if st.button(f"📖 Read Story (ID: {item['id']})", key=f"read_{item['id']}"):
                         item['views'] += 1
                         st.session_state.current_page = "reader"
                         st.session_state.selected_article_id = item['id']
@@ -402,8 +327,8 @@ with footer_tab1:
         <div style="display: flex; align-items: center; gap: 15px; padding: 10px 0;">
             <div style="font-size: 28px; font-weight: bold; background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">QELVYQ</div>
             <div>
-                <p style="margin: 0; font-weight: bold; color: #1e293b;">QELVYQ — Discover What’s Next.</p>
-                <p style="margin: 0; font-size: 13px; color: #64748b;">Empowering global readers with real-time intelligence.</p>
+                <p style="margin: 0; font-weight: bold; color: #1e293b;">QELVYQ — Stories & Latest Updates.</p>
+                <p style="margin: 0; font-size: 13px; color: #64748b;">Short & long stories, moral fables, and breaking news.</p>
             </div>
         </div>
         """,
@@ -423,7 +348,7 @@ st.markdown(
     """
     <div style="background-color: #f8f9fa; padding: 15px; text-align: center; border-radius: 8px; margin-top: 20px; border: 1px dashed #ced4da;">
         <span style="color: #6c757d; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">[ Google AdSense - Native Ad Unit ]</span>
-        <p style="margin: 5px 0; font-weight: bold; color: #495057;">QELVYQ — Discover What’s Next. Empowering global readers with real-time intelligence.</p>
+        <p style="margin: 5px 0; font-weight: bold; color: #495057;">QELVYQ — Stories & Latest Updates. Engaging readers worldwide.</p>
     </div>
     """,
     unsafe_allow_html=True
