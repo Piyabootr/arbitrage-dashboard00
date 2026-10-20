@@ -12,29 +12,39 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ---------- Theme & Professional Graphic Styling (Glassmorphism & Neon Accents) ----------
+# ---------- Theme & Professional Graphic Styling (ปิดช่องว่าง + เพิ่มลวดลายรวดราย) ----------
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 :root { --navy:#071a3b; --blue:#0878e8; --ink:#0f2537; --muted:#64748b; --line:#cbd5e1; }
 html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
 
-/* พื้นหลังฟ้าอ่อนระดับพรีเมียมพร้อมกราฟิกแสงเรืองแสง */
+/* พื้นหลังฟ้าอ่อนระดับพรีเมียม พร้อมลวดลายเส้นตารางจางๆ (Subtle Grid Pattern) */
 .stApp { 
-    background: radial-gradient(circle at 10% 10%, rgba(8, 120, 232, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 90% 90%, rgba(59, 130, 246, 0.06) 0%, transparent 40%),
-                linear-gradient(180deg, #f0f6ff 0%, #f8fbff 50%, #eef4fd 100%); 
+    background-image: 
+        linear-gradient(to right, rgba(8, 120, 232, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(8, 120, 232, 0.03) 1px, transparent 1px),
+        radial-gradient(circle at 10% 10%, rgba(8, 120, 232, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 90% 90%, rgba(59, 130, 246, 0.06) 0%, transparent 40%),
+        linear-gradient(180deg, #f0f6ff 0%, #f8fbff 50%, #eef4fd 100%);
+    background-size: 32px 32px, 32px 32px, 100% 100%, 100% 100%, 100% 100%;
     color: var(--ink); 
 }
 
-.block-container { max-width: 1520px; padding-top: 1rem; padding-bottom: 2rem; padding-left: 2rem; padding-right: 2rem; }
+/* ปิดช่องว่างส่วนบน (Header Padding) ให้กระชับพอดีกับขอบจอ */
+.block-container { max-width: 1520px; padding-top: 0.4rem !important; padding-bottom: 2rem; padding-left: 2rem; padding-right: 2rem; }
+header[data-testid="stHeader"] { background: rgba(0,0,0,0); }
 
-[data-testid="stSidebar"] { background: #f4f8ff; border-right:1px solid #d2e2fb; }
-[data-testid="stSidebar"] > div { padding-top: 0.8rem; padding-left: 0.8rem; padding-right: 0.8rem; }
+/* ปิดช่องว่าง Sidebar และเพิ่มลวดลายแบ็คกราวด์เล็กน้อย */
+[data-testid="stSidebar"] { 
+    background: linear-gradient(180deg, #f4f8ff 0%, #edf4ff 100%); 
+    border-right: 1px solid #d2e2fb; 
+}
+[data-testid="stSidebar"] > div { padding-top: 0.5rem !important; padding-left: 0.8rem; padding-right: 0.8rem; }
 
 h1,h2,h3,h4 { color:var(--ink); letter-spacing:-.025em; }
 
-/* ดีไซน์ Metric กรอบกระจกฝ้าแบบมืออาชีพ */
+/* ดีไซน์ Metric กรอบกระจกฝ้า */
 div[data-testid="stMetric"] { 
     background: rgba(255, 255, 255, 0.85); 
     backdrop-filter: blur(10px);
@@ -56,7 +66,7 @@ div[data-testid="stMetricValue"] { color:#0f172a; font-weight:800; font-size: 1.
 .stButton > button:hover { border-color:#0878e8; color:#0878e8; background:#f0f7ff; box-shadow: 0 4px 12px rgba(8,120,232,0.15); }
 div[data-testid="stTextInput"] input, div[data-testid="stSelectbox"] div[data-baseweb="select"] { border-radius:8px; background-color: #ffffff; min-height: 38px; border: 1px solid #cbd5e1; }
 
-/* โลโก้ Sidebar พร้อมลูกเล่นเรืองแสง */
+/* โลโก้ Sidebar */
 .q-brand-sidebar { display:flex; flex-direction:column; padding: 2px 2px 10px; border-bottom: 1px solid #d8e5f8; margin-bottom: 8px; }
 .q-brand-top { display:flex; align-items:center; gap:8px; }
 .q-brand-logo { width:34px; height:34px; background:linear-gradient(135deg,#38bdf8,#0284c7); border-radius:9px; display:flex; align-items:center; justify-content:center; color:white; font-size:17px; font-weight:900; box-shadow: 0 4px 12px rgba(2,132,199,0.3); }
@@ -73,19 +83,18 @@ div[data-testid="stTextInput"] input, div[data-testid="stSelectbox"] div[data-ba
 .h-card-meta { color:#64748b; font-size:10.5px; display:flex; gap:12px; align-items:center; font-weight: 500; }
 
 /* Hero Banner พร้อมลวดลายกราฟิกเชิงเทคโนโลยีมืออาชีพ */
-.hero { position:relative; overflow:hidden; border-radius:16px; padding:22px 26px; color:#fff; background:radial-gradient(circle at 80% 20%, rgba(56, 189, 248, 0.35) 0%, transparent 35%), linear-gradient(120deg,#0369a1 0%,#0284c7 50%,#0f172a 100%); box-shadow:0 10px 30px rgba(2,132,199,0.2); margin-bottom:16px; }
+.hero { position:relative; overflow:hidden; border-radius:16px; padding:20px 24px; color:#fff; background:radial-gradient(circle at 80% 20%, rgba(56, 189, 248, 0.35) 0%, transparent 35%), linear-gradient(120deg,#0369a1 0%,#0284c7 50%,#0f172a 100%); box-shadow:0 10px 30px rgba(2,132,199,0.2); margin-bottom:14px; }
 .hero:before { content:''; position:absolute; width:200px; height:200px; right:-50px; bottom:-50px; background:rgba(255,255,255,0.05); border-radius:50%; pointer-events:none; }
-.hero h1 { font-size:clamp(22px, 1.8vw, 30px); margin:6px 0 4px; font-weight:900; letter-spacing: -0.03em; }
+.hero h1 { font-size:clamp(22px, 1.8vw, 30px); margin:4px 0 4px; font-weight:900; letter-spacing: -0.03em; }
 .hero p { font-size:12px; opacity:0.9; margin:0; font-weight: 400; }
 
-/* ป้ายจุดขาย / จุดสังเกตุ (Key Selling Points Badge) */
-.usp-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 20px; padding: 4px 12px; color: #bae6fd; font-size: 10.5px; font-weight: 700; margin-bottom: 8px; }
+.usp-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 20px; padding: 3px 10px; color: #bae6fd; font-size: 10px; font-weight: 700; margin-bottom: 6px; }
 
-.section-head { display:flex; align-items:center; gap:8px; margin:4px 0 0; }
+.section-head { display:flex; align-items:center; gap:8px; margin:2px 0 0; }
 .section-head h3 { margin:0; font-size:18px; font-weight:800; }
-.section-sub { color:#64748b; font-size:11.5px; margin:2px 0 10px; }
+.section-sub { color:#64748b; font-size:11.5px; margin:2px 0 8px; }
 
-.footer { border-top:1px solid #cbd5e1; padding-top:12px; margin-top:20px; color:#64748b; font-size:10px; text-align:center; font-weight: 500; }
+.footer { border-top:1px solid #cbd5e1; padding-top:10px; margin-top:15px; color:#64748b; font-size:10px; text-align:center; font-weight: 500; }
 div[data-testid="stHorizontalBlock"] { gap: 0.8rem; }
 </style>
 """, unsafe_allow_html=True)
@@ -168,7 +177,7 @@ with st.sidebar:
     category_filter = st.selectbox("Category Filter", ["All Categories", "Business", "Technology", "AI", "Science", "World"], label_visibility="collapsed")
 
     st.markdown("""
-    <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:12px; padding:10px 12px; margin-top:10px; margin-bottom:10px; box-shadow: 0 4px 12px rgba(0,0,0,0.02);">
+    <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:12px; padding:10px 12px; margin-top:8px; margin-bottom:8px; box-shadow: 0 4px 12px rgba(0,0,0,0.02);">
         <div style="font-size:11px; font-weight:800; color:#0284c7; margin-bottom:6px; display:flex; align-items:center; gap:5px;">⚡ Quick Access</div>
         <div style="font-size:12px; font-weight:600; color:#1e293b; margin:4px 0;">🔥 Trending Now</div>
         <div style="font-size:12px; font-weight:600; color:#1e293b; margin:4px 0;">👁️ Most Viewed</div>
@@ -176,7 +185,7 @@ with st.sidebar:
     """, unsafe_allow_html=True)
 
     st.markdown("""
-    <div style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color:white; border-radius:12px; padding:12px; margin-top:10px; box-shadow:0 6px 16px rgba(2,132,199,0.25);">
+    <div style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color:white; border-radius:12px; padding:12px; margin-top:8px; box-shadow:0 6px 16px rgba(2,132,199,0.25);">
         <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px;">
             <span style="font-size:15px;">🤖</span>
             <span style="font-size:11.5px; font-weight:800;">QELVYQ AI Assistant</span>
@@ -215,7 +224,7 @@ if st.session_state.current_page != "Home":
 # ---------- HOME PAGE DASHBOARD ----------
 st.markdown(f"""
 <div class="hero">
-    <div style="position:absolute; right:20px; top:15px; font-size:11px; color:#e0f2fe; font-weight:500;">Mon, 20 Oct 2026 &bull; <span style="color:#4ade80; font-weight:700;">● Live Real-Time</span></div>
+    <div style="position:absolute; right:20px; top:12px; font-size:11px; color:#e0f2fe; font-weight:500;">Mon, 20 Oct 2026 &bull; <span style="color:#4ade80; font-weight:700;">● Live Real-Time</span></div>
     <div class="usp-badge">🛡️ Verified Live Intelligence &bull; Zero-Delay Sync</div>
     <h1>QELVYQ — Stories & Real-Time Updates.</h1>
     <p>Engaging stories and live breaking news powered by true real-time online data and AI synthesis.</p>
