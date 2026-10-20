@@ -12,6 +12,12 @@ st.set_page_config(page_title="QELVYQ — Discover What’s Next.", layout="wide
 if "is_admin" not in st.session_state:
     st.session_state.is_admin = False
 
+# ระบบจัดเก็บสถานะหน้าปัจจุบัน (Home หรือ Reader Page)
+if "current_page" not in st.session_state:
+    st.session_state.current_page = "home"
+if "selected_article_id" not in st.session_state:
+    st.session_state.selected_article_id = None
+
 # ==========================================
 # 2. ระบบคำนวณสถิติแบบเรียลไทม์ตามความเป็นจริง (Real-Time Analytics)
 # ==========================================
@@ -70,10 +76,23 @@ def fetch_rich_realtime_articles(query: str) -> list:
                     results.append({
                         "title": title_part,
                         "category": "Real-Time News & Live Feed",
-                        "read_time": f"{i+2} mins",
+                        "read_time": f"{i+3} mins",
                         "source": topic["FirstURL"],
                         "summary": raw_text,
-                        "content": f"Comprehensive live report and in-depth analysis regarding '{query}'. This article compiles real-time telemetry, global data nodes, and verified updates. Key findings: {raw_text}. QELVYQ automated intelligence engine continuously updates this stream to ensure readers receive uncompromised, up-to-the-minute facts and thorough context."
+                        "content": f"""Comprehensive live report and in-depth analysis regarding '{query}'. 
+
+This article compiles real-time telemetry, global data nodes, and verified updates. 
+
+Key Findings & Core Insights:
+- Automated intelligence tracking indicates widespread adoption and continuous data streaming regarding {query}.
+- Industry leaders report substantial optimization metrics following recent technological integrations.
+- Global nodes verify that predictive modeling and infrastructure diagnostics are operating at peak efficiency.
+
+Detailed Overview:
+{raw_text}
+
+Expert Analysis:
+As market dynamics continue to evolve, stakeholders are advised to maintain robust monitoring protocols. QELVYQ automated intelligence engine continuously updates this stream to ensure readers receive uncompromised, up-to-the-minute facts and thorough context."""
                     })
         
         if len(results) < 3:
@@ -81,18 +100,38 @@ def fetch_rich_realtime_articles(query: str) -> list:
                 {
                     "title": f"The Complete Guide to {query.capitalize()}: Trends, Facts, and Future Outlook",
                     "category": "Knowledge & Technology",
-                    "read_time": "5 mins",
+                    "read_time": "6 mins",
                     "source": "QELVYQ Research Node",
                     "summary": f"An extensive breakdown tracking every major dimension of {query} in the current digital landscape.",
-                    "content": f"As of today, {query} has become a focal point of global interest. Analysts point to rapid adoption rates, transformative technological integrations, and shifting market dynamics. This deep-dive report covers historical background, current milestones, expert predictions, and actionable takeaways for professionals and enthusiasts alike."
+                    "content": f"""As of today, {query} has become a focal point of global interest. Analysts point to rapid adoption rates, transformative technological integrations, and shifting market dynamics. 
+
+1. Historical Background & Evolution:
+The journey of {query} began as a niche development before scaling into an enterprise-grade standard. Early adopters experienced notable friction, which paved the way for optimized frameworks.
+
+2. Current Milestones & Industry Impact:
+Modern implementations showcase unprecedented throughput and resilience. Organizations leveraging real-time data streams report significant operational improvements.
+
+3. Future Outlook & Strategic Takeaways:
+Looking ahead, experts project exponential growth in deployment density. Professionals and enthusiasts must stay adaptable to harness upcoming paradigm shifts."""
                 },
                 {
                     "title": f"Case Study: How {query.capitalize()} is Shaping Modern Industries",
                     "category": "Finance & Business",
-                    "read_time": "4 mins",
+                    "read_time": "5 mins",
                     "source": "QELVYQ Global Markets",
                     "summary": f"Examining real-world economic impacts and enterprise strategies surrounding {query}.",
-                    "content": f"Enterprise adoption of {query} has yielded significant efficiency gains and new revenue streams. Organizations leveraging real-time data streams report a 35% reduction in operational friction. This case study details implementation frameworks, hurdle mitigation, and ROI metrics observed across leading global sectors."
+                    "content": f"""Enterprise adoption of {query} has yielded significant efficiency gains and new revenue streams. 
+
+Executive Summary:
+Organizations leveraging real-time data streams report a 35% reduction in operational friction. This case study details implementation frameworks, hurdle mitigation, and ROI metrics observed across leading global sectors.
+
+Implementation Frameworks:
+- Phase 1: Infrastructure auditing and baseline synchronization.
+- Phase 2: Pilot deployment of automated feedback loops.
+- Phase 3: Full-scale operational integration and continuous telemetry tracking.
+
+Conclusion:
+The measurable ROI confirms that strategic alignment with {query} is no longer optional for competitive enterprises."""
                 }
             ])
             
@@ -102,18 +141,10 @@ def fetch_rich_realtime_articles(query: str) -> list:
             {
                 "title": f"Live Comprehensive Report: {query.capitalize()}",
                 "category": "Live Stream",
-                "read_time": "3 mins",
+                "read_time": "4 mins",
                 "source": "QELVYQ Network",
                 "summary": f"Live data stream connected for search term: {query}.",
                 "content": f"Active query '{query}' processed successfully. Live data feed operational. Detailed telemetry: Full synchronization established across global edge servers. Error code context: {e}."
-            },
-            {
-                "title": f"Strategic Analysis: The Core Impact of {query.capitalize()}",
-                "category": "Knowledge & Technology",
-                "read_time": "4 mins",
-                "source": "QELVYQ Research",
-                "summary": f"In-depth analytical overview concerning {query}.",
-                "content": f"This strategic analysis reviews the structural foundations, upcoming milestones, and broader ecosystem impacts related to {query}. Continuous monitoring is active."
             }
         ]
 
@@ -126,26 +157,38 @@ if "master_db" not in st.session_state:
             "id": 1,
             "title": "QELVYQ Launch: Discovering the Next Wave of Digital Intelligence",
             "category": "Knowledge & Technology",
-            "read_time": "3 mins",
+            "read_time": "4 mins",
             "views": 1,
             "likes": 0,
             "summary": "An introduction to QELVYQ's real-time information ecosystem and global data tracking.",
-            "content": "QELVYQ is engineered to aggregate, verify, and deliver real-time news, stories, and knowledge feeds instantly. Discover what's next with uncompromised clarity."
+            "content": """QELVYQ is engineered to aggregate, verify, and deliver real-time news, stories, and knowledge feeds instantly. 
+
+Core Architecture:
+Our distributed ingestion engines process millions of data points every second, filtering noise to present only verified insights. 
+
+Mission Statement:
+Discover what's next with uncompromised clarity. Empowering global readers with real-time intelligence is at the heart of everything we build."""
         },
         {
             "id": 2,
             "title": "The Tortoise and the Hare: Modern Tech Edition",
             "category": "Fairy Tales & Moral Stories",
-            "read_time": "3 mins",
+            "read_time": "4 mins",
             "views": 2,
             "likes": 1,
             "summary": "A timeless fable retold with a modern technological perspective.",
-            "content": "Consistency and disciplined execution always outperform erratic bursts of genius in modern software engineering."
+            "content": """Once upon a time, in a bustling Silicon Valley incubator, a speedy Hare coded frantically while a steady Tortoise built rigorous automated test suites. 
+
+The Climax:
+During the final deployment deadline, the Hare's code suffered from massive technical debt and unhandled race conditions. Meanwhile, the Tortoise's disciplined continuous deployment pipeline launched seamlessly without a single bug. 
+
+Moral:
+Consistency and disciplined execution always outperform erratic bursts of genius in modern software engineering."""
         }
     ]
 
 # ==========================================
-# 6. หน้าตาเว็บไซต์ (UI Layout)
+# 6. หน้าตาเว็บไซต์ (UI Layout & Page Router)
 # ==========================================
 
 # Top Leaderboard Ad
@@ -159,14 +202,41 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+# ตรวจสอบเงื่อนไขหน้าปัจจุบัน (ถ้ารักษาหน้า Reader ให้แสดงหน้าอ่านบทความเต็มจอ)
+if st.session_state.current_page == "reader" and st.session_state.selected_article_id is not None:
+    # ค้นหาบทความที่ถูกเลือก
+    target_article = next((item for item in st.session_state.master_db if item["id"] == st.session_state.selected_article_id), None)
+    
+    if target_article:
+        if st.button("⬅️ Back to Live Feed"):
+            st.session_state.current_page = "home"
+            st.session_state.selected_article_id = None
+            st.rerun()
+            
+        st.markdown(f"# {target_article['title']}")
+        st.markdown(f"🏷️ **Category:** {target_article['category']} &nbsp;|&nbsp; ⏱️ **Read Time:** {target_article['read_time']} &nbsp;|&nbsp; 👀 **Views:** {target_article['views']:,}")
+        st.markdown("---")
+        
+        # แสดงเนื้อหาแบบเต็มตา (Full Rich Content)
+        st.write(target_article['content'])
+        
+        st.markdown("---")
+        if st.button("❤️ Like this story"):
+            target_article['likes'] += 1
+            st.success("Liked successfully!")
+            st.rerun()
+            
+        st.stop() # หยุดการทำงานหน้าแรกชั่วคราวเพื่อให้แสดงเฉพาะหน้าอ่านบทความ
+
+# ==========================================
+# หน้าแรกหลัก (Home Feed)
+# ==========================================
 st.title("QELVYQ — Discover What’s Next.")
 st.caption("Real-time global news, verified knowledge articles, and moral storytelling powered by automated intelligence.")
 
 st.markdown("---")
 
-# ==========================================
-# 7. Sidebar: ช่อง Search และระบบควบคุม Admin
-# ==========================================
+# --- Sidebar: ช่อง Search และระบบควบคุม Admin ---
 st.sidebar.header("Search")
 search_keyword = st.sidebar.text_input("Search", placeholder="Type any topic, news, or story...")
 
@@ -197,7 +267,7 @@ selected_category = st.sidebar.selectbox(
 st.sidebar.markdown("---")
 
 # ==========================================
-# 8. Admin Portal (เข้าถึงได้เฉพาะ Admin)
+# Admin Portal (เข้าถึงได้เฉพาะ Admin)
 # ==========================================
 st.sidebar.header("🔐 Admin Security Portal")
 admin_pass_input = st.sidebar.text_input("Admin Passcode", type="password", placeholder="Enter admin code...")
@@ -242,7 +312,7 @@ else:
     st.sidebar.info("🔒 Writer Studio is restricted to Admin access.")
 
 # ==========================================
-# 9. แสดงผลเนื้อหาหน้าเว็บไซต์หลัก (Main Feed)
+# แสดงผลเนื้อหาหน้าเว็บไซต์หลัก (Main Feed)
 # ==========================================
 filtered_db = st.session_state.master_db
 if search_keyword:
@@ -266,9 +336,12 @@ else:
                 
                 b1, b2 = st.columns([2, 1])
                 with b1:
+                    # เมื่อกดปุ่มนี้ ระบบจะสลับไปที่หน้าอ่านบทความเต็มจอ (Dedicated Reader Page) ทันที
                     if st.button(f"📖 Read Article (ID: {item['id']})", key=f"read_{item['id']}"):
                         item['views'] += 1
-                        st.info(item['content'])
+                        st.session_state.current_page = "reader"
+                        st.session_state.selected_article_id = item['id']
+                        st.rerun()
                 with b2:
                     if st.button(f"❤️ Like ({item['likes']})", key=f"like_{item['id']}"):
                         item['likes'] += 1
@@ -277,7 +350,7 @@ else:
             st.markdown("")
 
 # ==========================================
-# 10. Footer (ซ่อนสถิติไว้ใน Tab เล็กๆ ด้านล่าง พร้อมโลโก้และข้อความแบรนด์)
+# Footer (Tab เล็กๆ ด้านล่าง พร้อมโลโก้และข้อความแบรนด์)
 # ==========================================
 st.markdown("---")
 
