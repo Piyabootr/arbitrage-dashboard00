@@ -164,15 +164,6 @@ st.caption("Real-time global news, verified knowledge articles, and moral storyt
 
 st.markdown("---")
 
-# --- Analytics Metrics Bar ---
-m1, m2, m3, m4 = st.columns(4)
-m1.metric("🟢 Live Active Visitors", f"{st.session_state.active_users} online", "Real-Time")
-m2.metric("📊 Total Page Views", f"{st.session_state.page_views:,}", "Live Counter")
-m3.metric("💰 Est. AdSense Revenue", f"${real_adsense_revenue:,.4f} USD", "Live Earnings")
-m4.metric("📚 Total Articles & Tales", f"{len(st.session_state.master_db)} active", "Verified Database")
-
-st.markdown("---")
-
 # ==========================================
 # 7. Sidebar: ช่อง Search และระบบควบคุม Admin
 # ==========================================
@@ -285,10 +276,39 @@ else:
                 
             st.markdown("")
 
+# ==========================================
+# 10. Footer (ซ่อนสถิติไว้ใน Tab เล็กๆ ด้านล่าง พร้อมโลโก้และข้อความแบรนด์)
+# ==========================================
+st.markdown("---")
+
+footer_tab1, footer_tab2 = st.tabs(["🌐 QELVYQ Brand & Info", "📊 Live Real-Time Analytics"])
+
+with footer_tab1:
+    st.markdown(
+        """
+        <div style="display: flex; align-items: center; gap: 15px; padding: 10px 0;">
+            <div style="font-size: 28px; font-weight: bold; background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">QELVYQ</div>
+            <div>
+                <p style="margin: 0; font-weight: bold; color: #1e293b;">QELVYQ — Discover What’s Next.</p>
+                <p style="margin: 0; font-size: 13px; color: #64748b;">Empowering global readers with real-time intelligence.</p>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+with footer_tab2:
+    st.markdown("#### 📊 System Telemetry & Live Metrics")
+    f_col1, f_col2, f_col3, f_col4 = st.columns(4)
+    f_col1.metric("🟢 Live Visitors", f"{st.session_state.active_users} online")
+    f_col2.metric("📊 Page Views", f"{st.session_state.page_views:,}")
+    f_col3.metric("💰 Est. AdSense", f"${real_adsense_revenue:,.4f} USD")
+    f_col4.metric("📚 Active Posts", f"{len(st.session_state.master_db)}")
+
 # Footer AdSense Banner
 st.markdown(
     """
-    <div style="background-color: #f8f9fa; padding: 15px; text-align: center; border-radius: 8px; margin-top: 40px; border: 1px dashed #ced4da;">
+    <div style="background-color: #f8f9fa; padding: 15px; text-align: center; border-radius: 8px; margin-top: 20px; border: 1px dashed #ced4da;">
         <span style="color: #6c757d; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">[ Google AdSense - Native Ad Unit ]</span>
         <p style="margin: 5px 0; font-weight: bold; color: #495057;">QELVYQ — Discover What’s Next. Empowering global readers with real-time intelligence.</p>
     </div>
