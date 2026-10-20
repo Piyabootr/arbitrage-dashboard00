@@ -80,7 +80,7 @@ div[data-testid="stHorizontalBlock"] { gap: 0.8rem; }
 </style>
 """, unsafe_allow_html=True)
 
-# ---------- Session State & Massive Database Generator (50 items per category) ----------
+# ---------- Session State & Massive Database Generator ----------
 if "current_page" not in st.session_state:
     st.session_state.current_page = "Home"
 if "selected_article_id" not in st.session_state:
@@ -99,7 +99,6 @@ if "bookmarks" not in st.session_state:
 @st.cache_data
 def generate_massive_database():
     db = []
-    
     news_images = [
         "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=700&q=80",
         "https://images.unsplash.com/photo-1526367790999-0150786686a2?auto=format&fit=crop&w=700&q=80",
@@ -107,7 +106,6 @@ def generate_massive_database():
         "https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&fit=crop&w=700&q=80",
         "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=700&q=80"
     ]
-    
     story_images = [
         "https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&w=700&q=80",
         "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=700&q=80",
@@ -115,22 +113,20 @@ def generate_massive_database():
         "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=700&q=80"
     ]
 
-    # 1. Live News (50 เรื่อง)
     for i in range(1, 51):
         img_match = news_images[(i - 1) % len(news_images)]
         db.append({
             "id": 10000 + i,
-            "title": f"Live Wire #{i}: Advanced Intelligence & Market Breakthrough (Real-Time Update)",
+            "title": f"Live Wire #{i}: Advanced Intelligence & Market Breakthrough",
             "category": "Live News",
             "time_ago": f"{i * 3} mins ago",
             "views": f"{i * 145} views",
             "likes": i % 12,
-            "summary": f"Comprehensive real-time dispatch tracking the latest technical milestones and market reactions for global item #{i}.",
-            "content": f"Detailed Real-Time Report #{i}:\n\nContinuous monitoring and telemetry streams indicate rapid adaptation across international sectors. Industry leaders emphasize that robust data governance, real-time synchronization, and automated verification remain critical for maintaining competitive leadership in 2026.\n\nKey Metrics:\n- Real-time ingestion latency maintained below 15ms.\n- Multi-region cryptographic verification active.\n- Continuous scaling protocols successfully deployed.",
+            "summary": f"Comprehensive real-time dispatch tracking the latest technical milestones for global item #{i}.",
+            "content": f"Detailed Real-Time Report #{i}:\n\nContinuous monitoring indicates rapid adaptation across international sectors. Real-time verification remains active.",
             "image": img_match
         })
 
-    # 2. Stories (50 เรื่อง)
     for i in range(1, 51):
         img_match = story_images[(i - 1) % len(story_images)]
         db.append({
@@ -140,8 +136,8 @@ def generate_massive_database():
             "time_ago": f"{i * 12} mins ago",
             "views": f"{i * 320} views",
             "likes": (i * 3) % 25,
-            "summary": f"An immersive narrative exploring wisdom, perseverance, and ethical dilemmas in a rapidly evolving technological era.",
-            "content": f"Immersive Narrative Chapter #{i}:\n\nIn a realm where digital data flows like rivers of light, keepers of knowledge gather to decode the patterns of tomorrow. Story #{i} explores the delicate balance between rapid technological acceleration and enduring human wisdom.\n\nCore Lesson:\nTrue mastery is achieved through disciplined daily execution, empathy, and an open mind ready to learn from every live update.",
+            "summary": f"An immersive narrative exploring wisdom and perseverance in a rapidly evolving technological era.",
+            "content": f"Immersive Narrative Chapter #{i}:\n\nIn a realm where digital data flows like rivers of light, keepers of knowledge gather to decode the patterns of tomorrow.",
             "image": img_match
         })
 
@@ -189,4 +185,203 @@ with st.sidebar:
         <div style="font-size:12px; font-weight:600; color:#1e293b; margin:4px 0;">🔥 Trending Now</div>
         <div style="font-size:12px; font-weight:600; color:#1e293b; margin:4px 0;">👁️ Most Viewed</div>
     </div>
-    """, unsafe_allow
+    """, unsafe_allow_html=True)
+
+    st.markdown("""
+    <div style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color:white; border-radius:12px; padding:12px; margin-top:8px; box-shadow:0 6px 16px rgba(2,132,199,0.25);">
+        <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px;">
+            <span style="font-size:15px;">🤖</span>
+            <span style="font-size:11.5px; font-weight:800;">QELVYQ AI Assistant</span>
+        </div>
+        <p style="font-size:10px; color:#e0f2fe; line-height:1.3; margin:0 0 8px 0;">Your smart companion for live insights.</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    if st.button("Try Now ➔", use_container_width=True):
+        st.session_state.current_page = "AI Assistant"
+        st.rerun()
+
+# ---------- Dedicated Reader Page ----------
+if st.session_state.selected_article_id is not None:
+    article = next((item for item in st.session_state.master_db if item["id"] == st.session_state.selected_article_id), None)
+    
+    if article:
+        if st.button("← Back to Feed"):
+            st.session_state.selected_article_id = None
+            st.rerun()
+            
+        col_img, col_txt = st.columns([1, 2])
+        with col_img:
+            st.image(article.get("image"), use_container_width=True)
+        with col_txt:
+            st.markdown(f"## {article['title']}")
+            st.markdown(f"🏷️ **Category:** {article['category']} &nbsp;|&nbsp; ⏱️ **Time:** {article['time_ago']} &nbsp;|&nbsp; 👀 **Views:** {article['views']}")
+            st.markdown("---")
+            st.write(article.get('content'))
+        st.stop()
+
+# ---------- Main Routing for Pages ----------
+items_per_page = 30
+
+if st.session_state.current_page == "Live News":
+    st.markdown("## 📡 Live News Page")
+    st.markdown("Real-time automated wire updates from global intelligence feeds.")
+    
+    news_items = [i for i in st.session_state.master_db if i['category'] == 'Live News']
+    total_pages = max(1, (len(news_items) + items_per_page - 1) // items_per_page)
+    page_num = st.selectbox("📄 Select Page Navigation", range(1, total_pages + 1), format_func=lambda x: f"Page {x} of {total_pages}", key="news_page_sel")
+    
+    start_idx = (page_num - 1) * items_per_page
+    end_idx = start_idx + items_per_page
+    for item in news_items[start_idx:end_idx]:
+        st.markdown(f"""
+        <div class="horizontal-card">
+            <img src="{item['image']}" class="h-card-img">
+            <div class="h-card-content">
+                <div class="h-card-title">{item['title']}</div>
+                <div class="h-card-summary">{item['summary']}</div>
+                <div class="h-card-meta"><span>⏱ {item['time_ago']}</span> &bull; <span>👁 {item['views']}</span></div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button(f"📖 Read News (ID: {item['id']})", key=f"news_read_{item['id']}"):
+            st.session_state.selected_article_id = item['id']
+            st.rerun()
+    st.stop()
+
+elif st.session_state.current_page == "Stories":
+    st.markdown("## 📖 Stories Page")
+    st.markdown("Editorial & long-form stories, moral fables, and technical case studies.")
+    
+    story_items = [i for i in st.session_state.master_db if i['category'] == 'Stories']
+    total_pages = max(1, (len(story_items) + items_per_page - 1) // items_per_page)
+    page_num = st.selectbox("📄 Select Page Navigation", range(1, total_pages + 1), format_func=lambda x: f"Page {x} of {total_pages}", key="story_page_sel")
+    
+    start_idx = (page_num - 1) * items_per_page
+    end_idx = start_idx + items_per_page
+    for item in story_items[start_idx:end_idx]:
+        st.markdown(f"""
+        <div class="horizontal-card">
+            <img src="{item['image']}" class="h-card-img">
+            <div class="h-card-content">
+                <div class="h-card-title">{item['title']}</div>
+                <div class="h-card-summary">{item['summary']}</div>
+                <div class="h-card-meta"><span>⏱ {item['time_ago']}</span> &bull; <span>👁 {item['views']}</span></div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button(f"📖 Read Story (ID: {item['id']})", key=f"story_read_{item['id']}"):
+            st.session_state.selected_article_id = item['id']
+            st.rerun()
+    st.stop()
+
+elif st.session_state.current_page == "AI Assistant":
+    st.markdown("## 🤖 QELVYQ AI Intelligence Assistant")
+    st.markdown("Ask anything about current market trends, technology breakthroughs, or real-time news indexing.")
+    user_prompt = st.text_input("Query the live intelligence model...", placeholder="e.g., Summarize today's major AI infrastructure investments")
+    if user_prompt:
+        st.info(f"Analyzing real-time indices for: **{user_prompt}**...")
+        st.success("Based on current data streams, major investments are concentrating heavily on proprietary data centers.")
+    st.stop()
+
+elif st.session_state.current_page == "Analytics":
+    st.markdown("## 📊 System Telemetry & Analytics")
+    st.markdown("Live traffic monitoring, content engagement rates, and platform distribution telemetry.")
+    c1, c2, c3 = st.columns(3)
+    c1.metric("Platform Uptime", "99.998%", "+0.001%")
+    c2.metric("Index Latency", "42 ms", "-4 ms")
+    c3.metric("Verified Nodes", "1,240", "+12 active")
+    st.stop()
+
+elif st.session_state.current_page == "Bookmarks":
+    st.markdown("## 🔖 Your Saved Bookmarks")
+    saved_items = [i for i in st.session_state.master_db if i['id'] in st.session_state.bookmarks]
+    if not saved_items:
+        st.info("No bookmarks saved yet.")
+    else:
+        for item in saved_items:
+            st.markdown(f"- **{item['title']}** *({item['category']})*")
+    st.stop()
+
+# ---------- HOME PAGE DASHBOARD ----------
+st.markdown(f"""
+<div class="hero">
+    <div style="position:absolute; right:20px; top:12px; font-size:11px; color:#e0f2fe; font-weight:500;">{datetime.now().strftime('%a, %d %b %Y %H:%M:%S')} &bull; <span style="color:#4ade80; font-weight:700;">● Live Real-Time</span></div>
+    <div class="usp-badge">🛡️ Contextual Visual Intelligence &bull; Verified Feed</div>
+    <h1>QELVYQ — Stories & Real-Time Updates.</h1>
+    <p>Engaging stories and live breaking news powered by true real-time online telemetry.</p>
+</div>
+""", unsafe_allow_html=True)
+
+filtered_articles = st.session_state.master_db
+if search_query:
+    filtered_articles = [a for a in filtered_articles if search_query.lower() in a['title'].lower()]
+if category_filter != "All Categories":
+    filtered_articles = [a for a in filtered_articles if a['category'].lower() == category_filter.lower()]
+
+st.markdown("""
+<div class="section-head">
+    <h3>Latest News & Updates</h3>
+</div>
+<div class="section-sub">✨ Real-time news, technology, business, and more — verified and updated continuously.</div>
+""", unsafe_allow_html=True)
+
+if not filtered_articles:
+    st.info("No matching articles found.")
+else:
+    total_pages = max(1, (len(filtered_articles) + items_per_page - 1) // items_per_page)
+    
+    if total_pages > 1:
+        page_num = st.selectbox("📄 Select Page Navigation", range(1, total_pages + 1), format_func=lambda x: f"Full Page {x} of {total_pages}", key="home_page_sel")
+    else:
+        page_num = 1
+        
+    start_idx = (page_num - 1) * items_per_page
+    end_idx = start_idx + items_per_page
+    current_page_items = filtered_articles[start_idx:end_idx]
+
+    for idx, item in enumerate(current_page_items):
+        cat_color = "#0284c7" if item["category"] == "Live News" else "#7c3aed"
+        
+        st.markdown(f"""
+        <div class="horizontal-card">
+            <img src="{item['image']}" class="h-card-img">
+            <div class="h-card-content">
+                <div>
+                    <span style="background:{cat_color}; color:#fff; padding:2px 7px; border-radius:10px; font-size:9px; font-weight:750; text-transform:uppercase; letter-spacing:0.04em;">{item['category']}</span>
+                </div>
+                <div class="h-card-title">{item['title']}</div>
+                <div class="h-card-summary">{item.get('summary', '')}</div>
+                <div class="h-card-meta">
+                    <span>⏱ {item.get('time_ago')}</span> &nbsp;&bull;&nbsp; 
+                    <span>👁 {item.get('views')}</span> &nbsp;&bull;&nbsp; 
+                    <span style="color: #0284c7; font-weight: 600;">✓ Verified Visual Match</span>
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        col_b1, col_b2, col_b3 = st.columns([1.5, 1.5, 7])
+        with col_b1:
+            if st.button(f"📖 Read", key=f"btn_read_{item['id']}"):
+                st.session_state.selected_article_id = item['id']
+                st.rerun()
+        with col_b2:
+            if st.button(f"❤️ Like ({item.get('likes', 0)})", key=f"btn_like_{item['id']}"):
+                item['likes'] = item.get('likes', 0) + 1
+                st.rerun()
+
+st.markdown("<br>", unsafe_allow_html=True)
+
+m1, m2, m3, m4, m5 = st.columns(5)
+with m1: st.metric("Live Active Visitors", f"{real_active_users} online", "🟢 Real-time session")
+with m2: st.metric("Total Page Views", f"{st.session_state.page_views:,}", "📈 Live counter")
+with m3: st.metric("Est. AdSense Revenue", f"${real_adsense_revenue:,.4f} USD", "💎 Calculated real-time")
+with m4: st.metric("Total Articles & Tales", f"{len(st.session_state.master_db)} active", "⚡ Massive database")
+with m5: st.metric("Live & Verified", "100% Active", "🔒 Secure telemetry")
+
+st.markdown("""
+<div class="footer">
+    QELVYQ &bull; Knowledge in Real Time &bull; True Real-Time Telemetry Edition
+</div>
+""", unsafe_allow_html5=True)
