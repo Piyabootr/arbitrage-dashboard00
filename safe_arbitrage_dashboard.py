@@ -69,7 +69,7 @@ def generate_stories_and_news(query: str) -> list:
         resp = requests.get(rss_url, timeout=4)
         if resp.status_code == 200:
             root = ET.fromstring(resp.content)
-            for item in root.findall('.//item')[:6]:
+            for idx, item in enumerate(root.findall('.//item')[:6]):
                 title_elem = item.find('title')
                 title = title_elem.text if title_elem is not None else "Breaking News Update"
                 
@@ -78,6 +78,7 @@ def generate_stories_and_news(query: str) -> list:
                 clean_desc = re.sub('<.*?>', '', desc)
                 
                 items.append({
+                    "id": 1000 + idx,
                     "title": f"Breaking News: {title}",
                     "category": "Latest News & Updates",
                     "read_time": "4 mins",
@@ -127,6 +128,7 @@ Industry leaders emphasize that as machine learning models mature, privacy safeg
 
     for idx, (t_title, t_cat, t_time, t_sum, t_content) in enumerate(stories_pool):
         items.append({
+            "id": 2000 + idx,
             "title": f"{t_title} ({clean_query.capitalize()})" if clean_query != "all" else t_title,
             "category": t_cat,
             "read_time": t_time,
@@ -161,7 +163,7 @@ st.markdown(
 
 # หน้าอ่านบทความเต็มจอ (Dedicated Reader Page)
 if st.session_state.current_page == "reader" and st.session_state.selected_article_id is not None:
-    target_article = next((item for item in st.session_state.master_db if item["id"] == st.session_state.selected_article_id), None)
+    target_article = next((item for item in st.session_state.master_db if item.get("id") == st.session_state.selected_article_id), None)
     
     if target_article:
         if st.button("⬅️ Back to Feed"):
@@ -201,8 +203,9 @@ if search_keyword:
         new_items = generate_stories_and_news(search_keyword)
         for item in new_items:
             if not any(d['title'] == item['title'] for d in st.session_state.master_db):
+                new_id = len(st.session_state.master_db) + 100
                 st.session_state.master_db.insert(0, {
-                    "id": len(st.session_state.master_db) + 1,
+                    "id": new_id,
                     "title": item["title"],
                     "category": item["category"],
                     "read_time": item["read_time"],
@@ -253,8 +256,9 @@ if st.session_state.is_admin:
             
             if st.form_submit_button("✨ AI Check & Publish"):
                 corrected_content, logs = check_and_correct_grammar(w_content)
+                new_id = len(st.session_state.master_db) + 100
                 st.session_state.master_db.insert(0, {
-                    "id": len(st.session_state.master_db) + 1,
+                    "id": new_id,
                     "title": w_title,
                     "category": w_cat,
                     "read_time": w_time,
@@ -304,15 +308,18 @@ else:
                 st.markdown(f"🏷️ **{item['category']}** | ⏱️ {item['read_time']} | 👀 {item.get('views', 1):,} views")
                 st.write(item['summary'])
                 
+                # กำหนดค่า ID สำรองป้องกัน Key Error
+                item_id = item.get('id', idx + 5000)
+                
                 b1, b2 = st.columns([2, 1])
                 with b1:
-                    if st.button(f"📖 Read Story (ID: {item['id']})", key=f"read_{item['id']}"):
+                    if st.button(f"📖 Read Story (ID: {item_id})", key=f"read_{item_id}_{idx}"):
                         item['views'] = item.get('views', 1) + 1
                         st.session_state.current_page = "reader"
-                        st.session_state.selected_article_id = item['id']
+                        st.session_state.selected_article_id = item_id
                         st.rerun()
                 with b2:
-                    if st.button(f"❤️ Like ({item.get('likes', 0)})", key=f"like_{item['id']}"):
+                    if st.button(f"❤️ Like ({item.get('likes', 0)})", key=f"like_{item_id}_{idx}"):
                         item['likes'] = item.get('likes', 0) + 1
                         st.rerun()
                 
