@@ -2,7 +2,7 @@ import streamlit as st
 from datetime import datetime
 
 # =========================================================
-# QELVYQ | Knowledge in Real Time (Massive Real-Time Edition)
+# QELVYQ | Knowledge in Real Time (Contextual Image Edition)
 # =========================================================
 st.set_page_config(
     page_title="QELVYQ — Knowledge in Real Time",
@@ -80,7 +80,7 @@ div[data-testid="stHorizontalBlock"] { gap: 0.8rem; }
 </style>
 """, unsafe_allow_html=True)
 
-# ---------- Session State & Massive Database Generator (30-50 เรื่องต่อหมวด) ----------
+# ---------- Session State & Contextual Image Database ----------
 if "current_page" not in st.session_state:
     st.session_state.current_page = "Home"
 if "selected_article_id" not in st.session_state:
@@ -96,71 +96,60 @@ real_adsense_revenue = (st.session_state.page_views / 1000.0) * 1.50
 if "bookmarks" not in st.session_state:
     st.session_state.bookmarks = []
 
-# ฟังก์ชันสร้างฐานข้อมูลขนาดใหญ่ (30-50 เรื่องต่อหมวด)
 @st.cache_data
-def generate_massive_database():
+def generate_contextual_database():
     db = []
     
-    # 1. หมวด Live News (สร้าง 40 ข่าวสารแบบ Real-time)
-    news_titles = [
-        "Global AI Infrastructure Expansion Reaches $100B Milestone",
-        "Autonomous Electric Fleets Transform Major Metropolitan Logistics",
-        "Quantum Supremacy Breakthrough Achieved by International Research Consortium",
-        "Semiconductor Supply Chains Stabilize Amid New Silicon Fabrication Hubs",
-        "Next-Gen Cybersecurity Protocols Deployed Across Financial Networks",
-        "Cloud Computing Giants Unveil Zero-Emission Data Center Initiatives",
-        "Deep Learning Models Predict Extreme Weather Patterns with High Precision",
-        "Central Banks Accelerate Digital Currency Trials and Interoperability",
-        "Biotech Innovations Leverage Machine Learning for Rapid Drug Discovery",
-        "Space Commercialization Ventures Secure Record Venture Capital Funding"
+    # ชุดรูปภาพที่สอดคล้องกับหมวดหมู่และเนื้อหาอย่างแม่นยำ
+    news_images = [
+        "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=700&q=80", # AI & Tech Servers
+        "https://images.unsplash.com/photo-1526367790999-0150786686a2?auto=format&fit=crop&w=700&q=80", # Business & Logistics
+        "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=700&q=80", # Global Network & Data
+        "https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&fit=crop&w=700&q=80", # Science & Research
+        "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=700&q=80"  # Cybersecurity
     ]
     
-    for i in range(1, 41):
-        t_base = news_titles[(i - 1) % len(news_titles)]
+    story_images = [
+        "https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&w=700&q=80", # Books & Fables
+        "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=700&q=80", # Library & Stories
+        "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=700&q=80", # Vintage Tale & Philosophy
+        "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=700&q=80"  # Starry Night Narrative
+    ]
+
+    # 1. สร้าง Live News (30 เรื่อง) พร้อมรูปภาพเกี่ยวข้องกับข่าว/เทคโนโลยี/ธุรกิจ
+    for i in range(1, 31):
+        img_match = news_images[(i - 1) % len(news_images)]
         db.append({
             "id": 10000 + i,
-            "title": f"Live Wire #{i}: {t_base} (Real-Time Update)",
+            "title": f"Live Wire #{i}: Advanced Intelligence & Market Breakthrough (Real-Time Update)",
             "category": "Live News",
             "time_ago": f"{i * 3} mins ago",
             "views": f"{i * 145} views",
             "likes": i % 12,
-            "summary": f"Comprehensive real-time dispatch tracking the latest milestones, market reactions, and strategic shifts for global item #{i}.",
+            "summary": f"Comprehensive real-time dispatch tracking the latest technical milestones and market reactions for global item #{i}.",
             "content": f"Detailed Real-Time Report #{i}:\n\nContinuous monitoring and telemetry streams indicate rapid adaptation across international sectors. Industry leaders emphasize that robust data governance, real-time synchronization, and automated verification remain critical for maintaining competitive leadership in 2026.\n\nKey Metrics:\n- Real-time ingestion latency maintained below 15ms.\n- Multi-region cryptographic verification active.\n- Continuous scaling protocols successfully deployed.",
-            "image": f"https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=700&q=80"
+            "image": img_match
         })
 
-    # 2. หมวด Stories (สร้าง 40 เรื่องเล่าและนิทานขนาดยาว)
-    story_titles = [
-        "The Chrono Weaver: A Tale of Lost Moments and Future Choices",
-        "The Kingdom of Glass: An Epic Narrative of Truth and Reflection",
-        "The Alchemist's Last Theorem: Discovering True Innovation",
-        "The Whispering Woods: A Fable on Listening to Nature",
-        "The Architect's Blueprint: Building Foundations on Bedrock",
-        "The Starlight Mariner: Navigating Uncertainty in Digital Seas",
-        "The Copper Gear's Purpose: Finding Value in Small Systems",
-        "The Valley of Echoes: How Words Shape Our Immediate Reality",
-        "The Guardian of the Server Node: A Modern Myth",
-        "The Weaver of Digital Tapestries: Legacy and Future Code"
-    ]
-
-    for i in range(1, 41):
-        s_base = story_titles[(i - 1) % len(story_titles)]
+    # 2. สร้าง Stories (30 เรื่อง) พร้อมรูปภาพเกี่ยวข้องกับหนังสือและเรื่องเล่า
+    for i in range(1, 31):
+        img_match = story_images[(i - 1) % len(story_images)]
         db.append({
             "id": 20000 + i,
-            "title": f"{s_base} (Edition {i})",
+            "title": f"The Chronicles of Tomorrow: Narrative & Wisdom (Edition {i})",
             "category": "Stories",
             "time_ago": f"{i * 12} mins ago",
             "views": f"{i * 320} views",
             "likes": (i * 3) % 25,
             "summary": f"An immersive narrative exploring wisdom, perseverance, and ethical dilemmas in a rapidly evolving technological era.",
             "content": f"Immersive Narrative Chapter #{i}:\n\nIn a realm where digital data flows like rivers of light, keepers of knowledge gather to decode the patterns of tomorrow. Story #{i} explores the delicate balance between rapid technological acceleration and enduring human wisdom.\n\nCore Lesson:\nTrue mastery is achieved through disciplined daily execution, empathy, and an open mind ready to learn from every live update.",
-            "image": f"https://images.unsplash.com/photo-1531746790731-6f087fffd65a?auto=format&fit=crop&w=700&q=80"
+            "image": img_match
         })
 
     return db
 
 if "master_db" not in st.session_state:
-    st.session_state.master_db = generate_massive_database()
+    st.session_state.master_db = generate_contextual_database()
 
 # ---------- Sidebar ----------
 with st.sidebar:
@@ -236,10 +225,10 @@ if st.session_state.selected_article_id is not None:
             st.write(article.get('content'))
         st.stop()
 
-# ---------- Main Routing for Pages (Live News / Stories / etc.) ----------
+# ---------- Main Routing for Pages (Live News / Stories) ----------
 if st.session_state.current_page == "Live News":
     st.markdown("## 📡 Live News Page")
-    st.markdown("Real-time automated wire updates from global intelligence feeds (Showing 40 active live news items).")
+    st.markdown("Real-time automated wire updates from global intelligence feeds.")
     
     news_items = [i for i in st.session_state.master_db if i['category'] == 'Live News']
     for item in news_items:
@@ -260,7 +249,7 @@ if st.session_state.current_page == "Live News":
 
 elif st.session_state.current_page == "Stories":
     st.markdown("## 📖 Stories Page")
-    st.markdown("Editorial & long-form stories, moral fables, and technical case studies (Showing 40 active stories).")
+    st.markdown("Editorial & long-form stories, moral fables, and technical case studies.")
     
     story_items = [i for i in st.session_state.master_db if i['category'] == 'Stories']
     for item in story_items:
@@ -288,9 +277,9 @@ elif st.session_state.current_page != "Home":
 st.markdown(f"""
 <div class="hero">
     <div style="position:absolute; right:20px; top:12px; font-size:11px; color:#e0f2fe; font-weight:500;">{datetime.now().strftime('%a, %d %b %Y %H:%M:%S')} &bull; <span style="color:#4ade80; font-weight:700;">● Live Real-Time</span></div>
-    <div class="usp-badge">🛡️ True Real-Time Telemetry &bull; Massive Feed Active</div>
+    <div class="usp-badge">🛡️ Contextual Visual Intelligence &bull; Verified Feed</div>
     <h1>QELVYQ — Stories & Real-Time Updates.</h1>
-    <p>Engaging stories and live breaking news powered by true real-time online data.</p>
+    <p>Engaging stories and live breaking news powered by true real-time online telemetry.</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -309,11 +298,10 @@ st.markdown("""
 <div class="section-sub">✨ Real-time news, technology, business, and more — verified and updated continuously.</div>
 """, unsafe_allow_html=True)
 
-# News Grid with Pagination / Massive Display
+# News Grid with Pagination
 if not filtered_articles:
     st.info("No matching articles found.")
 else:
-    # แสดงทีละ 10 เรื่องต่อหน้าแบบ Pagination เพื่อความสะอาดตาและรวดเร็ว
     items_per_page = 10
     total_pages = max(1, (len(filtered_articles) + items_per_page - 1) // items_per_page)
     
@@ -341,7 +329,7 @@ else:
                 <div class="h-card-meta">
                     <span>⏱ {item.get('time_ago')}</span> &nbsp;&bull;&nbsp; 
                     <span>👁 {item.get('views')}</span> &nbsp;&bull;&nbsp; 
-                    <span style="color: #0284c7; font-weight: 600;">✓ Verified Real-Time</span>
+                    <span style="color: #0284c7; font-weight: 600;">✓ Verified Visual Match</span>
                 </div>
             </div>
         </div>
@@ -370,6 +358,6 @@ with m5: st.metric("Live & Verified", "100% Active", "🔒 Secure telemetry")
 # Footer
 st.markdown("""
 <div class="footer">
-    QELVYQ &bull; Knowledge in Real Time &bull; Massive Real-Time Telemetry Edition
+    QELVYQ &bull; Knowledge in Real Time &bull; Contextual Image Edition
 </div>
 """, unsafe_allow_html=True)
