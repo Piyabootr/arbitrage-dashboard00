@@ -61,27 +61,26 @@ def check_and_correct_grammar(text: str) -> tuple[str, list[str]]:
 # ==========================================
 @st.cache_data(ttl=60)
 def scrape_and_import_external_web_content(query: str) -> list:
-    """
-    ดึงข้อมูลบทความและเนื้อหาจากเว็บภายนอก (เช่น TechCrunch RSS และ API ข่าวสาร) 
-    แล้วแปลงเข้ามาเป็นฐานข้อมูลเนื้อหาของเราเองแบบเต็มรูปแบบ (Full Content Import)
-    """
     imported_articles = []
     clean_query = query.strip().lower()
     
-    # 1. ดึงจาก TechCrunch RSS Feed (ข้อมูลจริงจากเว็บภายนอก)
+    # 1. ดึงจาก TechCrunch RSS Feed (แก้ไขวงเล็บให้ถูกต้อง 100%)
     try:
         rss_url = "https://techcrunch.com/feed/"
         resp = requests.get(rss_url, timeout=4)
         if resp.status_code == 200:
             root = ET.fromstring(resp.content)
             for item in root.findall('.//item')[:8]:
-                title = item.find('title').text if item.find('title'] is not None else "External Web Article"
-                link = item.find('link').text if item.find('link'] is not None else "https://techcrunch.com"
+                title_elem = item.find('title')
+                title = title_elem.text if title_elem is not None else "External Web Article"
+                
+                link_elem = item.find('link')
+                link = link_elem.text if link_elem is not None else "https://techcrunch.com"
+                
                 desc_elem = item.find('description')
                 desc = desc_elem.text if desc_elem is not None and desc_elem.text else "Imported web description..."
                 clean_desc = re.sub('<.*?>', '', desc)
                 
-                # นำเข้ามาเก็บไว้ในระบบของเราทันที
                 imported_articles.append({
                     "title": f"Live Imported: {title}",
                     "category": "Knowledge & Technology",
@@ -105,7 +104,7 @@ Imported and hosted locally via QELVYQ Automated Web Importer."""
     except:
         pass
 
-    # 2. ดึงเสริมจาก DuckDuckGo API เพื่อให้ครอบคลุมทุกเว็บทั่วโลกตามคำค้นหา
+    # 2. ดึงเสริมจาก DuckDuckGo API
     try:
         api_url = f"https://api.duckduckgo.com/?q={clean_query}+articles+reports+insights&format=json"
         api_resp = requests.get(api_url, timeout=4)
@@ -146,7 +145,7 @@ Imported and managed by QELVYQ Content Pipeline."""
     except:
         pass
 
-    # 3. หากยังได้จำนวนไม่พอกับ Full 2 Pages ให้สร้างบทความนำเข้าเพิ่มเติมให้ครบถ้วนทันที
+    # 3. สร้างบทความสำรองเพิ่มเติมให้ครบ Full 2+ Pages เต็มอิ่ม
     extra_pool = [
         ("Advanced Telemetry and External Web Ingestion Standards", "Knowledge & Technology", "7 mins"),
         ("Global Economic Projections Extracted from Market Feeds", "Finance & Business", "6 mins"),
@@ -179,7 +178,7 @@ Imported into QELVYQ Master Database."""
     return imported_articles
 
 # ==========================================
-# 5. ฐานข้อมูลเริ่มต้น (Master Database - บรรจุเนื้อหาแน่น Full 2+ Pages)
+# 5. ฐานข้อมูลเริ่มต้น (Master Database)
 # ==========================================
 if "master_db" not in st.session_state:
     st.session_state.master_db = [
@@ -198,22 +197,6 @@ Our distributed ingestion engines process millions of data points every second, 
 
 Mission Statement:
 Discover what's next with uncompromised clarity. Empowering global readers with real-time intelligence is at the heart of everything we build."""
-        },
-        {
-            "id": 2,
-            "title": "The Tortoise and the Hare: Modern Tech Edition",
-            "category": "Fairy Tales & Moral Stories",
-            "read_time": "4 mins",
-            "views": 2,
-            "likes": 1,
-            "summary": "A timeless fable retold with a modern technological perspective.",
-            "content": """Once upon a time, in a bustling Silicon Valley incubator, a speedy Hare coded frantically while a steady Tortoise built rigorous automated test suites. 
-
-The Climax:
-During the final deployment deadline, the Hare's code suffered from massive technical debt and unhandled race conditions. Meanwhile, the Tortoise's disciplined continuous deployment pipeline launched seamlessly without a single bug. 
-
-Moral:
-Consistency and disciplined execution always outperform erratic bursts of genius in modern software engineering."""
         }
     ]
 
@@ -221,7 +204,6 @@ Consistency and disciplined execution always outperform erratic bursts of genius
 # 6. หน้าตาเว็บไซต์ (UI Layout & Page Router)
 # ==========================================
 
-# Top Leaderboard Ad
 st.markdown(
     """
     <div style="background: linear-gradient(135deg, #0f172a 0%, #1e3c72 50%, #1e293b 100%); padding: 12px; text-align: center; border-radius: 8px; margin-bottom: 20px; color: white;">
@@ -248,7 +230,6 @@ if st.session_state.current_page == "reader" and st.session_state.selected_artic
             st.markdown(f"🔗 **Imported Web Source:** [{target_article['source']}]({target_article['source']})")
         st.markdown("---")
         
-        # แสดงเนื้อหาแบบเต็มที่ดึงมาจากเว็บภายนอก
         st.write(target_article['content'])
         
         st.markdown("---")
