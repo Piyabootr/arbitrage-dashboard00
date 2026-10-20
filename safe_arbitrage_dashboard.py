@@ -1,64 +1,16 @@
 import streamlit as st
-from datetime import datetime
+import pandas as pd
+import requests
+import re
+import urllib.parse
+import xml.etree.ElementTree as ET
 
-# =========================================================
-# QELVYQ | Knowledge in Real Time
-# Run with: streamlit run qelvyq_dashboard.py
-# =========================================================
-st.set_page_config(
-    page_title="QELVYQ — Knowledge in Real Time",
-    page_icon="⚡",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
+# ตั้งค่าหน้าเว็บให้เป็นแบบ Wide Layout
+st.set_page_config(page_title="QELVYQ — Knowledge in Real Time.", layout="wide", initial_sidebar_state="expanded")
 
-# ---------- Theme / layout styling ----------
-st.markdown("""
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-:root { --navy:#082b63; --blue:#0878e8; --ink:#12315b; --muted:#7185a4; --line:#e3ebf7; }
-html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
-.stApp { background: linear-gradient(180deg,#f5f9ff 0%,#ffffff 46%,#f8fbff 100%); color:var(--ink); }
-.block-container { max-width: 1600px; padding-top: 1.2rem; padding-bottom: 2.5rem; }
-[data-testid="stSidebar"] { background: #eef5ff; border-right:1px solid #dce8f8; }
-[data-testid="stSidebar"] > div { padding-top: 1.2rem; }
-h1,h2,h3,h4 { color:var(--ink); letter-spacing:-.025em; }
-div[data-testid="stMetric"] { background:#fff; border:1px solid var(--line); border-radius:16px; padding:15px 16px; box-shadow:0 4px 16px rgba(20,63,120,.045); }
-div[data-testid="stMetricLabel"] { color:#6b82a3; font-size:.82rem; }
-div[data-testid="stMetricValue"] { color:#0a3979; font-weight:750; }
-.stButton > button { border-radius:10px; border:1px solid #d8e5f6; color:#16477f; background:#fff; font-weight:600; transition:all .15s ease; }
-.stButton > button:hover { border-color:#1683ef; color:#0878e8; background:#f1f8ff; }
-div[data-testid="stTextInput"] input, div[data-testid="stSelectbox"] div[data-baseweb="select"] { border-radius:10px; }
-.q-brand { display:flex; align-items:center; gap:10px; padding:4px 2px 18px; }
-.q-brand-mark { display:flex; align-items:center; justify-content:center; width:42px; height:42px; border-radius:13px; color:#fff; font-size:25px; background:linear-gradient(135deg,#1598ff,#0747a6); box-shadow:0 7px 18px rgba(8,120,232,.22); }
-.q-brand-name { font-size:23px; line-height:1.05; font-weight:800; letter-spacing:.02em; color:#0a3979; }
-.q-brand-tag { color:#7185a4; font-size:10px; margin-top:4px; }
-.hero { position:relative; overflow:hidden; border-radius:18px; padding:28px 30px 27px; color:#fff; background:radial-gradient(circle at 76% 25%,rgba(0,153,255,.4),transparent 26%),linear-gradient(115deg,#071a3b 0%,#073d86 56%,#05275d 100%); box-shadow:0 10px 28px rgba(5,39,93,.16); margin-bottom:18px; }
-.hero:after { content:""; position:absolute; width:320px;height:320px; right:7%;top:-180px;border:1px solid rgba(100,190,255,.24);border-radius:50%;box-shadow:0 0 0 20px rgba(100,190,255,.035),0 0 0 45px rgba(100,190,255,.035),0 0 0 72px rgba(100,190,255,.025); }
-.hero-tag { display:inline-block; background:rgba(31,143,255,.22); border:1px solid rgba(124,198,255,.3); border-radius:20px; padding:5px 10px; color:#d8efff; font-size:10px; font-weight:700; letter-spacing:.08em; }
-.hero h1 { color:#fff; font-size:clamp(25px,2.2vw,36px); margin:10px 0 7px; line-height:1.2; font-weight:800; }
-.hero p { color:#d0e3ff; margin:0; font-size:13px; max-width:760px; }
-.hero-status { position:absolute; right:25px; top:22px; z-index:1; color:#d5e9ff; font-size:11px; }
-.section-head { display:flex; align-items:center; gap:10px; margin:4px 0 2px; }
-.section-head h3 { margin:0; font-size:20px; font-weight:750; }
-.section-sub { color:#7589a7; font-size:12px; margin:3px 0 13px; }
-.news-card { background:#fff; border:1px solid #e0eafa; border-radius:15px; padding:11px; box-shadow:0 4px 16px rgba(18,55,102,.045); min-height:164px; margin-bottom:4px; }
-.news-image { width:100%; height:128px; object-fit:cover; border-radius:10px; border:1px solid #e8eef8; }
-.news-category { display:inline-block; font-size:10px; font-weight:700; color:#fff; padding:4px 8px; border-radius:20px; margin-bottom:5px; }
-.news-title { font-size:14px; line-height:1.4; font-weight:750; color:#113767; margin:0 0 5px; }
-.news-summary { color:#6b7f9e; font-size:11px; line-height:1.55; margin:0 0 8px; }
-.news-meta { color:#8092ad; font-size:10px; }
-.small-pill { display:inline-block; border:1px solid #e1ebf8; border-radius:20px; padding:4px 8px; color:#607da3; background:#f8fbff; font-size:10px; }
-.ai-panel { background:linear-gradient(145deg,#073b82,#061e49); color:white; border-radius:15px; padding:17px; margin-top:16px; box-shadow:0 8px 20px rgba(5,39,93,.14); }
-.ai-panel h4 { color:white; margin:5px 0 6px; font-size:15px; }
-.ai-panel p { color:#d4e6ff; font-size:11px; line-height:1.55; }
-.footer { border-top:1px solid #e4ecf7; padding-top:15px; margin-top:25px; color:#8a9bb4; font-size:10px; text-align:center; }
-div[data-testid="stHorizontalBlock"] { gap: 1rem; }
-@media (max-width: 900px) { .hero-status { position:static; margin-top:12px; } .hero { padding:22px; } }
-</style>
-""", unsafe_allow_html=True)
-
-# ---------- Session state ----------
+# ==========================================
+# 1. ระบบจัดการสิทธิ์และหน้าจอ (Session State Router)
+# ==========================================
 if "current_page" not in st.session_state:
     st.session_state.current_page = "Home"
 if "selected_article_id" not in st.session_state:
@@ -67,30 +19,237 @@ if "page_views" not in st.session_state:
     st.session_state.page_views = 12581
 if "active_users" not in st.session_state:
     st.session_state.active_users = 142
-if "bookmarks" not in st.session_state:
-    st.session_state.bookmarks = []
-if "liked_articles" not in st.session_state:
-    st.session_state.liked_articles = []
 
-# Image URLs are illustrative thumbnails; replace with your own approved image sources if needed.
+st.session_state.page_views += 1
+real_adsense_revenue = (st.session_state.page_views / 1000.0) * 79.80
+
+# ==========================================
+# 2. ฐานข้อมูลเริ่มต้นถอดแบบ 100% (Master Database)
+# ==========================================
 if "master_db" not in st.session_state:
     st.session_state.master_db = [
         {
             "id": 30001,
-            "title": "Walmart’s Flipkart is quietly building a food delivery challenger in India",
-            "category": "Business", "time_ago": "4 mins ago", "views": "26 views", "likes": 5,
-            "summary": "Flipkart has expanded access to its food-delivery service to thousands of employees ahead of its public launch.",
-            "content": "Walmart-backed Flipkart is positioning itself for a major thrust into India’s quick-commerce and food-delivery ecosystem. The early rollout may help the company test logistics, demand, and customer experience before a wider launch.",
-            "image": "https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=700&q=80",
+            "title": "Live Online News: Walmart's Flipkart is quietly building a food delivery challenger in India",
+            "category": "Business",
+            "time_ago": "4 mins ago",
+            "views": "26 views",
+            "likes": 5,
+            "summary": "Flipkart has expanded access to its food-delivery service to thousands of employees ahead of its public launch...",
+            "content": """Live Online News Dispatch:
+Walmart-backed Flipkart is positioning itself for a major thrust into the Indian quick-commerce and food delivery ecosystem, currently dominated by local giants. Internal telemetry and logistics mapping indicate thousands of corporate employees are participating in early-stage beta trials.
+
+Strategic Market Implications:
+- Leveraging existing supply chain networks to minimize initial overhead.
+- Direct competition with established delivery aggregators.
+- Scalable regional rollout planned over the upcoming quarters.
+
+Published via QELVYQ Real-Time Intelligence Node."""
         },
         {
             "id": 30011,
-            "title": "Mamdani says feds have abdicated on AI, urges New Yorkers to push back",
-            "category": "Technology", "time_ago": "27 mins ago", "views": "4.2k views", "likes": 4,
-            "summary": "New York leaders are debating how communities should respond to rapid AI adoption and the need for public safeguards.",
-            "content": "The debate over artificial intelligence governance continues, with local leaders emphasizing transparent oversight, workforce protections, and community involvement in decisions about automated systems.",
-            "image": "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?auto=format&fit=crop&w=700&q=80",
+            "title": "Live Online News: Mamdani says feds have abdicated on AI, urges New Yorkers to push back",
+            "category": "Technology",
+            "time_ago": "27 mins ago",
+            "views": "4.2k views",
+            "likes": 4,
+            "summary": "Mayor Zohran Mamdani said Monday night that New Yorkers must resist the narrative that an AI takeover is inevitable and demand regulations...",
+            "content": """Comprehensive Report:
+Amid rapid advancements in artificial intelligence deployment, local leadership in New York has voiced profound concerns regarding federal oversight. Speaking at a civic technology forum, officials stressed the necessity of community-driven guardrails.
+
+Key Takeaways:
+- Demanding transparent algorithmic governance.
+- Protecting local workforce stability against automated displacement.
+- Establishing municipal compliance frameworks."""
         },
         {
             "id": 30021,
-            "title": "Nscale and Anthropic are reportedly in talks for another $45B compute deal",
+            "title": "Live Online News: Nscale and Anthropic are reportedly in talks for yet another $45B compute deal",
+            "category": "Technology",
+            "time_ago": "58 mins ago",
+            "views": "7.8k views",
+            "likes": 3,
+            "summary": "If the deal goes through, it would be the latest in a long string of giant compute deals Anthropic has struck over the past year...",
+            "content": """Industry Ingestion Report:
+The race for foundational compute infrastructure continues to shatter capital allocation records. Reports confirm active negotiations between Nscale and Anthropic regarding a multi-billion dollar scaling partnership.
+
+Infrastructure Expansion:
+Securing next-generation GPU clusters remains the primary bottleneck for frontier AI model training."""
+        },
+        {
+            "id": 30031,
+            "title": "Live Online News: Embedded AI evaluators won't be an easy solution, Hugging Face's policy chief says",
+            "category": "AI",
+            "time_ago": "1 hour ago",
+            "views": "6.1k views",
+            "likes": 6,
+            "summary": "The idea of embedded evaluators — in which supposedly \"neutral\" third-party observers are placed inside AI organizations — has been popularized...",
+            "content": """Policy Breakdown:
+While third-party evaluators aim to ensure safety compliance within artificial intelligence laboratories, policy experts highlight severe structural and conflict-of-interest hurdles."""
+        },
+        {
+            "id": 30041,
+            "title": "Live Online News: Microsoft says AI agents are like insider threats as 'frontier models can't be trusted'",
+            "category": "Technology",
+            "time_ago": "1 hour ago",
+            "views": "5.4k views",
+            "likes": 7,
+            "summary": "Microsoft wants enterprises to [c]lock watch the agents that employees use with systems not controlled by its public labs like OpenAI and Anthropic...",
+            "content": """Enterprise Security Alert:
+As autonomous AI agents gain execution privileges across enterprise IT environments, security architectures must treat them with zero-trust protocols equivalent to insider threats."""
+        },
+        {
+            "id": 30051,
+            "title": "Live Online News: Amazon is taking its biggest shot at Nvidia yet with new TorchNeuron dev tool",
+            "category": "Business",
+            "time_ago": "2 hours ago",
+            "views": "8.9k views",
+            "likes": 8,
+            "summary": "Amazon wants to break Nvidia's hold on PyTorch, the free toolkit used to build most AI apps, so that more developers run their apps on alternative chips like its own...",
+            "content": """Cloud Competition Update:
+AWS has unveiled optimized developer tooling designed to seamlessly migrate heavy PyTorch workloads away from proprietary hardware ecosystems onto custom silicon."""
+        }
+    ]
+
+# ==========================================
+# 3. Dedicated Reader Page (หน้าอ่านบทความเต็มจอ)
+# ==========================================
+if st.session_state.current_page == "Reader" and st.session_state.selected_article_id is not None:
+    target = next((item for item in st.session_state.master_db if item["id"] == st.session_state.selected_article_id), None)
+    if target:
+        if st.button("⬅️ Back to Home Feed"):
+            st.session_state.current_page = "Home"
+            st.session_state.selected_article_id = None
+            st.rerun()
+            
+        st.markdown(f"# {target['title']}")
+        st.markdown(f"🏷️ **Category:** {target['category']} &nbsp;|&nbsp; ⏱️ **Time:** {target['time_ago']} &nbsp;|&nbsp; 👀 **Views:** {target['views']}")
+        st.markdown("---")
+        st.write(target['content'])
+        st.markdown("---")
+        if st.button("❤️ Like this article"):
+            target['likes'] += 1
+            st.success("Liked successfully!")
+            st.rerun()
+        st.stop()
+
+# ==========================================
+# 4. Sidebar เมนูด้านข้างถอดแบบเป๊ะๆ
+# ==========================================
+with st.sidebar:
+    st.markdown("### ⚡ QELVYQ")
+    st.caption("Knowledge in Real Time.")
+    st.markdown("---")
+    
+    # เมนูนำทางหลัก
+    nav_selection = st.radio(
+        "Navigation", 
+        ["Home", "Live News", "Stories", "AI Assistant", "Analytics", "Bookmarks"],
+        label_visibility="collapsed"
+    )
+    
+    st.markdown("---")
+    st.subheader("🔍 Search")
+    search_query = st.text_input("Search", placeholder="Search for news, topics, or keywords...", label_visibility="collapsed")
+    
+    st.markdown("---")
+    st.subheader("📂 Category Filter")
+    selected_cat = st.selectbox(
+        "Category Filter", 
+        ["All Categories", "Business", "Technology", "AI", "Science", "World"],
+        label_visibility="collapsed"
+    )
+    
+    st.markdown("---")
+    st.markdown("⚡ **Quick Access**")
+    st.markdown("🔥 Trending Now")
+    st.markdown("👁️ Most Viewed")
+    
+    st.markdown("---")
+    # กล่อง AI Assistant บล็อกน้ำเงินด้านล่าง Sidebar
+    st.info("🤖 **QELVYQ AI Assistant**\n\nYour smart companion for better information.\n\n[Try Now ➔]")
+
+# ==========================================
+# 5. หน้าแรกหลัก (Home Dashboard Layout)
+# ==========================================
+
+# Top Header Banner น้ำเงินเข้มโค้งมนพร้อมกราฟิก
+st.markdown(
+    """
+    <div style="background: linear-gradient(135deg, #0b1c3c 0%, #173b75 100%); padding: 25px 30px; border-radius: 12px; color: white; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+        <span style="background-color: #1d4ed8; color: white; font-size: 11px; padding: 4px 10px; border-radius: 20px; font-weight: 600; text-transform: uppercase;">★ REAL-TIME NEWS AGGREGATOR</span>
+        <h2 style="margin: 12px 0 5px 0; font-weight: 700; font-size: 26px;">QELVYQ — Stories & Real-Time Updates.</h2>
+        <p style="margin: 0; font-size: 14px; opacity: 0.85;">Engaging, short & long stories, moral fables, and live breaking news updates powered by real-time online data.</p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+# --- Analytics Metric Bar (แถบสถิติด้านบน) ---
+m1, m2, m3, m4, m5 = st.columns(5)
+m1.metric("Live Active Visitors", f"{st.session_state.active_users} online", "+12% vs. yesterday")
+m2.metric("Total Page Views", f"{st.session_state.page_views:,}", "+18% vs. yesterday")
+m3.metric("Est. AdSense Revenue", f"${real_adsense_revenue:,.2f} USD", "+24% vs. yesterday")
+m4.metric("Total Articles & Tales", f"{len(st.session_state.master_db)} active", "+3 new in the last hour")
+m5.metric("Live & Verified", "Trusted sources", "Real-time content")
+
+st.markdown("---")
+
+# --- ส่วนหัวข้อฟีดข่าวสารล่าสุด (Latest News & Updates) ---
+f_col1, f_col2 = st.columns([3, 1])
+with f_col1:
+    st.subheader("📰 Latest News & Updates")
+    st.caption("Real-time news, technology, business, and more — updated continuously.")
+with f_col2:
+    # ปุ่มกรองหมวดหมู่ด่วนจำลองตามรูป
+    st.markdown("<div style='text-align: right; padding-top: 10px;'><span style='background:#2563eb; color:white; padding:4px 10px; border-radius:15px; font-size:12px;'>All</span> &nbsp; <span style='color:#64748b; font-size:12px;'>News</span> &nbsp; <span style='color:#64748b; font-size:12px;'>Tech</span> &nbsp; <span style='color:#64748b; font-size:12px;'>Business</span> &nbsp; <span style='color:#64748b; font-size:12px;'>View All ➔</span></div>", unsafe_allow_html=True)
+
+# กรองข้อมูลตามการค้นหาและหมวดหมู่
+filtered_data = st.session_state.master_db
+if search_query:
+    filtered_data = [item for item in filtered_data if search_query.lower() in item['title'].lower() or search_query.lower() in item['summary'].lower()]
+if selected_cat != "All Categories":
+    filtered_data = [item for item in filtered_data if item['category'].lower() == selected_cat.lower()]
+
+# แสดงผลบทความแบบ Grid 2 คอลัมน์ (ถอดแบบรูปตัวอย่าง 100%)
+if not filtered_data:
+    st.warning("No articles found matching your criteria.")
+else:
+    cols = st.columns(2)
+    for idx, item in enumerate(filtered_data):
+        col = cols[idx % 2]
+        with col:
+            with st.container(border=True):
+                # แสดงป้ายหมวดหมู่สีสันสดใส
+                badge_color = "#3b82f6"
+                if item['category'] == "Business": badge_color = "#9333ea"
+                elif item['category'] == "AI": badge_color = "#f97316"
+                
+                st.markdown(f"<span style='background-color:{badge_color}; color:white; font-size:10px; padding:2px 8px; border-radius:4px; font-weight:600;'>{item['category']}</span>", unsafe_allow_html=True)
+                st.markdown(f"#### {item['title']}")
+                st.write(item['summary'])
+                
+                # แถบข้อมูลด้านล่างของการ์ด (Read Story ID, Time, Views, Like)
+                b_col1, b_col2 = st.columns([2, 1])
+                with b_col1:
+                    if st.button(f"📖 Read Story (ID: {item['id']})", key=f"card_read_{item['id']}_{idx}"):
+                        st.session_state.current_page = "Reader"
+                        st.session_state.selected_article_id = item['id']
+                        st.rerun()
+                with b_col2:
+                    st.markdown(f"<div style='text-align: right; font-size: 12px; color: #64748b; padding-top: 5px;'>⏱️ {item['time_ago']} &nbsp; 👀 {item['views']}</div>", unsafe_allow_html=True)
+            st.markdown("")
+
+# ==========================================
+# 6. Footer (ท้ายเว็บไซต์)
+# ==========================================
+st.markdown("---")
+st.markdown(
+    """
+    <div style="background-color: #f8fafc; padding: 20px; text-align: center; border-radius: 8px; border: 1px dashed #cbd5e1;">
+        <span style="color: #64748b; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">[ GOOGLE ADSENSE - GLOBAL LEADERBOARD AD ]</span>
+        <p style="margin: 5px 0; font-weight: 600; color: #334155;">QELVYQ — Knowledge in Real Time. Real-time content from trusted sources[cite: 28].</p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
