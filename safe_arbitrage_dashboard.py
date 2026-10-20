@@ -3,7 +3,7 @@ from datetime import datetime
 
 # =========================================================
 # QELVYQ | Knowledge in Real Time
-# Run with: streamlit run safe_arbitrage_dashboard.py
+# Run with: streamlit run qelvyq_dashboard.py
 # =========================================================
 st.set_page_config(
     page_title="QELVYQ — Knowledge in Real Time",
@@ -79,7 +79,7 @@ if "master_db" not in st.session_state:
             "category": "Business", "time_ago": "4 mins ago", "views": "26 views", "likes": 5,
             "summary": "Flipkart has expanded access to its food-delivery service to thousands of employees ahead of its public launch.",
             "content": "Walmart-backed Flipkart is positioning itself for a major thrust into India’s quick-commerce and food-delivery ecosystem. The early rollout may help the company test logistics, demand, and customer experience before a wider launch.",
-            "image": "https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=700&q=80",
+            "image": "https://images.unsplash.com/photo-1526367790999-0150786686a2?auto=format&fit=crop&w=700&q=80", # Delivery & Logistics
         },
         {
             "id": 30011,
@@ -87,7 +87,7 @@ if "master_db" not in st.session_state:
             "category": "Technology", "time_ago": "27 mins ago", "views": "4.2k views", "likes": 4,
             "summary": "New York leaders are debating how communities should respond to rapid AI adoption and the need for public safeguards.",
             "content": "The debate over artificial intelligence governance continues, with local leaders emphasizing transparent oversight, workforce protections, and community involvement in decisions about automated systems.",
-            "image": "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?auto=format&fit=crop&w=700&q=80",
+            "image": "https://images.unsplash.com/photo-1590402494682-cd3fb53b1f70?auto=format&fit=crop&w=700&q=80", # AI & City Governance
         },
         {
             "id": 30021,
@@ -95,7 +95,7 @@ if "master_db" not in st.session_state:
             "category": "AI", "time_ago": "58 mins ago", "views": "7.8k views", "likes": 3,
             "summary": "Massive infrastructure investments continue as AI labs scale up their compute clusters for next-gen models.",
             "content": "The soaring demand for computational power has triggered talks around massive funding rounds and infrastructure partnerships to secure dedicated GPU capacity for frontier model training.",
-            "image": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=700&q=80",
+            "image": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=700&q=80", # Data Center & Servers
         },
         {
             "id": 30031,
@@ -103,7 +103,7 @@ if "master_db" not in st.session_state:
             "category": "Science", "time_ago": "1 hour ago", "views": "6.1k views", "likes": 6,
             "summary": "Experts weigh in on the complexities of placing neutral observers inside AI labs to monitor safety.",
             "content": "Integrating third-party evaluators directly inside model development pipelines introduces unique challenges regarding proprietary data, security protocols, and true neutrality.",
-            "image": "https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&fit=crop&w=700&q=80",
+            "image": "https://images.unsplash.com/photo-1531746790731-6f087fffd65a?auto=format&fit=crop&w=700&q=80", # AI Research & Evaluation
         },
         {
             "id": 30041,
@@ -111,7 +111,7 @@ if "master_db" not in st.session_state:
             "category": "Technology", "time_ago": "1 hour ago", "views": "5.4k views", "likes": 7,
             "summary": "Enterprise security teams face new hurdles as autonomous agents gain deeper system access.",
             "content": "As employees increasingly rely on autonomous AI agents connected to corporate systems, Microsoft security analysts warn that these tools must be monitored under strict zero-trust guidelines.",
-            "image": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=700&q=80",
+            "image": "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=700&q=80", # Cybersecurity & Code
         },
         {
             "id": 30051,
@@ -119,7 +119,7 @@ if "master_db" not in st.session_state:
             "category": "Business", "time_ago": "2 hours ago", "views": "8.9k views", "likes": 8,
             "summary": "AWS expands its developer toolkit to make alternative silicon chips more attractive for PyTorch workloads.",
             "content": "Amazon Web Services is pushing further into hardware optimization, releasing toolsets designed to streamline AI application development on alternative silicon platforms.",
-            "image": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=700&q=80",
+            "image": "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?auto=format&fit=crop&w=700&q=80", # Computer Chips & Hardware
         }
     ]
 
@@ -281,7 +281,7 @@ with col_h2:
     </div>
     """, unsafe_allow_html=True)
 
-# News Grid (2 columns layout with images using .get() to prevent KeyError)
+# News Grid (2 columns layout with relevant images)
 if not filtered_articles:
     st.info("No matching articles found based on your filter criteria.")
 else:
@@ -311,7 +311,7 @@ else:
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# ---------- Metrics Grid (Below Latest News & Updates) ----------
+# ---------- Metrics Grid (Moved Below Latest News & Updates) ----------
 m1, m2, m3, m4, m5 = st.columns(5)
 with m1: st.metric("Live Active Visitors", f"{st.session_state.active_users} online", "+12% vs. yesterday")
 with m2: st.metric("Total Page Views", f"{st.session_state.page_views:,}", "+18% vs. yesterday")
