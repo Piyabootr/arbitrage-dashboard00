@@ -12,7 +12,7 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ---------- Theme / layout styling ----------
+# ---------- Theme / layout styling (ปรับแต่งดีไซน์การ์ดแนวนอน) ----------
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
@@ -42,18 +42,22 @@ div[data-testid="stTextInput"] input, div[data-testid="stSelectbox"] div[data-ba
 .section-head { display:flex; align-items:center; gap:10px; margin:4px 0 2px; }
 .section-head h3 { margin:0; font-size:20px; font-weight:750; }
 .section-sub { color:#7589a7; font-size:12px; margin:3px 0 13px; }
-.news-card { background:#fff; border:1px solid #e0eafa; border-radius:15px; padding:11px; box-shadow:0 4px 16px rgba(18,55,102,.045); min-height:164px; margin-bottom:4px; }
-.news-image { width:100%; height:128px; object-fit:cover; border-radius:10px; border:1px solid #e8eef8; }
-.news-title { font-size:14px; line-height:1.4; font-weight:750; color:#113767; margin:0 0 5px; }
-.news-summary { color:#6b7f9e; font-size:11px; line-height:1.55; margin:0 0 8px; }
-.news-meta { color:#8092ad; font-size:10px; }
+
+/* ดีไซน์การ์ดแนวนอนแบบใหม่ */
+.horizontal-card { background:#fff; border:1px solid #e0eafa; border-radius:15px; padding:15px; box-shadow:0 4px 16px rgba(18,55,102,.045); margin-bottom:14px; display:flex; gap:20px; align-items:center; }
+.h-card-img { width:130px; height:110px; object-fit:cover; border-radius:12px; border:1px solid #e8eef8; flex-shrink:0; }
+.h-card-content { flex-grow:1; }
+.h-card-title { font-size:15px; line-height:1.35; font-weight:750; color:#113767; margin:4px 0 4px; }
+.h-card-summary { color:#6b7f9e; font-size:12px; line-height:1.5; margin:0 0 8px; }
+.h-card-meta { color:#8092ad; font-size:11px; display:flex; gap:15px; align-items:center; }
+
 .small-pill { display:inline-block; border:1px solid #e1ebf8; border-radius:20px; padding:4px 8px; color:#607da3; background:#f8fbff; font-size:10px; }
 .ai-panel { background:linear-gradient(145deg,#073b82,#061e49); color:white; border-radius:15px; padding:17px; margin-top:16px; box-shadow:0 8px 20px rgba(5,39,93,.14); }
 .ai-panel h4 { color:white; margin:5px 0 6px; font-size:15px; }
 .ai-panel p { color:#d4e6ff; font-size:11px; line-height:1.55; }
 .footer { border-top:1px solid #e4ecf7; padding-top:15px; margin-top:25px; color:#8a9bb4; font-size:10px; text-align:center; }
 div[data-testid="stHorizontalBlock"] { gap: 1rem; }
-@media (max-width: 900px) { .hero-status { position:static; margin-top:12px; } .hero { padding:22px; } }
+@media (max-width: 900px) { .hero-status { position:static; margin-top:12px; } .hero { padding:22px; } .horizontal-card { flex-direction:column; align-items:flex-start; } .h-card-img { width:100%; height:140px; } }
 </style>
 """, unsafe_allow_html=True)
 
@@ -79,7 +83,7 @@ if "master_db" not in st.session_state:
             "category": "Business", "time_ago": "4 mins ago", "views": "26 views", "likes": 5,
             "summary": "Flipkart has expanded access to its food-delivery service to thousands of employees ahead of its public launch.",
             "content": "Walmart-backed Flipkart is positioning itself for a major thrust into India’s quick-commerce and food-delivery ecosystem. The early rollout may help the company test logistics, demand, and customer experience before a wider launch.",
-            "image": "https://images.unsplash.com/photo-1526367790999-0150786686a2?auto=format&fit=crop&w=700&q=80", # Delivery & Logistics
+            "image": "https://images.unsplash.com/photo-1526367790999-0150786686a2?auto=format&fit=crop&w=700&q=80",
         },
         {
             "id": 30011,
@@ -87,7 +91,7 @@ if "master_db" not in st.session_state:
             "category": "Technology", "time_ago": "27 mins ago", "views": "4.2k views", "likes": 4,
             "summary": "New York leaders are debating how communities should respond to rapid AI adoption and the need for public safeguards.",
             "content": "The debate over artificial intelligence governance continues, with local leaders emphasizing transparent oversight, workforce protections, and community involvement in decisions about automated systems.",
-            "image": "https://images.unsplash.com/photo-1590402494682-cd3fb53b1f70?auto=format&fit=crop&w=700&q=80", # AI & City Governance
+            "image": "https://images.unsplash.com/photo-1590402494682-cd3fb53b1f70?auto=format&fit=crop&w=700&q=80",
         },
         {
             "id": 30021,
@@ -95,7 +99,7 @@ if "master_db" not in st.session_state:
             "category": "AI", "time_ago": "58 mins ago", "views": "7.8k views", "likes": 3,
             "summary": "Massive infrastructure investments continue as AI labs scale up their compute clusters for next-gen models.",
             "content": "The soaring demand for computational power has triggered talks around massive funding rounds and infrastructure partnerships to secure dedicated GPU capacity for frontier model training.",
-            "image": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=700&q=80", # Data Center & Servers
+            "image": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=700&q=80",
         },
         {
             "id": 30031,
@@ -103,7 +107,7 @@ if "master_db" not in st.session_state:
             "category": "Science", "time_ago": "1 hour ago", "views": "6.1k views", "likes": 6,
             "summary": "Experts weigh in on the complexities of placing neutral observers inside AI labs to monitor safety.",
             "content": "Integrating third-party evaluators directly inside model development pipelines introduces unique challenges regarding proprietary data, security protocols, and true neutrality.",
-            "image": "https://images.unsplash.com/photo-1531746790731-6f087fffd65a?auto=format&fit=crop&w=700&q=80", # AI Research & Evaluation
+            "image": "https://images.unsplash.com/photo-1531746790731-6f087fffd65a?auto=format&fit=crop&w=700&q=80",
         },
         {
             "id": 30041,
@@ -111,7 +115,7 @@ if "master_db" not in st.session_state:
             "category": "Technology", "time_ago": "1 hour ago", "views": "5.4k views", "likes": 7,
             "summary": "Enterprise security teams face new hurdles as autonomous agents gain deeper system access.",
             "content": "As employees increasingly rely on autonomous AI agents connected to corporate systems, Microsoft security analysts warn that these tools must be monitored under strict zero-trust guidelines.",
-            "image": "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=700&q=80", # Cybersecurity & Code
+            "image": "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=700&q=80",
         },
         {
             "id": 30051,
@@ -119,7 +123,7 @@ if "master_db" not in st.session_state:
             "category": "Business", "time_ago": "2 hours ago", "views": "8.9k views", "likes": 8,
             "summary": "AWS expands its developer toolkit to make alternative silicon chips more attractive for PyTorch workloads.",
             "content": "Amazon Web Services is pushing further into hardware optimization, releasing toolsets designed to streamline AI application development on alternative silicon platforms.",
-            "image": "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?auto=format&fit=crop&w=700&q=80", # Computer Chips & Hardware
+            "image": "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?auto=format&fit=crop&w=700&q=80",
         }
     ]
 
@@ -234,7 +238,7 @@ elif st.session_state.current_page == "Analytics":
     c3.metric("Verified Nodes", "1,240", "+12 active")
     st.stop()
 
-elif st.session_state.current_page == "Bookmarks":
+elif st.session_state.current_page, st.session_state.current_page == ("Bookmarks", "Bookmarks"):
     st.markdown("## 🔖 Your Saved Bookmarks")
     saved_items = [i for i in st.session_state.master_db if i['id'] in st.session_state.bookmarks]
     if not saved_items:
@@ -281,37 +285,47 @@ with col_h2:
     </div>
     """, unsafe_allow_html=True)
 
-# News Grid (2 columns layout with relevant images)
+# News Grid (Horizontal Cards Layout matching user reference image)
 if not filtered_articles:
     st.info("No matching articles found based on your filter criteria.")
 else:
-    cols = st.columns(2)
     for idx, item in enumerate(filtered_articles):
-        col = cols[idx % 2]
-        with col:
-            cat_color = "#0878e8" if item["category"] == "Business" else "#7c3aed" if item["category"] == "AI" else "#059669"
-            img_url = item.get("image", "https://images.unsplash.com/photo-1585829365295-ab7cd400c167?auto=format&fit=crop&w=700&q=80")
-            
-            with st.container():
-                st.markdown(f"""
-                <div class="news-card">
-                    <img src="{img_url}" class="news-image">
-                    <div style="margin-top:8px;">
-                        <span style="background:{cat_color}; color:#fff; padding:2px 8px; border-radius:12px; font-size:9px; font-weight:700;">{item['category']}</span>
-                    </div>
-                    <div class="news-title">{item['title']}</div>
-                    <div class="news-summary">{item.get('summary', '')}</div>
-                    <div class="news-meta">⏱ {item.get('time_ago', 'Recent')} &bull; 👁 {item.get('views', '1 view')} &bull; ❤️ {item.get('likes', 0)} likes</div>
+        cat_color = "#0878e8" if item["category"] == "Business" else "#7c3aed" if item["category"] == "AI" else "#059669"
+        img_url = item.get("image", "https://images.unsplash.com/photo-1585829365295-ab7cd400c167?auto=format&fit=crop&w=700&q=80")
+        
+        # HTML structure for horizontal card layout matching reference image
+        st.markdown(f"""
+        <div class="horizontal-card">
+            <img src="{img_url}" class="h-card-img">
+            <div class="h-card-content">
+                <div>
+                    <span style="background:{cat_color}; color:#fff; padding:2px 8px; border-radius:12px; font-size:9px; font-weight:700;">{item['category']}</span>
                 </div>
-                """, unsafe_allow_html=True)
-                
-                if st.button(f"📖 Read Story (ID: {item['id']})", key=f"btn_read_{item['id']}"):
-                    st.session_state.selected_article_id = item['id']
-                    st.rerun()
+                <div class="h-card-title">{item['title']}</div>
+                <div class="h-card-summary">{item.get('summary', '')}</div>
+                <div class="h-card-meta">
+                    <span>📄 Read Story (ID: {item['id']})</span> &nbsp;&bull;&nbsp; 
+                    <span>⏱ {item.get('time_ago', 'Recent')}</span> &nbsp;&bull;&nbsp; 
+                    <span>👁 {item.get('views', '1 view')}</span>
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Action button styled nicely below/within layout context
+        col_btn1, col_btn2, col_btn3 = st.columns([2, 2, 6])
+        with col_btn1:
+            if st.button(f"📖 Read (ID: {item['id']})", key=f"btn_read_{item['id']}"):
+                st.session_state.selected_article_id = item['id']
+                st.rerun()
+        with col_btn2:
+            if st.button(f"❤️ Like ({item.get('likes', 0)})", key=f"btn_like_{item['id']}"):
+                item['likes'] = item.get('likes', 0) + 1
+                st.rerun()
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# ---------- Metrics Grid (Moved Below Latest News & Updates) ----------
+# ---------- Metrics Grid (Below Latest News & Updates) ----------
 m1, m2, m3, m4, m5 = st.columns(5)
 with m1: st.metric("Live Active Visitors", f"{st.session_state.active_users} online", "+12% vs. yesterday")
 with m2: st.metric("Total Page Views", f"{st.session_state.page_views:,}", "+18% vs. yesterday")
