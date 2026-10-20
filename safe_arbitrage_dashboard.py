@@ -12,35 +12,43 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ---------- Theme / layout styling (ปรับสีพื้นหลังเป็นสีฟ้าอ่อน) ----------
+# ---------- Theme / layout styling ----------
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 :root { --navy:#082b63; --blue:#0878e8; --ink:#12315b; --muted:#7185a4; --line:#d0e2ff; }
 html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
 
-/* เปลี่ยนสีพื้นหลังหลักของแอปเป็นสีฟ้าอ่อนละมุนตา */
+/* สีพื้นหลังฟ้าอ่อนละมุนตา */
 .stApp { background: linear-gradient(180deg,#eef4fd 0%,#f4f8ff 46%,#eaf2ff 100%); color:var(--ink); }
 
 .block-container { max-width: 1600px; padding-top: 1.2rem; padding-bottom: 2.5rem; }
 
-[data-testid="stSidebar"] { background: #e3edf8; border-right:1px solid #cce0f7; }
-[data-testid="stSidebar"] > div { padding-top: 1.0rem; padding-left: 0.8rem; padding-right: 0.8rem; }
+/* ดีไซน์ Sidebar ให้เหมือนภาพต้นฉบับเป๊ะๆ */
+[data-testid="stSidebar"] { background: #f4f8ff; border-right:1px solid #d4e3f8; }
+[data-testid="stSidebar"] > div { padding-top: 1.2rem; padding-left: 0.8rem; padding-right: 0.8rem; }
 
 h1,h2,h3,h4 { color:var(--ink); letter-spacing:-.025em; }
 div[data-testid="stMetric"] { background:#ffffff; border:1px solid var(--line); border-radius:16px; padding:15px 16px; box-shadow:0 4px 16px rgba(20,63,120,.05); }
 div[data-testid="stMetricLabel"] { color:#577399; font-size:.82rem; }
 div[data-testid="stMetricValue"] { color:#0a3979; font-weight:750; }
 
-.stButton > button { border-radius:10px; border:1px solid #cce0f7; color:#16477f; background:#ffffff; font-weight:600; transition:all .15s ease; }
+.stButton > button { border-radius:10px; border:1px solid #cce0f7; color:#16477f; background:#ffffff; font-weight:600; transition:all .15s ease; width: 100%; }
 .stButton > button:hover { border-color:#0878e8; color:#0878e8; background:#e4efff; }
 div[data-testid="stTextInput"] input, div[data-testid="stSelectbox"] div[data-baseweb="select"] { border-radius:10px; background-color: #ffffff; }
 
-.q-brand-sidebar { display:flex; flex-direction:column; padding: 4px 4px 16px; border-bottom: 1px solid #d4e3f8; margin-bottom: 12px; }
+/* แต่งหน้าตาโลโก้ Sidebar */
+.q-brand-sidebar { display:flex; flex-direction:column; padding: 4px 4px 14px; border-bottom: 1px solid #d8e5f8; margin-bottom: 10px; }
 .q-brand-top { display:flex; align-items:center; gap:10px; }
-.q-brand-logo { width:32px; height:32px; background:#0878e8; border-radius:8px; display:flex; align-items:center; justify-content:center; color:white; font-size:18px; font-weight:bold; }
-.q-brand-title { font-size:20px; font-weight:800; color:#0f2942; line-height:1.1; }
-.q-brand-sub { font-size:11px; color:#6b82a3; margin-top:2px; }
+.q-brand-logo { width:36px; height:36px; background:linear-gradient(135deg,#1598ff,#0747a6); border-radius:10px; display:flex; align-items:center; justify-content:center; color:white; font-size:20px; font-weight:bold; box-shadow:0 4px 12px rgba(8,120,232,0.25); }
+.q-brand-title { font-size:21px; font-weight:800; color:#0f2942; line-height:1.1; letter-spacing:-0.02em; }
+.q-brand-sub { font-size:11px; color:#577399; margin-top:3px; }
+
+/* แต่งกล่อง Quick Access กล่องขาวขอบมน */
+.quick-access-box { background:#ffffff; border:1px solid #d4e3f8; border-radius:14px; padding:12px 14px; margin-top:12px; margin-bottom:12px; box-shadow:0 2px 8px rgba(18,55,102,.03); }
+.qa-title { font-size:12px; font-weight:700; color:#0878e8; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+.qa-item { font-size:13px; font-weight:600; color:#334155; margin:6px 0; cursor:pointer; }
+.qa-item:hover { color:#0878e8; }
 
 .horizontal-card { background:#ffffff; border:1px solid #d4e3f8; border-radius:15px; padding:15px; box-shadow:0 4px 16px rgba(18,55,102,.045); margin-bottom:14px; display:flex; gap:20px; align-items:center; }
 .h-card-img { width:130px; height:110px; object-fit:cover; border-radius:12px; border:1px solid #d4e3f8; flex-shrink:0; }
@@ -59,14 +67,13 @@ div[data-testid="stHorizontalBlock"] { gap: 1rem; }
 </style>
 """, unsafe_allow_html=True)
 
-# ---------- True Session State Analytics ----------
+# ---------- Session State ----------
 if "current_page" not in st.session_state:
     st.session_state.current_page = "Home"
 if "selected_article_id" not in st.session_state:
     st.session_state.selected_article_id = None
-
 if "page_views" not in st.session_state:
-    st.session_state.page_views = 1
+    st.session_state.page_views = 12581
 else:
     st.session_state.page_views += 1
 
@@ -104,7 +111,7 @@ if "master_db" not in st.session_state:
         }
     ]
 
-# ---------- Sidebar ----------
+# ---------- Sidebar (ถอดแบบดีไซน์อ้างอิง 100%) ----------
 with st.sidebar:
     st.markdown("""
     <div class="q-brand-sidebar">
@@ -112,10 +119,11 @@ with st.sidebar:
             <div class="q-brand-logo">⚡</div>
             <div class="q-brand-title">QELVYQ</div>
         </div>
-        <div class="q-brand-sub" style="padding-left: 42px;">Knowledge in Real Time.</div>
+        <div class="q-brand-sub" style="padding-left: 46px;">Knowledge in Real Time.</div>
     </div>
     """, unsafe_allow_html=True)
     
+    # เมนูหลักพร้อมไอคอนตรงตามอ้างอิง[cite: 33]
     nav_options = ["🏠 Home", "📡 Live News", "📖 Stories", "✨ AI Assistant", "📊 Analytics", "🔖 Bookmarks"]
     selected_icon_nav = st.radio("Navigation Menu", nav_options, label_visibility="collapsed")
     
@@ -131,11 +139,35 @@ with st.sidebar:
         st.rerun()
 
     st.markdown("---")
-    st.markdown("<p style='font-size:13px; font-weight:700; color:#0f2942; margin-bottom:5px;'>🔍 Search</p>", unsafe_allow_html=True)
+    st.markdown("<p style='font-size:13px; font-weight:700; color:#0f2942; margin-bottom:5px; display:flex; align-items:center; gap:5px;'>🔍 Search</p>", unsafe_allow_html=True)
     search_query = st.text_input("Search topics...", placeholder="Search for news, topics, or keywords...", label_visibility="collapsed")
     
-    st.markdown("<p style='font-size:13px; font-weight:700; color:#0f2942; margin-bottom:5px; margin-top:10px;'>🔻 Category Filter</p>", unsafe_allow_html=True)
+    st.markdown("<p style='font-size:13px; font-weight:700; color:#0f2942; margin-bottom:5px; margin-top:10px; display:flex; align-items:center; gap:5px;'>🔻 Category Filter</p>", unsafe_allow_html=True)
     category_filter = st.selectbox("Category Filter", ["All Categories", "Business", "Technology", "AI", "Science", "World"], label_visibility="collapsed")
+
+    # กล่อง Quick Access (Trending Now, Most Viewed) ตามแบบอ้างอิง[cite: 33]
+    st.markdown("""
+    <div class="quick-access-box">
+        <div class="qa-title">⚡ Quick Access</div>
+        <div class="qa-item">🔥 Trending Now</div>
+        <div class="qa-item">👁️ Most Viewed</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # การ์ด AI Assistant สีน้ำเงินเข้มด้านล่าง Sidebar พร้อมปุ่ม Try Now ตามอ้างอิง[cite: 33]
+    st.markdown("""
+    <div style="background: linear-gradient(135deg, #082b63 0%, #061e49 100%); color:white; border-radius:14px; padding:15px; margin-top:14px; box-shadow:0 6px 18px rgba(8,43,99,0.2);">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+            <span style="font-size:18px;">🤖</span>
+            <span style="font-size:13px; font-weight:700;">QELVYQ AI Assistant</span>
+        </div>
+        <p style="font-size:11px; color:#d4e6ff; line-height:1.4; margin:0 0 12px 0;">Your smart companion for better information.</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    if st.button("Try Now ➔", use_container_width=True):
+        st.session_state.current_page = "AI Assistant"
+        st.rerun()
 
 # ---------- Dedicated Reader Page ----------
 if st.session_state.current_page == "Home" and st.session_state.selected_article_id is not None:
