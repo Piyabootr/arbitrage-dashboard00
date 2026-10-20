@@ -20,30 +20,27 @@ st.markdown("""
 html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
 .stApp { background: linear-gradient(180deg,#f5f9ff 0%,#ffffff 46%,#f8fbff 100%); color:var(--ink); }
 .block-container { max-width: 1600px; padding-top: 1.2rem; padding-bottom: 2.5rem; }
-[data-testid="stSidebar"] { background: #eef5ff; border-right:1px solid #dce8f8; }
-[data-testid="stSidebar"] > div { padding-top: 1.2rem; }
+
+[data-testid="stSidebar"] { background: #fbfdff; border-right:1px solid #e2edf9; }
+[data-testid="stSidebar"] > div { padding-top: 1.0rem; padding-left: 0.8rem; padding-right: 0.8rem; }
+
 h1,h2,h3,h4 { color:var(--ink); letter-spacing:-.025em; }
 div[data-testid="stMetric"] { background:#fff; border:1px solid var(--line); border-radius:16px; padding:15px 16px; box-shadow:0 4px 16px rgba(20,63,120,.045); }
 div[data-testid="stMetricLabel"] { color:#6b82a3; font-size:.82rem; }
 div[data-testid="stMetricValue"] { color:#0a3979; font-weight:750; }
+
 .stButton > button { border-radius:10px; border:1px solid #d8e5f6; color:#16477f; background:#fff; font-weight:600; transition:all .15s ease; }
 .stButton > button:hover { border-color:#1683ef; color:#0878e8; background:#f1f8ff; }
 div[data-testid="stTextInput"] input, div[data-testid="stSelectbox"] div[data-baseweb="select"] { border-radius:10px; }
-.q-brand { display:flex; align-items:center; gap:10px; padding:4px 2px 18px; }
-.q-brand-mark { display:flex; align-items:center; justify-content:center; width:42px; height:42px; border-radius:13px; color:#fff; font-size:25px; background:linear-gradient(135deg,#1598ff,#0747a6); box-shadow:0 7px 18px rgba(8,120,232,.22); }
-.q-brand-name { font-size:23px; line-height:1.05; font-weight:800; letter-spacing:.02em; color:#0a3979; }
-.q-brand-tag { color:#7185a4; font-size:10px; margin-top:4px; }
-.hero { position:relative; overflow:hidden; border-radius:18px; padding:28px 30px 27px; color:#fff; background:radial-gradient(circle at 76% 25%,rgba(0,153,255,.4),transparent 26%),linear-gradient(115deg,#071a3b 0%,#073d86 56%,#05275d 100%); box-shadow:0 10px 28px rgba(5,39,93,.16); margin-bottom:18px; }
-.hero:after { content:""; position:absolute; width:320px;height:320px; right:7%;top:-180px;border:1px solid rgba(100,190,255,.24);border-radius:50%;box-shadow:0 0 0 20px rgba(100,190,255,.035),0 0 0 45px rgba(100,190,255,.035),0 0 0 72px rgba(100,190,255,.025); }
-.hero-tag { display:inline-block; background:rgba(31,143,255,.22); border:1px solid rgba(124,198,255,.3); border-radius:20px; padding:5px 10px; color:#d8efff; font-size:10px; font-weight:700; letter-spacing:.08em; }
-.hero h1 { color:#fff; font-size:clamp(25px,2.2vw,36px); margin:10px 0 7px; line-height:1.2; font-weight:800; }
-.hero p { color:#d0e3ff; margin:0; font-size:13px; max-width:760px; }
-.hero-status { position:absolute; right:25px; top:22px; z-index:1; color:#d5e9ff; font-size:11px; }
-.section-head { display:flex; align-items:center; gap:10px; margin:4px 0 2px; }
-.section-head h3 { margin:0; font-size:20px; font-weight:750; }
-.section-sub { color:#7589a7; font-size:12px; margin:3px 0 13px; }
 
-/* ดีไซน์การ์ดแนวนอน */
+/* ดีไซน์ Sidebar ตามแบบอ้างอิง */
+.q-brand-sidebar { display:flex; flex-direction:column; padding: 4px 4px 16px; border-bottom: 1px solid #e5effd; margin-bottom: 12px; }
+.q-brand-top { display:flex; align-items:center; gap:10px; }
+.q-brand-logo { width:32px; height:32px; background:#0878e8; border-radius:8px; display:flex; align-items:center; justify-content:center; color:white; font-size:18px; font-weight:bold; }
+.q-brand-title { font-size:20px; font-weight:800; color:#0f2942; line-height:1.1; }
+.q-brand-sub { font-size:11px; color:#6b82a3; margin-top:2px; }
+
+/* การ์ดแนวนอน */
 .horizontal-card { background:#fff; border:1px solid #e0eafa; border-radius:15px; padding:15px; box-shadow:0 4px 16px rgba(18,55,102,.045); margin-bottom:14px; display:flex; gap:20px; align-items:center; }
 .h-card-img { width:130px; height:110px; object-fit:cover; border-radius:12px; border:1px solid #e8eef8; flex-shrink:0; }
 .h-card-content { flex-grow:1; }
@@ -51,13 +48,13 @@ div[data-testid="stTextInput"] input, div[data-testid="stSelectbox"] div[data-ba
 .h-card-summary { color:#6b7f9e; font-size:12px; line-height:1.5; margin:0 0 8px; }
 .h-card-meta { color:#8092ad; font-size:11px; display:flex; gap:15px; align-items:center; }
 
-.small-pill { display:inline-block; border:1px solid #e1ebf8; border-radius:20px; padding:4px 8px; color:#607da3; background:#f8fbff; font-size:10px; }
-.ai-panel { background:linear-gradient(145deg,#073b82,#061e49); color:white; border-radius:15px; padding:17px; margin-top:16px; box-shadow:0 8px 20px rgba(5,39,93,.14); }
-.ai-panel h4 { color:white; margin:5px 0 6px; font-size:15px; }
-.ai-panel p { color:#d4e6ff; font-size:11px; line-height:1.55; }
+.hero { position:relative; overflow:hidden; border-radius:18px; padding:28px 30px 27px; color:#fff; background:radial-gradient(circle at 76% 25%,rgba(0,153,255,.4),transparent 26%),linear-gradient(115deg,#071a3b 0%,#073d86 56%,#05275d 100%); box-shadow:0 10px 28px rgba(5,39,93,.16); margin-bottom:18px; }
+.section-head { display:flex; align-items:center; gap:10px; margin:4px 0 2px; }
+.section-head h3 { margin:0; font-size:20px; font-weight:750; }
+.section-sub { color:#7589a7; font-size:12px; margin:3px 0 13px; }
+
 .footer { border-top:1px solid #e4ecf7; padding-top:15px; margin-top:25px; color:#8a9bb4; font-size:10px; text-align:center; }
 div[data-testid="stHorizontalBlock"] { gap: 1rem; }
-@media (max-width: 900px) { .hero-status { position:static; margin-top:12px; } .hero { padding:22px; } .horizontal-card { flex-direction:column; align-items:flex-start; } .h-card-img { width:100%; height:140px; } }
 </style>
 """, unsafe_allow_html=True)
 
@@ -127,21 +124,32 @@ if "master_db" not in st.session_state:
         }
     ]
 
-# ---------- Sidebar ----------
+# ---------- Sidebar (ถอดแบบดีไซน์อ้างอิง 100%) ----------
 with st.sidebar:
     st.markdown("""
-    <div class="q-brand">
-        <div class="q-brand-mark">⚡</div>
-        <div>
-            <div class="q-brand-name">QELVYQ</div>
-            <div class="q-brand-tag">Knowledge in Real Time</div>
+    <div class="q-brand-sidebar">
+        <div class="q-brand-top">
+            <div class="q-brand-logo">⚡</div>
+            <div class="q-brand-title">QELVYQ</div>
         </div>
+        <div class="q-brand-sub" style="padding-left: 42px;">Knowledge in Real Time.</div>
     </div>
     """, unsafe_allow_html=True)
     
-    st.markdown("### Navigation")
-    nav_options = ["Home", "Live News", "Stories", "AI Assistant", "Analytics", "Bookmarks"]
-    selected_nav = st.radio("Navigation Menu", nav_options, label_visibility="collapsed")
+    # เมนูนำทางพร้อมไอคอนตรงตามรูปตัวอย่าง[cite: 33]
+    nav_options = ["🏠 Home", "📡 Live News", "📖 Stories", "✨ AI Assistant", "📊 Analytics", "🔖 Bookmarks"]
+    selected_icon_nav = st.radio("Navigation Menu", nav_options, label_visibility="collapsed")
+    
+    # แปลงค่ากลับเป็นชื่อเพจหลัก
+    page_mapping = {
+        "🏠 Home": "Home",
+        "📡 Live News": "Live News",
+        "📖 Stories": "Stories",
+        "✨ AI Assistant": "AI Assistant",
+        "📊 Analytics": "Analytics",
+        "🔖 Bookmarks": "Bookmarks"
+    }
+    selected_nav = page_mapping[selected_icon_nav]
     
     if selected_nav != st.session_state.current_page:
         st.session_state.current_page = selected_nav
@@ -149,24 +157,33 @@ with st.sidebar:
         st.rerun()
 
     st.markdown("---")
-    st.markdown("### Search & Filter")
-    search_query = st.text_input("Search topics...", placeholder="Type keyword...")
-    category_filter = st.selectbox("Category Filter", ["All Categories", "Business", "Technology", "AI", "Science", "World"])
+    st.markdown("<p style='font-size:13px; font-weight:700; color:#0f2942; margin-bottom:5px;'>🔍 Search</p>", unsafe_allow_html=True)
+    search_query = st.text_input("Search topics...", placeholder="Search for news, topics, or keywords...", label_visibility="collapsed")
+    
+    st.markdown("<p style='font-size:13px; font-weight:700; color:#0f2942; margin-bottom:5px; margin-top:10px;'>🔻 Category Filter</p>", unsafe_allow_html=True)
+    category_filter = st.selectbox("Category Filter", ["All Categories", "Business", "Technology", "AI", "Science", "World"], label_visibility="collapsed")
 
     st.markdown("---")
-    st.markdown("### Quick Access")
+    st.markdown("<p style='font-size:12px; font-weight:700; color:#6b82a3; text-transform:uppercase; letter-spacing:.05em; margin-bottom:8px;'>⚡ Quick Access</p>", unsafe_allow_html=True)
     if st.button("🔥 Trending Now", use_container_width=True):
         st.toast("Showing trending live stories...")
     if st.button("👁️ Most Viewed", use_container_width=True):
         st.toast("Sorting by highest viewership...")
 
+    # การ์ด AI Assistant สีน้ำเงินเข้มด้านล่าง Sidebar ตรงตามรูปตัวอย่าง[cite: 33]
     st.markdown("""
-    <div class="ai-panel">
-        <div style="font-size:10px; font-weight:700; color:#64b5f6; letter-spacing:.08em;">QELVYQ AI ASSISTANT</div>
-        <h4>Smart Companion</h4>
-        <p>Summarize real-time intelligence instantly with conversational context.</p>
+    <div style="background: linear-gradient(135deg, #082b63 0%, #061e49 100%); color:white; border-radius:14px; padding:15px; margin-top:18px; box-shadow:0 6px 18px rgba(8,43,99,0.2);">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+            <span style="font-size:18px;">🤖</span>
+            <span style="font-size:13px; font-weight:700;">QELVYQ AI Assistant</span>
+        </div>
+        <p style="font-size:11px; color:#d4e6ff; line-height:1.4; margin:0 0 12px 0;">Your smart companion for better information.</p>
     </div>
     """, unsafe_allow_html=True)
+    
+    if st.button("Try Now ➔", use_container_width=True):
+        st.session_state.current_page = "AI Assistant"
+        st.rerun()
 
 # ---------- Dedicated Reader / Detail Page ----------
 if st.session_state.current_page == "Home" and st.session_state.selected_article_id is not None:
@@ -285,7 +302,7 @@ with col_h2:
     </div>
     """, unsafe_allow_html=True)
 
-# News Grid (Horizontal Cards Layout matching user reference image)
+# News Grid (Horizontal Cards Layout)
 if not filtered_articles:
     st.info("No matching articles found based on your filter criteria.")
 else:
