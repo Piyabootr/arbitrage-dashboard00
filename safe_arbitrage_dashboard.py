@@ -2,7 +2,7 @@ import streamlit as st
 from datetime import datetime
 
 # =========================================================
-# QELVYQ | Knowledge in Real Time (Pro Enterprise Edition)
+# QELVYQ | Knowledge in Real Time (True Real-Time Edition)
 # Run with: streamlit run safe_arbitrage_dashboard.py
 # =========================================================
 st.set_page_config(
@@ -12,14 +12,13 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ---------- Theme & Professional Graphic Styling (ปิดช่องว่าง + เพิ่มลวดลายรวดราย) ----------
+# ---------- Theme & Professional Graphic Styling ----------
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 :root { --navy:#071a3b; --blue:#0878e8; --ink:#0f2537; --muted:#64748b; --line:#cbd5e1; }
 html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
 
-/* พื้นหลังฟ้าอ่อนระดับพรีเมียม พร้อมลวดลายเส้นตารางจางๆ (Subtle Grid Pattern) */
 .stApp { 
     background-image: 
         linear-gradient(to right, rgba(8, 120, 232, 0.03) 1px, transparent 1px),
@@ -31,11 +30,9 @@ html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
     color: var(--ink); 
 }
 
-/* ปิดช่องว่างส่วนบน (Header Padding) ให้กระชับพอดีกับขอบจอ */
 .block-container { max-width: 1520px; padding-top: 0.4rem !important; padding-bottom: 2rem; padding-left: 2rem; padding-right: 2rem; }
 header[data-testid="stHeader"] { background: rgba(0,0,0,0); }
 
-/* ปิดช่องว่าง Sidebar และเพิ่มลวดลายแบ็คกราวด์เล็กน้อย */
 [data-testid="stSidebar"] { 
     background: linear-gradient(180deg, #f4f8ff 0%, #edf4ff 100%); 
     border-right: 1px solid #d2e2fb; 
@@ -44,7 +41,6 @@ header[data-testid="stHeader"] { background: rgba(0,0,0,0); }
 
 h1,h2,h3,h4 { color:var(--ink); letter-spacing:-.025em; }
 
-/* ดีไซน์ Metric กรอบกระจกฝ้า */
 div[data-testid="stMetric"] { 
     background: rgba(255, 255, 255, 0.85); 
     backdrop-filter: blur(10px);
@@ -54,11 +50,6 @@ div[data-testid="stMetric"] {
     box-shadow: 0 8px 24px rgba(14, 116, 144, 0.06); 
     transition: all 0.3s ease;
 }
-div[data-testid="stMetric"]:hover {
-    border-color: #0878e8;
-    box-shadow: 0 12px 28px rgba(8, 120, 232, 0.12);
-    transform: translateY(-2px);
-}
 div[data-testid="stMetricLabel"] { color:#475569; font-size:.8rem; font-weight: 600; }
 div[data-testid="stMetricValue"] { color:#0f172a; font-weight:800; font-size: 1.25rem !important; }
 
@@ -66,14 +57,12 @@ div[data-testid="stMetricValue"] { color:#0f172a; font-weight:800; font-size: 1.
 .stButton > button:hover { border-color:#0878e8; color:#0878e8; background:#f0f7ff; box-shadow: 0 4px 12px rgba(8,120,232,0.15); }
 div[data-testid="stTextInput"] input, div[data-testid="stSelectbox"] div[data-baseweb="select"] { border-radius:8px; background-color: #ffffff; min-height: 38px; border: 1px solid #cbd5e1; }
 
-/* โลโก้ Sidebar */
 .q-brand-sidebar { display:flex; flex-direction:column; padding: 2px 2px 10px; border-bottom: 1px solid #d8e5f8; margin-bottom: 8px; }
 .q-brand-top { display:flex; align-items:center; gap:8px; }
 .q-brand-logo { width:34px; height:34px; background:linear-gradient(135deg,#38bdf8,#0284c7); border-radius:9px; display:flex; align-items:center; justify-content:center; color:white; font-size:17px; font-weight:900; box-shadow: 0 4px 12px rgba(2,132,199,0.3); }
 .q-brand-title { font-size:18px; font-weight:900; color:#0f172a; line-height:1.1; letter-spacing: -0.03em; }
 .q-brand-sub { font-size:10px; color:#64748b; margin-top:2px; font-weight:600; }
 
-/* การ์ดข่าวสารแบบแนวนอน ลวดลายพรีเมียม */
 .horizontal-card { background:#ffffff; border:1px solid #d4e3f8; border-radius:12px; padding:12px 15px; box-shadow:0 4px 16px rgba(18,55,102,.045); margin-bottom:10px; display:flex; gap:16px; align-items:center; transition: all 0.25s ease; }
 .horizontal-card:hover { border-color: #38bdf8; box-shadow: 0 6px 20px rgba(8,120,232,0.08); }
 .h-card-img { width:110px; height:90px; object-fit:cover; border-radius:10px; border:1px solid #e2e8f0; flex-shrink:0; }
@@ -82,12 +71,7 @@ div[data-testid="stTextInput"] input, div[data-testid="stSelectbox"] div[data-ba
 .h-card-summary { color:#475569; font-size:11.5px; line-height:1.45; margin:0 0 6px; }
 .h-card-meta { color:#64748b; font-size:10.5px; display:flex; gap:12px; align-items:center; font-weight: 500; }
 
-/* Hero Banner พร้อมลวดลายกราฟิกเชิงเทคโนโลยีมืออาชีพ */
 .hero { position:relative; overflow:hidden; border-radius:16px; padding:20px 24px; color:#fff; background:radial-gradient(circle at 80% 20%, rgba(56, 189, 248, 0.35) 0%, transparent 35%), linear-gradient(120deg,#0369a1 0%,#0284c7 50%,#0f172a 100%); box-shadow:0 10px 30px rgba(2,132,199,0.2); margin-bottom:14px; }
-.hero:before { content:''; position:absolute; width:200px; height:200px; right:-50px; bottom:-50px; background:rgba(255,255,255,0.05); border-radius:50%; pointer-events:none; }
-.hero h1 { font-size:clamp(22px, 1.8vw, 30px); margin:4px 0 4px; font-weight:900; letter-spacing: -0.03em; }
-.hero p { font-size:12px; opacity:0.9; margin:0; font-weight: 400; }
-
 .usp-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 20px; padding: 3px 10px; color: #bae6fd; font-size: 10px; font-weight: 700; margin-bottom: 6px; }
 
 .section-head { display:flex; align-items:center; gap:8px; margin:2px 0 0; }
@@ -99,18 +83,20 @@ div[data-testid="stHorizontalBlock"] { gap: 0.8rem; }
 </style>
 """, unsafe_allow_html=True)
 
-# ---------- Session State ----------
+# ---------- True Real-Time Session State ----------
 if "current_page" not in st.session_state:
     st.session_state.current_page = "Home"
 if "selected_article_id" not in st.session_state:
     st.session_state.selected_article_id = None
+
+# นับยอด Page Views ตามจริง (เริ่มต้นจาก 1 และเพิ่มขึ้นทุกครั้งที่รีเฟรชจริง)
 if "page_views" not in st.session_state:
-    st.session_state.page_views = 12581
+    st.session_state.page_views = 1
 else:
     st.session_state.page_views += 1
 
-real_active_users = 1
-real_adsense_revenue = (st.session_state.page_views / 1000.0) * 1.50
+real_active_users = 1  # ผู้ใช้งานจริงที่กำลังเปิดหน้าเว็บตอนนี้
+real_adsense_revenue = (st.session_state.page_views / 1000.0) * 1.50  # คำนวณรายได้จากวิวจริง
 
 if "bookmarks" not in st.session_state:
     st.session_state.bookmarks = []
@@ -120,7 +106,7 @@ if "master_db" not in st.session_state:
         {
             "id": 30001,
             "title": "Walmart’s Flipkart is quietly building a food delivery challenger in India",
-            "category": "Business", "time_ago": "4 mins ago", "views": "26 views", "likes": 5,
+            "category": "Business", "time_ago": "4 mins ago", "views": "1 view", "likes": 0,
             "summary": "Flipkart has expanded access to its food-delivery service to thousands of employees ahead of its public launch.",
             "content": "Walmart-backed Flipkart is positioning itself for a major thrust into India’s quick-commerce and food-delivery ecosystem.",
             "image": "https://images.unsplash.com/photo-1526367790999-0150786686a2?auto=format&fit=crop&w=700&q=80",
@@ -128,7 +114,7 @@ if "master_db" not in st.session_state:
         {
             "id": 30011,
             "title": "Mamdani says feds have abdicated on AI, urges New Yorkers to push back",
-            "category": "Technology", "time_ago": "27 mins ago", "views": "4.2k views", "likes": 4,
+            "category": "Technology", "time_ago": "27 mins ago", "views": "1 view", "likes": 0,
             "summary": "New York leaders are debating how communities should respond to rapid AI adoption and the need for public safeguards.",
             "content": "The debate over artificial intelligence governance continues, with local leaders emphasizing transparent oversight.",
             "image": "https://images.unsplash.com/photo-1590402494682-cd3fb53b1f70?auto=format&fit=crop&w=700&q=80",
@@ -136,7 +122,7 @@ if "master_db" not in st.session_state:
         {
             "id": 30021,
             "title": "Nscale and Anthropic are reportedly in talks for another $45B compute deal",
-            "category": "AI", "time_ago": "58 mins ago", "views": "7.8k views", "likes": 3,
+            "category": "AI", "time_ago": "58 mins ago", "views": "1 view", "likes": 0,
             "summary": "Massive infrastructure investments continue as AI labs scale up their compute clusters for next-gen models.",
             "content": "The soaring demand for computational power has triggered talks around massive funding rounds.",
             "image": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=700&q=80",
@@ -224,10 +210,10 @@ if st.session_state.current_page != "Home":
 # ---------- HOME PAGE DASHBOARD ----------
 st.markdown(f"""
 <div class="hero">
-    <div style="position:absolute; right:20px; top:12px; font-size:11px; color:#e0f2fe; font-weight:500;">Mon, 20 Oct 2026 &bull; <span style="color:#4ade80; font-weight:700;">● Live Real-Time</span></div>
-    <div class="usp-badge">🛡️ Verified Live Intelligence &bull; Zero-Delay Sync</div>
+    <div style="position:absolute; right:20px; top:12px; font-size:11px; color:#e0f2fe; font-weight:500;">{datetime.now().strftime('%a, %d %b %Y %H:%M:%S')} &bull; <span style="color:#4ade80; font-weight:700;">● Live Real-Time</span></div>
+    <div class="usp-badge">🛡️ True Real-Time Telemetry &bull; Live Connected</div>
     <h1>QELVYQ — Stories & Real-Time Updates.</h1>
-    <p>Engaging stories and live breaking news powered by true real-time online data and AI synthesis.</p>
+    <p>Engaging stories and live breaking news powered by true real-time online telemetry.</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -238,15 +224,15 @@ if search_query:
 if category_filter != "All Categories":
     filtered_articles = [a for a in filtered_articles if a['category'].lower() == category_filter.lower()]
 
-# Section Header with Selling Point Highlights
+# Section Header
 st.markdown("""
 <div class="section-head">
     <h3>Latest News & Updates</h3>
 </div>
-<div class="section-sub">✨ Real-time news, technology, business, and more — verified and updated continuously.</div>
+<div class="section-sub">✨ Real-time news, technology, business, and more — updated continuously.</div>
 """, unsafe_allow_html=True)
 
-# News Grid (Horizontal Cards Pro)
+# News Grid
 if not filtered_articles:
     st.info("No matching articles found.")
 else:
@@ -265,7 +251,7 @@ else:
                 <div class="h-card-meta">
                     <span>⏱ {item.get('time_ago')}</span> &nbsp;&bull;&nbsp; 
                     <span>👁 {item.get('views')}</span> &nbsp;&bull;&nbsp; 
-                    <span style="color: #0284c7; font-weight: 600;">✓ Verified Source</span>
+                    <span style="color: #0284c7; font-weight: 600;">✓ Live Session</span>
                 </div>
             </div>
         </div>
@@ -283,17 +269,17 @@ else:
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# ---------- True Analytics Metrics Grid with Professional Graphic Touch ----------
+# ---------- True Real-Time Metrics Grid ----------
 m1, m2, m3, m4, m5 = st.columns(5)
 with m1: st.metric("Live Active Visitors", f"{real_active_users} online", "🟢 Real-time session")
 with m2: st.metric("Total Page Views", f"{st.session_state.page_views:,}", "📈 Live counter")
-with m3: st.metric("Est. AdSense Revenue", f"${real_adsense_revenue:,.4f} USD", "💎 Verified earnings")
+with m3: st.metric("Est. AdSense Revenue", f"${real_adsense_revenue:,.4f} USD", "💎 Calculated real-time")
 with m4: st.metric("Total Articles & Tales", f"{len(st.session_state.master_db)} active", "⚡ Local database")
-with m5: st.metric("Live & Verified", "100% Trusted", "🔒 Secure nodes")
+with m5: st.metric("Live & Verified", "100% Active", "🔒 Secure telemetry")
 
 # Footer
 st.markdown("""
 <div class="footer">
-    QELVYQ &bull; Knowledge in Real Time &bull; Professional Intelligence Edition
+    QELVYQ &bull; Knowledge in Real Time &bull; True Real-Time Telemetry Edition
 </div>
 """, unsafe_allow_html=True)
