@@ -3,7 +3,7 @@ from datetime import datetime
 
 # =========================================================
 # QELVYQ | Knowledge in Real Time
-# Run with: streamlit run qelvyq_dashboard.py
+# Run with: streamlit run safe_arbitrage_dashboard.py
 # =========================================================
 st.set_page_config(
     page_title="QELVYQ — Knowledge in Real Time",
@@ -44,7 +44,6 @@ div[data-testid="stTextInput"] input, div[data-testid="stSelectbox"] div[data-ba
 .section-sub { color:#7589a7; font-size:12px; margin:3px 0 13px; }
 .news-card { background:#fff; border:1px solid #e0eafa; border-radius:15px; padding:11px; box-shadow:0 4px 16px rgba(18,55,102,.045); min-height:164px; margin-bottom:4px; }
 .news-image { width:100%; height:128px; object-fit:cover; border-radius:10px; border:1px solid #e8eef8; }
-.news-category { display:inline-block; font-size:10px; font-weight:700; color:#fff; padding:4px 8px; border-radius:20px; margin-bottom:5px; }
 .news-title { font-size:14px; line-height:1.4; font-weight:750; color:#113767; margin:0 0 5px; }
 .news-summary { color:#6b7f9e; font-size:11px; line-height:1.55; margin:0 0 8px; }
 .news-meta { color:#8092ad; font-size:10px; }
@@ -176,19 +175,19 @@ if st.session_state.current_page == "Home" and st.session_state.selected_article
             
         col_img, col_txt = st.columns([1, 2])
         with col_img:
-            st.image(article["image"], use_container_width=True)
+            st.image(article.get("image", "https://images.unsplash.com/photo-1585829365295-ab7cd400c167?auto=format&fit=crop&w=700&q=80"), use_container_width=True)
         with col_txt:
             cat_color = "#0878e8" if article["category"] == "Business" else "#7c3aed" if article["category"] == "AI" else "#059669"
             st.markdown(f'<span style="background:{cat_color}; color:#fff; padding:4px 10px; border-radius:20px; font-size:11px; font-weight:700;">{article["category"]}</span>', unsafe_allow_html=True)
             st.markdown(f"## {article['title']}")
-            st.markdown(f"**Published:** {article['time_ago']} &nbsp;|&nbsp; **Views:** {article['views']} &nbsp;|&nbsp; **Likes:** {article['likes']}")
+            st.markdown(f"**Published:** {article.get('time_ago', 'Just now')} &nbsp;|&nbsp; **Views:** {article.get('views', '1 view')} &nbsp;|&nbsp; **Likes:** {article.get('likes', 0)}")
             st.markdown("---")
-            st.write(article['content'])
+            st.write(article.get('content', 'No content available.'))
             
             b_col1, b_col2 = st.columns(2)
             with b_col1:
                 if st.button("❤️ Like Article", use_container_width=True):
-                    article['likes'] += 1
+                    article['likes'] = article.get('likes', 0) + 1
                     st.success("Liked successfully!")
                     st.rerun()
             with b_col2:
@@ -205,7 +204,7 @@ if st.session_state.current_page == "Live News":
     st.markdown("## 📡 Live News Feeds")
     st.markdown("Real-time automated wire updates from global intelligence feeds.")
     for item in st.session_state.master_db:
-        st.markdown(f"- **[{item['category']}]** {item['title']} *({item['time_ago']})*")
+        st.markdown(f"- **[{item['category']}]** {item['title']} *({item.get('time_ago', 'Recent')})*")
     st.stop()
 
 elif st.session_state.current_page == "Stories":
@@ -213,7 +212,7 @@ elif st.session_state.current_page == "Stories":
     st.markdown("Deep-dive investigative pieces, technical case studies, and industry analysis.")
     for item in st.session_state.master_db:
         st.markdown(f"### {item['title']}")
-        st.write(item['summary'])
+        st.write(item.get('summary', ''))
         st.markdown("---")
     st.stop()
 
@@ -259,7 +258,7 @@ st.markdown(f"""
 # Filter articles based on sidebar search / category
 filtered_articles = st.session_state.master_db
 if search_query:
-    filtered_articles = [a for a in filtered_articles if search_query.lower() in a['title'].lower() or search_query.lower() in a['summary'].lower()]
+    filtered_articles = [a for a in filtered_articles if search_query.lower() in a['title'].lower() or search_query.lower() in a.get('summary', '').lower()]
 if category_filter != "All Categories":
     filtered_articles = [a for a in filtered_articles if a['category'].lower() == category_filter.lower()]
 
@@ -282,7 +281,7 @@ with col_h2:
     </div>
     """, unsafe_allow_html=True)
 
-# News Grid (2 columns layout with images)
+# News Grid (2 columns layout with images using .get() to prevent KeyError)
 if not filtered_articles:
     st.info("No matching articles found based on your filter criteria.")
 else:
@@ -291,17 +290,18 @@ else:
         col = cols[idx % 2]
         with col:
             cat_color = "#0878e8" if item["category"] == "Business" else "#7c3aed" if item["category"] == "AI" else "#059669"
+            img_url = item.get("image", "https://images.unsplash.com/photo-1585829365295-ab7cd400c167?auto=format&fit=crop&w=700&q=80")
             
             with st.container():
                 st.markdown(f"""
                 <div class="news-card">
-                    <img src="{item['image']}" class="news-image">
+                    <img src="{img_url}" class="news-image">
                     <div style="margin-top:8px;">
                         <span style="background:{cat_color}; color:#fff; padding:2px 8px; border-radius:12px; font-size:9px; font-weight:700;">{item['category']}</span>
                     </div>
                     <div class="news-title">{item['title']}</div>
-                    <div class="news-summary">{item['summary']}</div>
-                    <div class="news-meta">⏱ {item['time_ago']} &bull; 👁 {item['views']} &bull; ❤️ {item['likes']} likes</div>
+                    <div class="news-summary">{item.get('summary', '')}</div>
+                    <div class="news-meta">⏱ {item.get('time_ago', 'Recent')} &bull; 👁 {item.get('views', '1 view')} &bull; ❤️ {item.get('likes', 0)} likes</div>
                 </div>
                 """, unsafe_allow_html=True)
                 
@@ -311,7 +311,7 @@ else:
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# ---------- Metrics Grid (Moved Below Latest News & Updates) ----------
+# ---------- Metrics Grid (Below Latest News & Updates) ----------
 m1, m2, m3, m4, m5 = st.columns(5)
 with m1: st.metric("Live Active Visitors", f"{st.session_state.active_users} online", "+12% vs. yesterday")
 with m2: st.metric("Total Page Views", f"{st.session_state.page_views:,}", "+18% vs. yesterday")
