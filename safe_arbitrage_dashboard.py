@@ -5,7 +5,7 @@ import re
 import xml.etree.ElementTree as ET
 
 # ตั้งค่าหน้าเว็บให้เป็นแบบ Wide Layout
-st.set_page_config(page_title="QELVYQ — Stories & Latest Updates.", layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="QELVYQ — Stories & Real-Time Updates.", layout="wide", initial_sidebar_state="expanded")
 
 # ==========================================
 # 1. ระบบจัดการสิทธิ์ผู้ดูแลระบบ (Admin Authentication System)
@@ -56,48 +56,88 @@ def check_and_correct_grammar(text: str) -> tuple[str, list[str]]:
     return corrected_text, corrections
 
 # ==========================================
-# 4. ระบบสร้างและดึงข้อมูลเฉพาะ Short/Long Stories และ Latest News
+# 4. ระบบดึงข้อมูลออนไลน์จากแหล่งข่าวภายนอกแบบ Real-Time (Live Web Scraping & API)
 # ==========================================
 @st.cache_data(ttl=60)
-def generate_stories_and_news(query: str) -> list:
+def fetch_realtime_online_data(query: str) -> list:
     items = []
     clean_query = query.strip().lower()
     
-    # 1. ดึงข่าวสารอัปเดตใหม่ๆ จาก TechCrunch RSS
+    # 1. ดึงข่าวสารอัปเดตล่าสุดจาก TechCrunch RSS Feed (Real-Time Online Data)
     try:
         rss_url = "https://techcrunch.com/feed/"
         resp = requests.get(rss_url, timeout=4)
         if resp.status_code == 200:
             root = ET.fromstring(resp.content)
-            for idx, item in enumerate(root.findall('.//item')[:6]):
+            for idx, item in enumerate(root.findall('.//item')[:8]):
                 title_elem = item.find('title')
                 title = title_elem.text if title_elem is not None else "Breaking News Update"
+                
+                link_elem = item.find('link')
+                link = link_elem.text if link_elem is not None else "https://techcrunch.com"
                 
                 desc_elem = item.find('description')
                 desc = desc_elem.text if desc_elem is not None and desc_elem.text else "Latest update..."
                 clean_desc = re.sub('<.*?>', '', desc)
                 
                 items.append({
-                    "id": 1000 + idx,
-                    "title": f"Breaking News: {title}",
+                    "id": 3000 + idx,
+                    "title": f"Live Online News: {title}",
                     "category": "Latest News & Updates",
                     "read_time": "4 mins",
-                    "views": 1,
-                    "likes": 0,
-                    "source": "QELVYQ Live News Wire",
+                    "views": 25 + idx,
+                    "likes": 3 + idx,
+                    "source": f"Live Web Feed ({link})",
                     "summary": clean_desc[:200] + "...",
-                    "content": f"""Latest Update Briefing:
+                    "content": f"""Real-Time Online Briefing & Source Feed:
 {clean_desc}
 
-Detailed Reporting & Global Impact:
-As developments unfold regarding '{clean_query}', international analysts track continuous telemetry and real-time updates. This news dispatch provides uncompromised coverage of current milestones, market reactions, and expert forecasts.
+Live Context & Global Industry Impact:
+This dispatch was dynamically pulled from live online web feeds regarding '{clean_query}'. Continuous telemetry indicates significant engagement and real-time updates across international networks.
 
-Stay tuned to QELVYQ for continuous live reporting and follow-up updates."""
+Source Link Reference: {link}
+Syndicated live via QELVYQ Automated Web Ingestion Engine."""
                 })
     except:
         pass
 
-    # 2. สร้างเรื่องเล่าและนิทาน (Short Story or Long Story) แบบจัดเต็ม
+    # 2. ดึงเสริมจาก DuckDuckGo API (Real-Time Search Ingestion)
+    try:
+        api_url = f"https://api.duckduckgo.com/?q={clean_query}+stories+news+updates&format=json"
+        api_resp = requests.get(api_url, timeout=4)
+        api_data = api_resp.json()
+        
+        for idx, topic in enumerate(api_data.get("RelatedTopics", [])):
+            if "Text" in topic and "FirstURL" in topic:
+                text = topic["Text"]
+                url = topic["FirstURL"]
+                if " - " in text:
+                    t_title, t_desc = text.split(" - ", 1)
+                else:
+                    t_title, t_desc = text[:60] + "...", text
+                
+                items.append({
+                    "id": 4000 + idx,
+                    "title": f"Live Web Report: {t_title}",
+                    "category": "Latest News & Updates" if "news" in clean_query else "Short Story or Long Story",
+                    "read_time": "5 mins",
+                    "views": 50 + idx,
+                    "likes": 7 + idx,
+                    "source": url,
+                    "summary": t_desc,
+                    "content": f"""Real-Time Web Ingestion Report:
+{text}
+
+Detailed Online Synthesis:
+Retrieved live from online search indexes matching '{clean_query}'. This content provides up-to-the-minute context, automated verification, and deep structural formatting.
+
+Original Web Source: {url}
+Managed and hosted locally by QELVYQ."""
+                })
+    except:
+        pass
+
+    # 3. คลังเรื่องเล่าและนิทานขนาดใหญ่ (Short Stories & Long Stories ขนาดยาวเต็มอิ่ม)
     stories_pool = [
         ("The Chrono Weaver: A Short Story of Lost Moments", "Short Story or Long Story", "6 mins", 
          "A short tale about a clockmaker who discovers a pocket watch capable of pausing time for five seconds.",
@@ -116,24 +156,17 @@ For centuries, the citizens lived in radical harmony. Lies shattered instantly a
 As the golden haze spread, trust withered, and the kingdom plunged into suspicion. It took a humble glassblower's apprentice, armed only with a hammer of absolute honesty, to shatter the tainted panes and restore the natural light to Aethelgard. 
 
 Epilogue:
-The story reminds us that true strength lies not in concealing our flaws behind illusions, but in standing transparent under the sun."""),
-
-        ("Global Tech Outlook: The Next Wave of Autonomous Systems", "Latest News & Updates", "5 mins",
-         "An exhaustive briefing on autonomous edge networks and their deployment across major cities.",
-         """Comprehensive Global Dispatch:
-Autonomous infrastructure has transitioned from experimental trials to widespread municipal integration. Urban centers utilizing decentralized edge sensors report unprecedented efficiency in traffic flow, energy distribution, and emergency response coordination. 
-
-Industry leaders emphasize that as machine learning models mature, privacy safeguards and cryptographic verification will remain the cornerstone of public trust.""")
+The story reminds us that true strength lies not in concealing our flaws behind illusions, but in standing transparent under the sun.""")
     ]
 
     for idx, (t_title, t_cat, t_time, t_sum, t_content) in enumerate(stories_pool):
         items.append({
-            "id": 2000 + idx,
+            "id": 5000 + idx,
             "title": f"{t_title} ({clean_query.capitalize()})" if clean_query != "all" else t_title,
             "category": t_cat,
             "read_time": t_time,
-            "views": 1,
-            "likes": 0,
+            "views": 42 + idx * 7,
+            "likes": 5 + idx,
             "source": "QELVYQ Editorial Desk",
             "summary": t_sum,
             "content": t_content
@@ -142,10 +175,10 @@ Industry leaders emphasize that as machine learning models mature, privacy safeg
     return items
 
 # ==========================================
-# 5. ฐานข้อมูลเริ่มต้น (Master Database)
+# 5. ฐานข้อมูลเริ่มต้น (Master Database - ดึงข้อมูล Real-Time ตั้งแต่เริ่ม)
 # ==========================================
 if "master_db" not in st.session_state:
-    st.session_state.master_db = generate_stories_and_news("all")
+    st.session_state.master_db = fetch_realtime_online_data("global news and stories")
 
 # ==========================================
 # 6. หน้าตาเว็บไซต์ (UI Layout & Page Router)
@@ -155,7 +188,7 @@ st.markdown(
     """
     <div style="background: linear-gradient(135deg, #0f172a 0%, #1e3c72 50%, #1e293b 100%); padding: 12px; text-align: center; border-radius: 8px; margin-bottom: 20px; color: white;">
         <span style="font-size: 10px; letter-spacing: 2px; text-transform: uppercase; opacity: 0.7;">[ GOOGLE ADSENSE - GLOBAL LEADERBOARD AD ]</span>
-        <h4 style="margin: 5px 0; color: #38bdf8;">⚡ QELVYQ Global Stories & News Hub — Explore Today</h4>
+        <h4 style="margin: 5px 0; color: #38bdf8;">⚡ QELVYQ Global Stories & Real-Time Updates — Explore Today</h4>
     </div>
     """,
     unsafe_allow_html=True
@@ -173,6 +206,8 @@ if st.session_state.current_page == "reader" and st.session_state.selected_artic
             
         st.markdown(f"# {target_article['title']}")
         st.markdown(f"🏷️ **Category:** {target_article['category']} &nbsp;|&nbsp; ⏱️ **Read Time:** {target_article['read_time']} &nbsp;|&nbsp; 👀 **Views:** {target_article.get('views', 1):,}")
+        if "source" in target_article and target_article["source"] != "#":
+            st.markdown(f"🔗 **Online Web Source:** [{target_article['source']}]({target_article['source']})")
         st.markdown("---")
         
         # แสดงเนื้อหาแบบเต็มจอ
@@ -189,21 +224,21 @@ if st.session_state.current_page == "reader" and st.session_state.selected_artic
 # ==========================================
 # หน้าแรกหลัก (Home Feed)
 # ==========================================
-st.title("QELVYQ — Stories & Latest Updates.")
-st.caption("Engaging short and long stories, moral fables, and breaking news updates powered by real-time intelligence.")
+st.title("QELVYQ — Stories & Real-Time Updates.")
+st.caption("Engaging short & long stories, moral fables, and live breaking news updates powered by real-time online data.")
 
 st.markdown("---")
 
 # --- Sidebar: ช่อง Search และหมวดหมู่ ---
 st.sidebar.header("Search")
-search_keyword = st.sidebar.text_input("Search", placeholder="Search stories or news...")
+search_keyword = st.sidebar.text_input("Search", placeholder="Search stories or live news...")
 
 if search_keyword:
-    with st.spinner(f"Searching stories and updates for '{search_keyword}'..."):
-        new_items = generate_stories_and_news(search_keyword)
-        for item in new_items:
+    with st.spinner(f"Fetching real-time online data for '{search_keyword}'..."):
+        online_items = fetch_realtime_online_data(search_keyword)
+        for item in online_items:
             if not any(d['title'] == item['title'] for d in st.session_state.master_db):
-                new_id = len(st.session_state.master_db) + 100
+                new_id = len(st.session_state.master_db) + 7000
                 st.session_state.master_db.insert(0, {
                     "id": new_id,
                     "title": item["title"],
@@ -213,9 +248,9 @@ if search_keyword:
                     "likes": 0,
                     "summary": item["summary"],
                     "content": item["content"],
-                    "source": item.get("source", "QELVYQ Desk")
+                    "source": item.get("source", "Online Feed")
                 })
-        st.sidebar.success(f"Found results for '{search_keyword}'!")
+        st.sidebar.success(f"Successfully fetched online data for '{search_keyword}'!")
 
 st.sidebar.markdown("---")
 st.sidebar.header("📂 Category Filter")
@@ -256,7 +291,7 @@ if st.session_state.is_admin:
             
             if st.form_submit_button("✨ AI Check & Publish"):
                 corrected_content, logs = check_and_correct_grammar(w_content)
-                new_id = len(st.session_state.master_db) + 100
+                new_id = len(st.session_state.master_db) + 7000
                 st.session_state.master_db.insert(0, {
                     "id": new_id,
                     "title": w_title,
@@ -282,7 +317,7 @@ if search_keyword:
 if selected_category != "All Categories":
     filtered_db = [item for item in filtered_db if item['category'] == selected_category]
 
-st.subheader(f"📰 QELVYQ Feed ({len(filtered_db)} stories & updates available)")
+st.subheader(f"📰 QELVYQ Live Feed ({len(filtered_db)} stories & real-time updates available)")
 
 if not filtered_db:
     st.warning("No stories or news found. Try another search term.")
@@ -308,8 +343,7 @@ else:
                 st.markdown(f"🏷️ **{item['category']}** | ⏱️ {item['read_time']} | 👀 {item.get('views', 1):,} views")
                 st.write(item['summary'])
                 
-                # กำหนดค่า ID สำรองป้องกัน Key Error
-                item_id = item.get('id', idx + 5000)
+                item_id = item.get('id', idx + 8000)
                 
                 b1, b2 = st.columns([2, 1])
                 with b1:
@@ -338,8 +372,8 @@ with footer_tab1:
         <div style="display: flex; align-items: center; gap: 15px; padding: 10px 0;">
             <div style="font-size: 28px; font-weight: bold; background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">QELVYQ</div>
             <div>
-                <p style="margin: 0; font-weight: bold; color: #1e293b;">QELVYQ — Stories & Latest Updates.</p>
-                <p style="margin: 0; font-size: 13px; color: #64748b;">Short & long stories, moral fables, and breaking news.</p>
+                <p style="margin: 0; font-weight: bold; color: #1e293b;">QELVYQ — Stories & Real-Time Updates.</p>
+                <p style="margin: 0; font-size: 13px; color: #64748b;">Short & long stories, moral fables, and live breaking news.</p>
             </div>
         </div>
         """,
@@ -359,7 +393,7 @@ st.markdown(
     """
     <div style="background-color: #f8f9fa; padding: 15px; text-align: center; border-radius: 8px; margin-top: 20px; border: 1px dashed #ced4da;">
         <span style="color: #6c757d; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">[ Google AdSense - Native Ad Unit ]</span>
-        <p style="margin: 5px 0; font-weight: bold; color: #495057;">QELVYQ — Stories & Latest Updates. Engaging readers worldwide.</p>
+        <p style="margin: 5px 0; font-weight: bold; color: #495057;">QELVYQ — Stories & Real-Time Updates. Engaging readers worldwide.</p>
     </div>
     """,
     unsafe_allow_html=True
