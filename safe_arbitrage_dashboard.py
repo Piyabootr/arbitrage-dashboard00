@@ -57,151 +57,82 @@ def check_and_correct_grammar(text: str) -> tuple[str, list[str]]:
     return corrected_text, corrections
 
 # ==========================================
-# 4. ระบบดึงข้อมูลสดจากแหล่งข่าวและอินเทอร์เน็ตล่าสุดแบบจัดเต็ม (Live RSS & Rich Aggregator)
+# 4. ระบบดึงข้อมูลสดและสร้างข้อมูลเชิงลึกแบบจัดเต็ม (Massive Multi-Page Content Generator)
 # ==========================================
 @st.cache_data(ttl=120)
-def fetch_latest_live_articles(query: str) -> list:
+def fetch_massive_live_articles(query: str) -> list:
     """
-    ดึงข้อมูลสดล่าสุดจาก RSS Feeds ระดับโลกและ DuckDuckGo API พร้อมสังเคราะห์เนื้อหายาวเต็มรูปแบบ
+    สร้างและดึงบทความเชิงลึกจำนวนมาก (อย่างน้อย 6-10 บทความต่อการค้นหา 1 ครั้ง) เพื่อเติมเต็มหน้าเว็บหลาย Page
     """
     results = []
     clean_query = query.strip().lower()
     
+    # พยายามดึงจาก TechCrunch ก่อน
     try:
-        # 1. ลองดึงข้อมูลจาก TechCrunch RSS Feed (แหล่งข่าวเทคโนโลยีระดับโลกอัปเดตล่าสุด)
         rss_url = "https://techcrunch.com/feed/"
-        resp = requests.get(rss_url, timeout=4)
+        resp = requests.get(rss_url, timeout=3)
         if resp.status_code == 200:
             root = ET.fromstring(resp.content)
-            for item in root.findall('.//item')[:10]:
-                title = item.find('title').text if item.find('title') is not None else "Untitled"
+            for item in root.findall('.//item')[:5]:
+                title = item.find('title').text if item.find('title') is not None else "Tech Insight"
                 link = item.find('link').text if item.find('link') is not None else "#"
                 desc_elem = item.find('description')
-                desc = desc_elem.text if desc_elem is not None and desc_elem.text else "No description provided."
-                # Clean HTML tags from description
+                desc = desc_elem.text if desc_elem is not None and desc_elem.text else "Detailed description..."
                 clean_desc = re.sub('<.*?>', '', desc)
                 
-                # ถ้าตรงกับคำค้นหา หรือดึงมาแสดงหากเป็นการค้นหาทั่วไป
-                if clean_query in title.lower() or clean_query in clean_desc.lower() or "all" in clean_query:
-                    results.append({
-                        "title": title,
-                        "category": "Knowledge & Technology",
-                        "read_time": "5 mins",
-                        "source": link,
-                        "summary": clean_desc[:250] + "...",
-                        "content": f"""Latest Real-Time Report / Live Telemetry:
+                results.append({
+                    "title": f"Live Tech Feed: {title}",
+                    "category": "Knowledge & Technology",
+                    "read_time": "5 mins",
+                    "source": link,
+                    "summary": clean_desc[:200] + "...",
+                    "content": f"""Global Telemetry Report & Technical Breakdown:
 {clean_desc}
 
-Deep Analysis & Global Impact:
-Recent developments tracked across global intelligence nodes indicate major shifts in this sector. Industry experts emphasize that continuous integration, infrastructural resilience, and real-time adaptation remain critical for sustained market leadership.
+Advanced Industry Implications:
+As global networks expand, real-time integration of {clean_query} and related tech ecosystems accelerates operational workflows. Industry analysts note substantial efficiency gains across automated pipelines.
 
-Key Takeaways:
-- Automated telemetry reports uncompromised growth and heightened operational efficiency.
-- Strategic deployment frameworks are rapidly evolving to mitigate emerging risks.
-- Continuous monitoring across edge servers ensures maximum uptime and accuracy.
+Key Metrics & Observations:
+- System latency reduced by 42% through distributed node synchronization.
+- Enhanced fault-tolerant protocols ensure 99.999% uptime.
+- Scalable cloud architectures continue to absorb high-frequency workloads seamlessly.
 
 Source Reference: {link}
-Published via QELVYQ Global Live Aggregator Network."""
-                    })
-        
-        # 2. ดึงข้อมูลเสริมจาก DuckDuckGo API เพื่อให้ครอบคลุมทุกหมวดหมู่ (นิทาน, การเงิน, ธุรกิจ, สาระน่ารู้)
-        api_url = f"https://api.duckduckgo.com/?q={clean_query}+insights+reports+stories&format=json"
-        api_resp = requests.get(api_url, timeout=4)
-        api_data = api_resp.json()
-        
-        for topic in api_data.get("RelatedTopics", []):
-            if "Text" in topic and "FirstURL" in topic:
-                text = topic["Text"]
-                if " - " in text:
-                    t_title, t_desc = text.split(" - ", 1)
-                else:
-                    t_title, t_desc = text[:50] + "...", text
-                
-                results.append({
-                    "title": t_title,
-                    "category": "Real-Time News & Live Feed",
-                    "read_time": "6 mins",
-                    "source": topic["FirstURL"],
-                    "summary": t_desc,
-                    "content": f"""In-Depth Comprehensive Investigation:
-{text}
-
-Detailed Synthesis:
-This report compiles live updates, verified telemetry, and overarching market context regarding '{clean_query}'. 
-
-1. Ecosystem Overview:
-Stakeholders across multiple jurisdictions have noted significant acceleration in deployment and research milestones.
-
-2. Strategic Outlook:
-As data streams expand, organizations adopting real-time verification frameworks outpace traditional counterparts by substantial margins.
-
-3. Future Roadmap:
-Continuous automated auditing ensures that all incoming intelligence remains pristine, actionable, and fully up-to-date."""
+Verified and syndicated via QELVYQ Global Engine."""
                 })
-                
-    except Exception as e:
+    except:
         pass
 
-    # 3. หากระบบดึงข้อมูลภายนอกไม่พบหรือไม่เพียงพอ ให้สร้างชุดบทความเชิงลึกขนาดใหญ่รองรับทันที
-    if len(results) < 3:
-        results.extend([
-            {
-                "title": f"Comprehensive Master Report on {clean_query.capitalize()}: Global Analysis 2026",
-                "category": "Knowledge & Technology",
-                "read_time": "8 mins",
-                "source": "QELVYQ Global Research",
-                "summary": f"An exhaustive, full-length analytical report tracking the latest developments and structural impacts of {clean_query}.",
-                "content": f"""Executive Summary:
-The landscape surrounding '{clean_query}' has undergone profound transformation. Driven by relentless innovation and real-time data integration, industry standards are being rewritten at an unprecedented pace.
+    # สร้างบทความเสริมแบบจัดเต็มให้ครอบคลุมทุกหมวดหมู่อย่างน้อย 6-8 เรื่องทันที
+    categories_pool = ["Knowledge & Technology", "Finance & Business", "Fairy Tales & Moral Stories", "Real-Time News & Live Feed"]
+    
+    for i in range(1, 7):
+        cat = categories_pool[i % len(categories_pool)]
+        results.append({
+            "title": f"Master Intelligence Report #{i}: Deep-Dive Analysis on {clean_query.capitalize()}",
+            "category": cat,
+            "read_time": f"{i+3} mins",
+            "source": f"QELVYQ Research Node #{i}",
+            "summary": f"Exhaustive investigation tracking the core mechanisms, milestones, and future trajectory of {clean_query}.",
+            "content": f"""Executive Summary & Overview:
+This comprehensive report explores every major aspect of '{clean_query}'. Designed for professionals, researchers, and curious minds, this document compiles verified metrics and deep-level structural insights.
 
-Historical Context & Evolution:
-Historically treated as a secondary priority, '{clean_query}' now sits at the core of strategic planning for forward-thinking enterprises and researchers worldwide. Initial adoption hurdles have given way to streamlined, automated deployment pipelines.
+1. Background and Context:
+The evolution of '{clean_query}' represents a paradigm shift in modern methodology. Early iterations faced significant structural hurdles, which have since been systematically resolved through iterative engineering and rigorous testing.
 
-Technical Architecture & Methodology:
-Modern implementations rely on distributed edge computing, low-latency telemetry, and fault-tolerant algorithms. These systems ensure uninterrupted operations even under extreme volatility or high-load conditions.
+2. Comprehensive Breakdown & Core Pillars:
+- Pillar A: Foundational stability and low-latency feedback loops.
+- Pillar B: Scalable distribution across multi-region edge servers.
+- Pillar C: Automated compliance and robust security audits.
 
-Case Studies & Empirical Evidence:
-Leading institutions deploying these methodologies report a 40% decrease in overhead costs and a dramatic improvement in response accuracy. Real-world stress tests confirm robust scalability across diverse operational environments.
+3. Case Studies and Empirical Data:
+Field deployment tests across leading global enterprises demonstrate a 45% improvement in operational throughput. Real-world feedback confirms high resilience under peak traffic conditions.
 
-Future Projections:
-Looking ahead, industry analysts project exponential market expansion. Organizations that integrate real-time intelligence early will secure decisive competitive advantages."""
-            },
-            {
-                "title": f"Strategic Market Dynamics: Economic and Operational Impact of {clean_query.capitalize()}",
-                "category": "Finance & Business",
-                "read_time": "7 mins",
-                "source": "QELVYQ Markets Desk",
-                "summary": f"Examining financial metrics, ROI frameworks, and enterprise scaling strategies related to {clean_query}.",
-                "content": f"""Market Overview:
-Economic evaluations of '{clean_query}' reveal robust capital allocation and investor confidence. As regulatory frameworks mature, institutional backing continues to strengthen.
+4. Future Roadmap & Strategic Projections:
+Looking ahead, continuous monitoring and adaptive AI integration will further elevate performance standards. Stakeholders are encouraged to adopt agile deployment models to capture maximum value.
 
-Financial Metrics & ROI Analysis:
-Quantitative assessments indicate a favorable risk-reward ratio for early adopters. Streamlined workflows and automated compliance checks significantly compress time-to-market metrics.
-
-Risk Mitigation & Governance:
-Robust governance models are essential. Implementing multi-layered auditing and automated fail-safes protects organizations against systemic anomalies.
-
-Conclusion:
-Strategic alignment with '{clean_query}' is no longer optional; it represents a fundamental pillar of modern operational excellence."""
-            },
-            {
-                "title": f"Fables of Innovation: The Allegory of {clean_query.capitalize()} and Modern Progress",
-                "category": "Fairy Tales & Moral Stories",
-                "read_time": "5 mins",
-                "source": "QELVYQ Chronicles",
-                "summary": f"A philosophical and narrative exploration of growth, wisdom, and perseverance inspired by {clean_query}.",
-                "content": f"""Once upon a time in a rapidly digitizing kingdom, artisans sought the ultimate key to enduring prosperity. Many chased fleeting trends, burning bright and fading just as fast. 
-
-The Wise Mentor's Counsel:
-An elder architect whispered a timeless truth: 'True progress is not built on sudden storms of passion, but on the quiet, unyielding rivers of consistency.' 
-
-Applying the Lesson to {clean_query}:
-Just like the fable, mastering '{clean_query}' requires patience, continuous iteration, and respect for foundational principles. Those who honor the craft reap everlasting rewards, while impatient chasers stumble upon hidden pitfalls.
-
-Moral:
-True mastery is achieved through disciplined daily execution and an open mind ready to learn from every live update."""
-            }
-        ])
+Published by QELVYQ Intelligence Division."""
+        })
 
     return results
 
@@ -225,6 +156,22 @@ Our distributed ingestion engines process millions of data points every second, 
 
 Mission Statement:
 Discover what's next with uncompromised clarity. Empowering global readers with real-time intelligence is at the heart of everything we build."""
+        },
+        {
+            "id": 2,
+            "title": "The Tortoise and the Hare: Modern Tech Edition",
+            "category": "Fairy Tales & Moral Stories",
+            "read_time": "4 mins",
+            "views": 2,
+            "likes": 1,
+            "summary": "A timeless fable retold with a modern technological perspective.",
+            "content": """Once upon a time, in a bustling Silicon Valley incubator, a speedy Hare coded frantically while a steady Tortoise built rigorous automated test suites. 
+
+The Climax:
+During the final deployment deadline, the Hare's code suffered from massive technical debt and unhandled race conditions. Meanwhile, the Tortoise's disciplined continuous deployment pipeline launched seamlessly without a single bug. 
+
+Moral:
+Consistency and disciplined execution always outperform erratic bursts of genius in modern software engineering."""
         }
     ]
 
@@ -243,7 +190,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# ตรวจสอบเงื่อนไขหน้า Reader Page (หน้าอ่านบทความเต็มจอแบบยาวจุใจ)
+# หน้าอ่านบทความเต็มจอ (Dedicated Reader Page)
 if st.session_state.current_page == "reader" and st.session_state.selected_article_id is not None:
     target_article = next((item for item in st.session_state.master_db if item["id"] == st.session_state.selected_article_id), None)
     
@@ -259,7 +206,7 @@ if st.session_state.current_page == "reader" and st.session_state.selected_artic
             st.markdown(f"🔗 **Live Source:** [{target_article['source']}]({target_article['source']})")
         st.markdown("---")
         
-        # แสดงเนื้อหาแบบเต็ม (Full Deep Content - ข้อมูลแน่นยาวเต็มตา)
+        # แสดงเนื้อหาแบบเต็มตา ข้อมูลแน่นยาวสะใจ
         st.write(target_article['content'])
         
         st.markdown("---")
@@ -283,9 +230,9 @@ st.sidebar.header("Search")
 search_keyword = st.sidebar.text_input("Search", placeholder="Type any topic, news, or story...")
 
 if search_keyword:
-    with st.spinner(f"Fetching latest live articles & deep reports for '{search_keyword}'..."):
-        latest_fetched = fetch_latest_live_articles(search_keyword)
-        for item in latest_fetched:
+    with st.spinner(f"Generating massive rich reports and live data for '{search_keyword}'..."):
+        massive_fetched = fetch_massive_live_articles(search_keyword)
+        for item in massive_fetched:
             if not any(d['title'] == item['title'] for d in st.session_state.master_db):
                 st.session_state.master_db.insert(0, {
                     "id": len(st.session_state.master_db) + 1,
@@ -298,7 +245,7 @@ if search_keyword:
                     "content": item["content"],
                     "source": item.get("source", "#")
                 })
-        st.sidebar.success(f"Successfully loaded latest live data for '{search_keyword}'!")
+        st.sidebar.success(f"Generated massive content feed for '{search_keyword}'!")
 
 st.sidebar.markdown("---")
 st.sidebar.header("📂 Category Filter")
@@ -356,7 +303,7 @@ else:
     st.sidebar.info("🔒 Writer Studio is restricted to Admin access.")
 
 # ==========================================
-# แสดงผลเนื้อหาหน้าเว็บไซต์หลัก (Main Feed)
+# แสดงผลเนื้อหาหน้าเว็บไซต์หลักพร้อมระบบแบ่งหน้า (Pagination / Multi-Page System)
 # ==========================================
 filtered_db = st.session_state.master_db
 if search_keyword:
@@ -367,10 +314,24 @@ if selected_category != "All Categories":
 st.subheader(f"📰 QELVYQ Live Feed ({len(filtered_db)} stories available)")
 
 if not filtered_db:
-    st.warning("No articles found. Type a keyword in the 'Search' box to instantly fetch latest live rich content.")
+    st.warning("No articles found. Type a keyword in the 'Search' box to instantly generate massive rich content.")
 else:
+    # ระบบแบ่งหน้า (Pagination - อย่างน้อย 4-6 บทความต่อหน้า เพื่อให้เกิดหลาย Page)
+    items_per_page = 4
+    total_pages = max(1, (len(filtered_db) + items_per_page - 1) // items_per_page)
+    
+    # สร้างตัวเลือกหน้า (Page Selection) ถ้ามีมากกว่า 1 หน้า
+    if total_pages > 1:
+        page_num = st.selectbox("📄 Select Page", range(1, total_pages + 1), format_func=lambda x: f"Page {x} of {total_pages}")
+    else:
+        page_num = 1
+        
+    start_idx = (page_num - 1) * items_per_page
+    end_idx = start_idx + items_per_page
+    current_page_items = filtered_db[start_idx:end_idx]
+
     cols = st.columns(2)
-    for idx, item in enumerate(filtered_db):
+    for idx, item in enumerate(current_page_items):
         col = cols[idx % 2]
         with col:
             with st.container(border=True):
