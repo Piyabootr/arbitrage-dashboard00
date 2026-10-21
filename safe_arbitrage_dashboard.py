@@ -747,3 +747,12 @@ st.markdown("<br>", unsafe_allow_html=True)
 m1, m2, m3, m4, m5 = st.columns(5)
 with m1: st.metric("Live Active Visitors", f"{real_active_users} online", "🟢 Real-time session")
 with m2: st.metric("Total Page Views", f"{st.session_state.page_views:,}", "📈 Live counter")
+with m3: st.metric("Est. AdSense Revenue", f"${real_adsense_revenue:,.4f} USD", "💎 Calculated real-time")
+with m4: st.metric("Total Articles & Tales", f"{len(st.session_state.master_db)} active", "⚡ 40 per topic (8 topics)")
+with m5: st.metric("Saved Bookmarks", f"{len(st.session_state.bookmarks)} saved", "🔖 True user saves")
+
+st.markdown("""
+<div class="footer">
+    QELVYQ &bull; Knowledge in Real Time &bull; Vibrant Multi-Color &amp; 3D Logo Edition
+</div>
+""", unsafe_allow_html=True)
