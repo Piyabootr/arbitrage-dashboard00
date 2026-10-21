@@ -5,7 +5,7 @@ from datetime import datetime
 # QELVYQ | Knowledge in Real Time (Clean Production Edition)
 # =========================================================
 st.set_page_config(
-    page_title="QELVYQ[Piyabootr]— Knowledge in Real Time",
+    page_title="QELVYQ[BY Piyabootr manager]— Knowledge in Real Time",
     page_icon="⚡⚡⚡⚡⚡⚡⚡ELECTRICAL POWER SYSTEM⚡⚡⚡⚡⚡⚡⚡⚡",
     layout="wide",
     initial_sidebar_state="expanded",
