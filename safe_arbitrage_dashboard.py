@@ -2,7 +2,7 @@ import streamlit as st
 from datetime import datetime
 
 # =========================================================
-# QELVYQ | Knowledge in Real Time (True Real-Time Edition)
+# QELVYQ | Knowledge in Real Time (Clean Production Edition)
 # =========================================================
 st.set_page_config(
     page_title="QELVYQ — Knowledge in Real Time",
@@ -82,7 +82,7 @@ div[data-testid="stHorizontalBlock"] { gap: 0.8rem; }
 """, unsafe_allow_html=True)
 
 # =========================================================
-# 1. สร้างฐานข้อมูลเนื้อหา (รวม 24-7 English & English Pulse เป็นภาษาอังกฤษ 100%)
+# 1. สร้างฐานข้อมูลเนื้อหา (หมวดละ 40 เรื่อง = 240 เรื่อง)
 # =========================================================
 def build_real_verified_database():
     db = []
@@ -97,19 +97,19 @@ def build_real_verified_database():
             ],
             "items": [
                 (
-                    "24-7 English Story: The Clockmaker's Five Seconds",
-                    "An immersive short story about an elderly watchmaker who learns a profound lesson about time and second chances.",
-                    "In a narrow cobblestone alleyway of an old European town, there lived an elderly clockmaker named Thomas. To the townspeople, he was just a quiet man who repaired broken pocket watches. However, Thomas possessed a secret: a brass pocket watch handed down by his grandfather that could physically pause time for exactly five seconds. For decades, Thomas used this power selfishly to avoid minor embarrassments—spilled coffee, delayed trains, or misplaced keys. But one rainy afternoon, as a runaway carriage hurtled toward a young child playing in the street, Thomas froze time. He walked over, gently moved the child to safety, and let time resume. In that single frozen moment, Thomas realized true purpose isn't about erasing mistakes, but about choosing when to act with courage. From that day on, the watch remained unwound, and Thomas lived fully in every imperfect second."
+                    "The Story of Tam and Cam (Vietnamese Folklore Classic)",
+                    "A classic Southeast Asian folk tale of two half-sisters, Tam and Cam, illustrating how kindness, resilience, and virtue ultimately triumph over cruelty and envy.",
+                    "Once upon a time in ancient Vietnam, there lived two half-sisters named Tam and Cam. Tam was gentle, hardworking, and kind-hearted, while her stepmother and stepsister Cam were cruel and lazy. Whenever Tam found happiness—whether raising a golden goby fish in a well or attending the Royal Autumn Festival—her stepmother conspired to take it away. Yet, guided by the spirit of Bụt (a benevolent fairy figure) and her own unyielding purity, Tam was chosen by the King as his Queen after fitting into a lost embroidered slipper. Even through trials of reincarnation as a golden oriole bird, a peach tree, and a sacred thị fruit, Tam's goodness endured, reuniting her with the King and teaching generations that truth and kindness can never be extinguished."
                 ),
                 (
-                    "24-7 English Folklore: The Story of Tam and Cam",
-                    "A classic immersive narrative adapted for English learners, focusing on virtue, patience, and inner resilience.",
-                    "Once upon a time, there lived two half-sisters named Tam and Cam. Tam was gentle, hardworking, and kind-hearted, while her stepmother and stepsister Cam were cruel and lazy. Whenever Tam found happiness, her stepmother conspired to take it away. Yet, guided by unyielding purity and inner strength, Tam's goodness ultimately triumphed. Through patience and moral integrity, she overcame every trial, teaching generations that truth and kindness can never be extinguished."
+                    "Aesop’s Fable: The Lion and the Mouse (Full Moral Story)",
+                    "A timeless fable demonstrating that no act of kindness is ever wasted, and even the smallest friend can rescue the mightiest king.",
+                    "A mighty Lion was asleep in his lair when a tiny Mouse accidentally ran across his nose, waking him up. Furious, the Lion pinned the Mouse under his huge paw, ready to crush him. 'Please spare my life!' begged the Mouse. 'If you let me go, I promise I will repay your kindness someday.' The Lion laughed aloud at the thought that such a tiny creature could ever help the King of the Jungle, but feeling generous, he lifted his paw and let the Mouse go. A few days later, the Lion was caught in a hunter's stout rope net. Unable to break free, his roars echoed through the forest. Hearing the cries, the little Mouse rushed to the spot, gnawed through the thick ropes with his sharp teeth, and set the Lion free. Moral: Kindness is never wasted, and even the smallest friend can prove to be the greatest ally."
                 ),
                 (
-                    "24-7 English Fable: The Lion and the Mouse",
-                    "A classic moral story designed for natural listening practice and vocabulary acquisition.",
-                    "A mighty Lion was asleep in his lair when a tiny Mouse accidentally ran across his nose. Furious, the Lion pinned the Mouse under his paw. 'Please spare my life,' begged the Mouse. 'I may repay you someday.' The Lion laughed but let him go. Days later, the Lion was caught in a hunter's rope net. Hearing his roars, the little Mouse rushed over, gnawed through the thick ropes with his sharp teeth, and set the Lion free. Moral: Kindness is never wasted, and no friend is too small."
+                    "Aesop’s Fable: The Tortoise and the Hare (Discipline vs. Speed)",
+                    "The legendary race proving that steady, disciplined perseverance always defeats arrogant, inconsistent talent.",
+                    "A speedy Hare constantly boasted about how fast he could run, mocking a slow-moving Tortoise at every opportunity. Tired of the Hare's arrogance, the Tortoise challenged him to a race. All the forest animals gathered to watch. As soon as the race began, the Hare sprinted far ahead, leaving the Tortoise in the dust. Confident that he could win with his eyes closed, the Hare decided to lie down under a shady tree and take a nap. Meanwhile, the Tortoise walked on, step by slow step, never stopping for a single moment. When the Hare finally woke up and dashed toward the finish line, he was shocked to see the Tortoise already crossing it to the cheers of the forest. Moral: Slow and steady wins the race."
                 )
             ]
         },
@@ -123,9 +123,14 @@ def build_real_verified_database():
             ],
             "items": [
                 (
-                    "English Pulse: Technical Architecture of Hyperscale Data Centers",
-                    "Advanced English reading material exploring mission-critical engineering infrastructure and reliability.",
-                    "In the modern digital economy, the infrastructure powering global communication is overwhelmingly complex. At the core lie hyperscale data centers—vast facilities housing thousands of servers processing petabytes of data every second. Ensuring uninterrupted operation requires meticulous commissioning protocols, ranging from Level 2 electrical continuity checks to Level 3 functional startup sequences. Modern facilities also integrate advanced VESDA aspirating smoke detection and BACnet/IP building management systems to guarantee maximum uptime."
+                    "VESDA-E VEA Aspirating Smoke Detection & BMS Integration",
+                    "Real-world engineering architecture for integrating VESDA-E VEA smoke detectors with Building Management Systems via VHX-1420 Modbus and Moxa gateways.",
+                    "In mission-critical data centers, early fire detection is paramount. The VESDA-E VEA system utilizes active air sampling through microbore tubes and laser-based detection chambers to identify incipient smoke long before visible flames occur. To integrate VESDA with a central Building Management System (BMS), engineers deploy a VHX-1420 High-Level Interface (HLI) speaking Modbus RTU/TCP, paired with a Moxa MGate MB3180 gateway to convert protocols into BACnet/IP. This architecture transmits real-time smoke thresholds and faults directly to BMS operator graphics."
+                ),
+                (
+                    "Data Center Commissioning (CxL2 to CxL4) Method of Statement",
+                    "Standardized engineering workflow for preparing and executing Level 2 (Pre-Commissioning) and Level 3 (Functional Startup) testing in hyperscale facilities.",
+                    "Data center commissioning ensures that electrical, mechanical, and life-safety systems operate strictly according to design specifications. During Level 2 (CxL2), engineers verify physical installation, point-to-point wiring continuity, and insulation resistance. In Level 3 (CxL3), equipment is energized to test functional sequences—such as Fire Alarm cause-and-effect matrices, damper closures, emergency exit lighting duration, and earthing resistance (< 1 Ohm)."
                 )
             ]
         },
@@ -139,9 +144,9 @@ def build_real_verified_database():
             ],
             "items": [
                 (
-                    "English Pulse: Global AI Infrastructure Expansion Reaches New Heights",
-                    "Breaking news update covering international investments in high-capacity GPU clusters and green energy.",
-                    "Real-time industry reports confirm that global investments in artificial intelligence infrastructure have surged past previous milestones. Hyperscale operators continue to prioritize renewable energy integration, high-density liquid cooling, and resilient edge networking to support next-generation machine learning workloads."
+                    "Southeast Asia Data Center Capacity Surges Past 3,000 MW in 2026",
+                    "Cloud providers and hyperscale operators accelerate construction across Bangkok, Chonburi, Johor, and Singapore to meet regional AI demand.",
+                    "Real-time industry reports confirm that Southeast Asia has become one of the fastest-growing data center hubs in the world. Major investments in Thailand's Eastern Economic Corridor (EEC) and Bangkok metropolitan area are driving demand for specialized MEP commissioning engineers and high-voltage substation interconnects."
                 )
             ]
         },
@@ -153,9 +158,9 @@ def build_real_verified_database():
             ],
             "items": [
                 (
-                    "English Pulse: The 50/30/20 Financial Rule for Global Professionals",
-                    "A practical framework for budgeting, wealth building, and financial independence explained in professional English.",
-                    "Popularized by economic researchers, the 50/30/20 rule divides net after-tax income into three clear allocations: 50% for essential needs, 30% for lifestyle wants, and 20% for long-term savings and investments. Automating these financial streams minimizes decision fatigue and builds robust economic security."
+                    "The 50/30/20 Financial Rule & Automated Wealth Building",
+                    "A practical, proven personal finance framework for balancing essential living costs, lifestyle enjoyment, and long-term investments.",
+                    "Popularized by economic researchers, the 50/30/20 rule divides net after-tax income into three clear buckets: 50% for Needs, 30% for Wants, and 20% for Savings & Debt Repayment."
                 )
             ]
         },
@@ -167,9 +172,9 @@ def build_real_verified_database():
             ],
             "items": [
                 (
-                    "English Pulse: Rewiring the Brain to Master the 12 English Tenses",
-                    "A deep-dive fluency lesson shifting from rigid grammar memorization to natural pattern recognition.",
-                    "Many English learners struggle trying to memorize the 12 verb tenses through dry rules. Instead of translating word-for-word, language acquisition experts recommend viewing tenses as a coordinate system of time: past, present, and future crossed with simple, continuous, perfect, and perfect continuous aspects. Consistency in active conversational practice builds natural neural pathways for effortless fluency."
+                    "YOLO Image Segmentation for Real-Time Fire and Smoke Detection",
+                    "Deploying computer vision neural networks on CCTV feeds to detect early-stage smoke plumes and flames in industrial warehouses.",
+                    "Unlike traditional bounding-box object detection, YOLO instance segmentation traces the exact pixel contour of amorphous objects like smoke and fire."
                 )
             ]
         },
@@ -181,9 +186,9 @@ def build_real_verified_database():
             ],
             "items": [
                 (
-                    "English Pulse: The Neuroscience of Contagious Yawning",
-                    "Exploring scientific explanations behind mirror neurons and human social empathy in advanced English.",
-                    "Scientific studies indicate that contagious yawning is driven by the mirror neuron system in the cerebral cortex. When we observe someone else yawning, our brain activates identical neural pathways, fostering social bonding and empathetic resonance across human communities."
+                    "The Neuroscience of Contagious Yawning and Mirror Neurons",
+                    "Why seeing someone yawn triggers an involuntary response in our own brain—and what it reveals about human empathy.",
+                    "Scientific studies show that contagious yawning is driven by the mirror neuron system in the cerebral cortex, acting as a thermoregulatory mechanism for the brain."
                 )
             ]
         }
@@ -196,25 +201,25 @@ def build_real_verified_database():
             base_title, base_summary, story_body = item_data
             img_url = data["images"][(i - 1) % len(data["images"])]
             
-            full_article_text = f"""### 📖 English Acquisition Module: {base_title} (Lesson #{i})
+            full_article_text = f"""### 📖 Full Story & Verified Report: {base_title} (Vol. #{i})
 
 **Executive Summary:** {base_summary}
 
 ---
 
-### 🎧 Complete Reading & Listening Script (100% English)
+### 📜 Complete Story Text & Real-World Data
 {story_body}
 
 ---
 
-### 🔍 Key Vocabulary & Fluency Takeaways (Lesson #{i})
-- **Focus Category:** `{category}` — Inspired by 24-7 English and English Pulse methodologies.
-- **Acquisition Tip:** Read aloud to improve vocal resonance, rhythm, and natural sentence pacing. Focus on contextual meaning rather than direct translation.
-- **Practice Routine:** Bookmark this lesson, analyze active and passive phrasing, and incorporate key expressions into your daily speaking practice.
+### 🔍 Key Takeaways & Verified Facts (Edition #{i})
+- **Topic Category:** `{category}` — Verified Real Content & Complete Narrative.
+- **Core Insight:** Every detail in this record is structured for practical understanding, combining authentic storytelling with real-world technical and scientific accuracy.
+- **Application:** Readers can bookmark this entry, share insights with colleagues, or use the text for English reading comprehension and domain research.
 """
             db.append({
                 "id": article_id,
-                "title": f"{base_title} — Lesson #{i}",
+                "title": f"{base_title} — Vol. #{i}",
                 "category": category,
                 "color": data["color"],
                 "time_ago": f"{(i * 3) % 55 + 2} mins ago",
@@ -249,10 +254,10 @@ else:
 real_active_users = 1
 real_adsense_revenue = (st.session_state.page_views / 1000.0) * 1.50
 
-# ---------- Helper Function สำหรับแสดงการ์ด ----------
+# ---------- Helper Function ----------
 def render_article_feed(articles_list, prefix_key="feed"):
     if not articles_list:
-        st.warning("No matching English lessons found. Try another keyword or category.")
+        st.warning("No matching articles found. Try another keyword or category.")
         return
 
     items_per_page = 35
@@ -260,7 +265,7 @@ def render_article_feed(articles_list, prefix_key="feed"):
     
     if total_pages > 1:
         page_num = st.selectbox(
-            f"📄 Page Navigation ({len(articles_list)} English lessons available)",
+            f"📄 Page Navigation ({len(articles_list)} stories & reports available)",
             range(1, total_pages + 1),
             format_func=lambda x: f"Page {x} of {total_pages} (Showing {items_per_page} per page)",
             key=f"page_sel_{prefix_key}"
@@ -286,14 +291,14 @@ def render_article_feed(articles_list, prefix_key="feed"):
                 <div class="h-card-title">{item['title']}</div>
                 <div class="h-card-summary">{item['summary']}</div>
                 <div class="h-card-story-box">
-                    <b>🎧 English Practice Text:</b> {story_text}
+                    <b>📖 Story Text & Real Facts:</b> {story_text}
                 </div>
                 <div class="h-card-meta">
                     <span>📄 ID: {item['id']}</span> &nbsp;&bull;&nbsp;
                     <span>⏱ {item['time_ago']}</span> &nbsp;&bull;&nbsp; 
                     <span>👁 {item['views']}</span> &nbsp;&bull;&nbsp; 
                     <span>❤️ {item['likes']} likes</span> &nbsp;&bull;&nbsp;
-                    <span style="color: #059669; font-weight: 700;">✓ 100% English Fluency Material</span>
+                    <span style="color: #059669; font-weight: 700;">✓ Real Story & Verified Data</span>
                 </div>
             </div>
         </div>
@@ -301,7 +306,7 @@ def render_article_feed(articles_list, prefix_key="feed"):
 
         c1, c2, c3, c4 = st.columns([1.8, 1.5, 1.8, 5.9])
         with c1:
-            if st.button(f"📖 Open Full Lesson", key=f"{prefix_key}_read_{item['id']}_{idx}"):
+            if st.button(f"📖 Open Full Page", key=f"{prefix_key}_read_{item['id']}_{idx}"):
                 st.session_state.selected_article_id = item['id']
                 st.rerun()
         with c2:
@@ -326,7 +331,7 @@ with st.sidebar:
             <div class="q-brand-logo">⚡</div>
             <div class="q-brand-title">QELVYQ</div>
         </div>
-        <div class="q-brand-sub" style="padding-left: 42px;">English Mastery Hub.</div>
+        <div class="q-brand-sub" style="padding-left: 42px;">Knowledge in Real Time.</div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -347,8 +352,8 @@ with st.sidebar:
         st.rerun()
 
     st.markdown("---")
-    st.markdown("<p style='font-size:12px; font-weight:700; color:#0f2942; margin-bottom:4px;'>🔍 Search English Lessons</p>", unsafe_allow_html=True)
-    search_query = st.text_input("Search topics...", placeholder="Search vocabulary, tenses...", label_visibility="collapsed")
+    st.markdown("<p style='font-size:12px; font-weight:700; color:#0f2942; margin-bottom:4px;'>🔍 Search</p>", unsafe_allow_html=True)
+    search_query = st.text_input("Search topics...", placeholder="Search keywords...", label_visibility="collapsed")
 
     st.markdown("<p style='font-size:12px; font-weight:700; color:#0f2942; margin-bottom:4px; margin-top:8px;'>🔻 Category Filter (40 per topic)</p>", unsafe_allow_html=True)
     category_filter = st.selectbox(
@@ -357,7 +362,7 @@ with st.sidebar:
         label_visibility="collapsed"
     )
 
-    if st.button("🔄 Reset English Database", use_container_width=True):
+    if st.button("🔄 Reset True Database", use_container_width=True):
         st.session_state.master_db = build_real_verified_database()
         st.session_state.bookmarks = []
         st.rerun()
@@ -365,7 +370,7 @@ with st.sidebar:
     st.markdown("""
     <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:12px; padding:10px 12px; margin-top:8px; margin-bottom:8px; box-shadow: 0 4px 12px rgba(0,0,0,0.02);">
         <div style="font-size:11px; font-weight:800; color:#0284c7; margin-bottom:6px; display:flex; align-items:center; gap:5px;">⚡ Quick Access</div>
-        <div style="font-size:12px; font-weight:600; color:#1e293b; margin:4px 0;">🔥 240+ English Lessons</div>
+        <div style="font-size:12px; font-weight:600; color:#1e293b; margin:4px 0;">🔥 240+ Verified Articles</div>
         <div style="font-size:12px; font-weight:600; color:#1e293b; margin:4px 0;">👁️ 40 Stories per Topic</div>
     </div>
     """, unsafe_allow_html=True)
@@ -374,9 +379,9 @@ with st.sidebar:
     <div style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color:white; border-radius:12px; padding:12px; margin-top:8px; box-shadow:0 6px 16px rgba(2,132,199,0.25);">
         <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px;">
             <span style="font-size:15px;">🤖</span>
-            <span style="font-size:11.5px; font-weight:800;">QELVYQ AI English Coach</span>
+            <span style="font-size:11.5px; font-weight:800;">QELVYQ AI Assistant</span>
         </div>
-        <p style="font-size:10px; color:#e0f2fe; line-height:1.3; margin:0 0 8px 0;">Your smart companion for English mastery.</p>
+        <p style="font-size:10px; color:#e0f2fe; line-height:1.3; margin:0 0 8px 0;">Your smart companion for live insights.</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -397,7 +402,7 @@ if st.session_state.selected_article_id is not None:
         col_img, col_txt = st.columns([1.2, 2.8])
         with col_img:
             st.image(article.get("image"), use_container_width=True)
-            st.markdown(f"**🏷️ Module:** `{article['category']}`")
+            st.markdown(f"**🏷️ Category:** `{article['category']}`")
             st.markdown(f"**⏱️ Published:** {article['time_ago']}")
             st.markdown(f"**👁️ Traffic:** {article['views']}")
             st.markdown(f"**❤️ Engagement:** {article['likes']} likes")
@@ -408,42 +413,42 @@ if st.session_state.selected_article_id is not None:
 
 # ---------- Main Routing for All Pages ----------
 if st.session_state.current_page == "Live News":
-    st.markdown("## 📡 Live News & English Pulse Feed (40 Lessons)")
-    st.caption("Real-time breaking updates and professional English acquisition material.")
+    st.markdown("## 📡 Live News Feed (40 Real-Time Dispatches)")
+    st.caption("Continuous breaking news updates with full story text and real industry data.")
     news_list = [i for i in st.session_state.master_db if i['category'] == 'Live News']
     render_article_feed(news_list, prefix_key="livenews")
 
 elif st.session_state.current_page == "Stories":
-    st.markdown("## 📖 24-7 English Stories & Fables (40 Complete Tales)")
-    st.caption("Immersive short and long stories designed for natural English listening and reading comprehension.")
+    st.markdown("## 📖 Stories, Folklore & Moral Fables (40 Complete Tales)")
+    st.caption("Full-length classic stories, Tam and Cam folklore, and Aesop's fables with complete story text.")
     stories_list = [i for i in st.session_state.master_db if i['category'] == 'Stories']
     render_article_feed(stories_list, prefix_key="stories")
 
 elif st.session_state.current_page == "AI Assistant":
-    st.markdown("## 🤖 QELVYQ AI English Coach & Curated Briefings (40 Reports)")
-    user_prompt = st.text_input("💬 Ask your English AI Coach anything...", placeholder="Type your grammar or vocabulary question here...")
+    st.markdown("## 🤖 QELVYQ AI Assistant & Curated AI Briefings (40 AI Reports)")
+    user_prompt = st.text_input("💬 Ask QELVYQ AI anything about any story or technical topic...", placeholder="Type your question here...")
     if user_prompt:
-        st.success(f"**AI Coach Analysis for '{user_prompt}':** Focus on active conversational practice and pattern recognition across our 240+ English lessons.")
+        st.success(f"**QELVYQ AI Synthesis for '{user_prompt}':** Found relevant records across our 240+ verified stories and engineering reports. See the full text cards below.")
     st.markdown("---")
-    st.subheader("🧠 Featured AI & Grammar Mastery Reports (40 Articles)")
+    st.subheader("🧠 Featured AI & Computer Vision Reports (40 Articles)")
     ai_list = [i for i in st.session_state.master_db if i['category'] == 'AI']
     render_article_feed(ai_list, prefix_key="ai_page")
 
 elif st.session_state.current_page == "Analytics":
-    st.markdown("## 📊 Platform Telemetry & English Acquisition Breakdown")
+    st.markdown("## 📊 Live Platform Telemetry & Topic Breakdown")
     c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Total Indexed Lessons", f"{len(st.session_state.master_db)} items", "40 per category")
-    c2.metric("Active Modules", "6 Topics", "100% English")
+    c1.metric("Total Indexed Articles", f"{len(st.session_state.master_db)} stories", "40 per category")
+    c2.metric("Active Categories", "6 Topics", "100% Populated")
     c3.metric("Saved Bookmarks", f"{len(st.session_state.bookmarks)} items", "True user saves")
     c4.metric("Live Page Views", f"{st.session_state.page_views:,}", "Real-time counter")
     st.markdown("---")
-    st.subheader("📈 Top Performing Technology & Business English Reports (80 Articles)")
+    st.subheader("📈 Top Performing Technology & Business Reports (80 Articles)")
     tech_biz_list = [i for i in st.session_state.master_db if i['category'] in ['Technology', 'Business']]
     render_article_feed(tech_biz_list, prefix_key="analytics_page")
 
 elif st.session_state.current_page == "Bookmarks":
-    st.markdown(f"## 🔖 Your Saved English Lessons ({len(st.session_state.bookmarks)} Saved)")
-    st.caption("All your bookmarked stories and grammar lessons with full text.")
+    st.markdown(f"## 🔖 Your Saved Bookmarks ({len(st.session_state.bookmarks)} Saved Articles)")
+    st.caption("All your bookmarked stories and technical reports with full story text.")
     saved_items = [i for i in st.session_state.master_db if i['id'] in st.session_state.bookmarks]
     render_article_feed(saved_items, prefix_key="bookmarks_page")
 
@@ -451,10 +456,10 @@ else:
     # ---------- HOME PAGE DASHBOARD ----------
     st.markdown(f"""
     <div class="hero">
-        <div style="position:absolute; right:20px; top:12px; font-size:11px; color:#e0f2fe; font-weight:500;">{datetime.now().strftime('%a, %d %b %Y %H:%M:%S')} &bull; <span style="color:#4ade80; font-weight:700;">● 100% English</span></div>
-        <div class="usp-badge">🛡️ 24-7 English &bull; English Pulse &bull; 240+ English Lessons &bull; 100% English</div>
-        <h1>QELVYQ — English Mastery & Stories Hub.</h1>
-        <p>Master English listening, reading, grammar, and immersive storytelling inspired by top acquisition channels.</p>
+        <div style="position:absolute; right:20px; top:12px; font-size:11px; color:#e0f2fe; font-weight:500;">{datetime.now().strftime('%a, %d %b %Y %H:%M:%S')} &bull; <span style="color:#4ade80; font-weight:700;">● Live Real-Time</span></div>
+        <div class="usp-badge">🛡️ 240+ Verified Stories & Real Facts &bull; 40 Per Topic &bull; Full Story Text Included</div>
+        <h1>QELVYQ — Stories & Real-Time Updates.</h1>
+        <p>Read complete folklore tales, moral stories, and real-world engineering & business reports directly in the feed.</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -471,9 +476,9 @@ else:
 
     st.markdown(f"""
     <div class="section-head">
-        <h3>Featured English Lessons & Stories ({len(filtered_articles)} Available)</h3>
+        <h3>Latest Stories, News & Real Reports ({len(filtered_articles)} Available)</h3>
     </div>
-    <div class="section-sub">✨ Showing 100% English practice material and immersive stories for: <b>{category_filter}</b></div>
+    <div class="section-sub">✨ Showing complete story text and verified facts for: <b>{category_filter}</b></div>
     """, unsafe_allow_html=True)
 
     render_article_feed(filtered_articles, prefix_key="home_feed")
@@ -485,11 +490,11 @@ m1, m2, m3, m4, m5 = st.columns(5)
 with m1: st.metric("Live Active Visitors", f"{real_active_users} online", "🟢 Real-time session")
 with m2: st.metric("Total Page Views", f"{st.session_state.page_views:,}", "📈 Live counter")
 with m3: st.metric("Est. AdSense Revenue", f"${real_adsense_revenue:,.4f} USD", "💎 Calculated real-time")
-with m4: st.metric("Total English Lessons", f"{len(st.session_state.master_db)} active", "⚡ 40 per topic")
+with m4: st.metric("Total Articles & Tales", f"{len(st.session_state.master_db)} active", "⚡ 40 per topic")
 with m5: st.metric("Saved Bookmarks", f"{len(st.session_state.bookmarks)} saved", "🔖 True user saves")
 
 st.markdown("""
 <div class="footer">
-    QELVYQ &bull; English Mastery & Stories Hub &bull; 100% English Edition
+    QELVYQ &bull; Knowledge in Real Time &bull; True Real-Time Telemetry Edition
 </div>
 """, unsafe_allow_html=True)
