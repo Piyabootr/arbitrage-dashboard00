@@ -2,7 +2,7 @@ import streamlit as st
 from datetime import datetime
 
 # =========================================================
-# QELVYQ | Knowledge in Real Time & English Mastery (Vibrant Edition)
+# QELVYQ | Knowledge in Real Time & English Mastery (320+ Edition)
 # =========================================================
 st.set_page_config(
     page_title="QELVYQ - Knowledge in Real Time",
@@ -11,206 +11,78 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ---------- SVG Logo Graphics (Custom 3D Gradient Vector Logos) ----------
-SIDEBAR_LOGO_SVG = """
-<svg width="42" height="42" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0; filter: drop-shadow(0 4px 10px rgba(99, 102, 241, 0.35));">
-  <defs>
-    <linearGradient id="qGrad1" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#06b6d4"/>
-      <stop offset="50%" stop-color="#6366f1"/>
-      <stop offset="100%" stop-color="#ec4899"/>
-    </linearGradient>
-    <linearGradient id="qBolt" x1="12" y1="8" x2="36" y2="40" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#ffffff"/>
-      <stop offset="100%" stop-color="#fef08a"/>
-    </linearGradient>
-  </defs>
-  <rect width="48" height="48" rx="14" fill="url(#qGrad1)"/>
-  <rect x="2" y="2" width="44" height="44" rx="12" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" fill="none"/>
-  <path d="M26.5 9L13 26.5H23.5L21.5 39L35 21.5H24.5L26.5 9Z" fill="url(#qBolt)"/>
-</svg>
-"""
-
-HERO_LOGO_SVG = """
-<svg width="58" height="58" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0; filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.25));">
-  <defs>
-    <linearGradient id="heroGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#38bdf8"/>
-      <stop offset="50%" stop-color="#818cf8"/>
-      <stop offset="100%" stop-color="#f472b6"/>
-    </linearGradient>
-  </defs>
-  <rect width="64" height="64" rx="18" fill="rgba(255,255,255,0.14)"/>
-  <rect x="2" y="2" width="60" height="60" rx="16" stroke="url(#heroGrad)" stroke-width="2.5" fill="rgba(15,23,42,0.45)"/>
-  <circle cx="32" cy="32" r="20" stroke="rgba(255,255,255,0.18)" stroke-width="1.5" stroke-dasharray="4 4" fill="none"/>
-  <path d="M35 13L18 35H31L29 51L46 29H33L35 13Z" fill="url(#heroGrad)"/>
-</svg>
-"""
-
-# ---------- Theme & Vibrant Professional Styling ----------
+# ---------- Theme & Professional Styling ----------
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 :root { --navy:#071a3b; --blue:#0878e8; --ink:#0f2537; --muted:#64748b; --line:#cbd5e1; }
 html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
 
-/* พื้นหลัง Aurora Mesh สีสันสดใสละมุนตา */
 .stApp { 
     background-image: 
-        radial-gradient(circle at 8% 12%, rgba(6, 182, 212, 0.12) 0%, transparent 35%),
-        radial-gradient(circle at 92% 18%, rgba(236, 72, 153, 0.10) 0%, transparent 35%),
-        radial-gradient(circle at 85% 88%, rgba(99, 102, 241, 0.12) 0%, transparent 40%),
-        radial-gradient(circle at 15% 85%, rgba(16, 185, 129, 0.09) 0%, transparent 35%),
-        linear-gradient(180deg, #f0f7ff 0%, #faf5ff 50%, #f0fdf4 100%);
+        linear-gradient(to right, rgba(8, 120, 232, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(8, 120, 232, 0.03) 1px, transparent 1px),
+        radial-gradient(circle at 10% 10%, rgba(8, 120, 232, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 90% 90%, rgba(59, 130, 246, 0.06) 0%, transparent 40%),
+        linear-gradient(180deg, #f0f6ff 0%, #f8fbff 50%, #eef4fd 100%);
+    background-size: 32px 32px, 32px 32px, 100% 100%, 100% 100%, 100% 100%;
     color: var(--ink); 
 }
 
 .block-container { max-width: 1520px; padding-top: 0.4rem !important; padding-bottom: 2rem; padding-left: 2rem; padding-right: 2rem; }
 header[data-testid="stHeader"] { background: rgba(0,0,0,0); }
 
-/* Sidebar สีสันสดใสพร้อมขอบไล่สี */
 [data-testid="stSidebar"] { 
-    background: linear-gradient(180deg, #eef6ff 0%, #f5f3ff 55%, #fdf2f8 100%); 
-    border-right: 2px solid #dbeafe; 
+    background: linear-gradient(180deg, #f4f8ff 0%, #edf4ff 100%); 
+    border-right: 1px solid #d2e2fb; 
 }
 [data-testid="stSidebar"] > div { padding-top: 0.5rem !important; padding-left: 0.8rem; padding-right: 0.8rem; }
 
 h1,h2,h3,h4 { color:var(--ink); letter-spacing:-.025em; }
 
-/* Metric Cards มีแถบสีรุ้งด้านบนและเงาสวยงาม */
 div[data-testid="stMetric"] { 
-    background: rgba(255, 255, 255, 0.94); 
-    backdrop-filter: blur(12px);
-    border: 1px solid #e0e7ff; 
-    border-top: 4px solid #6366f1;
-    border-radius: 16px; 
-    padding: 14px 16px; 
-    box-shadow: 0 10px 25px rgba(99, 102, 241, 0.08); 
-    transition: all 0.25s ease;
+    background: rgba(255, 255, 255, 0.9); 
+    backdrop-filter: blur(10px);
+    border: 1px solid #d1e3fc; 
+    border-radius: 14px; 
+    padding: 12px 14px; 
+    box-shadow: 0 8px 24px rgba(14, 116, 144, 0.06); 
 }
-div[data-testid="stMetric"]:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 14px 30px rgba(236, 72, 153, 0.14);
-    border-top-color: #ec4899;
-}
-div[data-testid="stMetricLabel"] { color:#475569; font-size:.82rem; font-weight: 700; }
-div[data-testid="stMetricValue"] { color:#0f172a; font-weight:900; font-size: 1.3rem !important; }
+div[data-testid="stMetricLabel"] { color:#475569; font-size:.8rem; font-weight: 600; }
+div[data-testid="stMetricValue"] { color:#0f172a; font-weight:800; font-size: 1.25rem !important; }
 
-/* ปุ่มกดไล่เฉดสีเมื่อเอาเมาส์ชี้ */
-.stButton > button { 
-    border-radius:10px; 
-    border:1px solid #c7d2fe; 
-    color:#1e1b4b; 
-    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%); 
-    font-weight:700; 
-    transition:all .2s ease; 
-    width: 100%; 
-    padding: 0.38rem 0.75rem; 
-    font-size: 0.82rem; 
-}
-.stButton > button:hover { 
-    border-color: transparent; 
-    color: #ffffff; 
-    background: linear-gradient(135deg, #06b6d4 0%, #6366f1 50%, #ec4899 100%); 
-    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3); 
-    transform: translateY(-1px);
-}
-div[data-testid="stTextInput"] input, div[data-testid="stSelectbox"] div[data-baseweb="select"] { border-radius:10px; background-color: #ffffff; min-height: 38px; border: 1px solid #c7d2fe; }
+.stButton > button { border-radius:8px; border:1px solid #cbd5e1; color:#0f172a; background:#ffffff; font-weight:600; transition:all .2s ease; width: 100%; padding: 0.35rem 0.75rem; font-size: 0.82rem; }
+.stButton > button:hover { border-color:#0878e8; color:#0878e8; background:#f0f7ff; box-shadow: 0 4px 12px rgba(8,120,232,0.15); }
+div[data-testid="stTextInput"] input, div[data-testid="stSelectbox"] div[data-baseweb="select"] { border-radius:8px; background-color: #ffffff; min-height: 38px; border: 1px solid #cbd5e1; }
 
-/* โลโก้แบรนด์ใน Sidebar แบบไล่เฉดสี */
-.q-brand-sidebar { 
-    display:flex; 
-    flex-direction:column; 
-    padding: 8px 10px 12px; 
-    background: rgba(255,255,255,0.75);
-    border: 1px solid #e0e7ff;
-    border-radius: 16px;
-    margin-bottom: 12px; 
-    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.06);
-}
-.q-brand-top { display:flex; align-items:center; gap:12px; }
-.q-brand-title { 
-    font-size:21px; 
-    font-weight:900; 
-    background: linear-gradient(135deg, #0284c7 0%, #6366f1 50%, #db2777 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    line-height:1.1; 
-    letter-spacing: -0.02em; 
-}
-.q-brand-sub { font-size:10.5px; color:#6366f1; margin-top:3px; font-weight:700; letter-spacing: 0.02em; }
+.q-brand-sidebar { display:flex; flex-direction:column; padding: 2px 2px 10px; border-bottom: 1px solid #d8e5f8; margin-bottom: 8px; }
+.q-brand-top { display:flex; align-items:center; gap:8px; }
+.q-brand-logo { width:34px; height:34px; background:linear-gradient(135deg,#38bdf8,#0284c7); border-radius:9px; display:flex; align-items:center; justify-content:center; color:white; font-size:17px; font-weight:900; box-shadow: 0 4px 12px rgba(2,132,199,0.3); }
+.q-brand-title { font-size:18px; font-weight:900; color:#0f172a; line-height:1.1; letter-spacing: -0.03em; }
+.q-brand-sub { font-size:10px; color:#64748b; margin-top:2px; font-weight:600; }
 
-/* การ์ดบทความมีแถบสีด้านซ้ายและเงาละมุน */
-.horizontal-card { 
-    background:#ffffff; 
-    border:1px solid #e2e8f0; 
-    border-radius:16px; 
-    padding:16px 18px; 
-    box-shadow:0 6px 20px rgba(15, 23, 42, 0.05); 
-    margin-bottom:10px; 
-    display:flex; 
-    gap:18px; 
-    align-items:flex-start; 
-    transition: all 0.25s ease;
-}
-.horizontal-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 28px rgba(99, 102, 241, 0.12);
-}
-.h-card-img { width:150px; height:130px; object-fit:cover; border-radius:12px; border:2px solid #f1f5f9; flex-shrink:0; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+.horizontal-card { background:#ffffff; border:1px solid #d4e3f8; border-radius:14px; padding:16px 18px; box-shadow:0 4px 16px rgba(18,55,102,.05); margin-bottom:10px; display:flex; gap:18px; align-items:flex-start; }
+.h-card-img { width:145px; height:125px; object-fit:cover; border-radius:10px; border:1px solid #e2e8f0; flex-shrink:0; }
 .h-card-content { flex-grow:1; }
-.h-card-title { font-size:16px; line-height:1.35; font-weight:800; color:#0f172a; margin:6px 0 6px; }
-.h-card-summary { color:#334155; font-size:12.5px; line-height:1.55; margin:0 0 8px; font-weight: 500; }
-.h-card-story-box { padding:10px 14px; border-radius:10px; color:#1e293b; font-size:12px; line-height:1.65; margin-bottom:10px; }
-.h-card-meta { color:#64748b; font-size:11px; display:flex; flex-wrap:wrap; gap:10px; align-items:center; font-weight: 600; }
+.h-card-title { font-size:15.5px; line-height:1.35; font-weight:800; color:#0f172a; margin:4px 0 6px; }
+.h-card-summary { color:#1e293b; font-size:12.5px; line-height:1.55; margin:0 0 8px; font-weight: 500; }
+.h-card-story-box { background:#f8fafc; border-left:3px solid #0284c7; padding:8px 12px; border-radius:6px; color:#334155; font-size:12px; line-height:1.6; margin-bottom:8px; }
+.h-card-meta { color:#64748b; font-size:11px; display:flex; gap:12px; align-items:center; font-weight: 600; }
 
-/* Hero Banner ไล่สี Aurora สดใส */
-.hero { 
-    position:relative; 
-    overflow:hidden; 
-    border-radius:20px; 
-    padding:24px 28px; 
-    color:#fff; 
-    background: 
-        radial-gradient(circle at 85% 20%, rgba(244, 114, 182, 0.45) 0%, transparent 40%),
-        radial-gradient(circle at 15% 85%, rgba(56, 189, 248, 0.4) 0%, transparent 45%),
-        linear-gradient(125deg, #0f172a 0%, #1e1b4b 38%, #4338ca 72%, #be185d 100%); 
-    box-shadow:0 12px 34px rgba(67, 56, 202, 0.28); 
-    margin-bottom:18px; 
-}
-.usp-badge { 
-    display: inline-flex; 
-    align-items: center; 
-    gap: 6px; 
-    background: linear-gradient(90deg, rgba(6,182,212,0.25), rgba(236,72,153,0.25)); 
-    backdrop-filter: blur(6px); 
-    border: 1px solid rgba(255, 255, 255, 0.3); 
-    border-radius: 20px; 
-    padding: 4px 12px; 
-    color: #fdf4ff; 
-    font-size: 10.5px; 
-    font-weight: 700; 
-    margin-bottom: 8px; 
-}
+.hero { position:relative; overflow:hidden; border-radius:16px; padding:20px 24px; color:#fff; background:radial-gradient(circle at 80% 20%, rgba(56, 189, 248, 0.35) 0%, transparent 35%), linear-gradient(120deg,#0369a1 0%,#0284c7 50%,#0f172a 100%); box-shadow:0 10px 30px rgba(2,132,199,0.2); margin-bottom:14px; }
+.usp-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 20px; padding: 3px 10px; color: #bae6fd; font-size: 10px; font-weight: 700; margin-bottom: 6px; }
 
 .section-head { display:flex; align-items:center; gap:8px; margin:2px 0 0; }
-.section-head h3 { 
-    margin:0; 
-    font-size:20px; 
-    font-weight:900; 
-    background: linear-gradient(90deg, #0f172a 0%, #4338ca 60%, #db2777 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-.section-sub { color:#64748b; font-size:12px; margin:2px 0 10px; font-weight: 500; }
+.section-head h3 { margin:0; font-size:18px; font-weight:800; }
+.section-sub { color:#64748b; font-size:11.5px; margin:2px 0 8px; }
 
-.footer { border-top:1px solid #cbd5e1; padding-top:12px; margin-top:18px; color:#64748b; font-size:11px; text-align:center; font-weight: 600; }
+.footer { border-top:1px solid #cbd5e1; padding-top:10px; margin-top:15px; color:#64748b; font-size:10px; text-align:center; font-weight: 500; }
 div[data-testid="stHorizontalBlock"] { gap: 0.8rem; }
 </style>
 """, unsafe_allow_html=True)
 
 # =========================================================
-# 1. Database Builder (8 Topics x 40 Items = 320 Items with Vibrant Palettes)
+# 1. Database Builder (Old 6 Topics + 2 New English Mastery Topics = 320 Items)
 # =========================================================
 @st.cache_data
 def build_real_verified_database():
@@ -218,8 +90,6 @@ def build_real_verified_database():
     topics_config = {
         "Stories": {
             "color": "#7c3aed",
-            "gradient": "linear-gradient(135deg, #7c3aed 0%, #c026d3 100%)",
-            "bg_tint": "#faf5ff",
             "images": [
                 "https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&w=700&q=80",
                 "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=700&q=80",
@@ -246,8 +116,6 @@ def build_real_verified_database():
         },
         "24-7 English": {
             "color": "#0d9488",
-            "gradient": "linear-gradient(135deg, #0d9488 0%, #06b6d4 100%)",
-            "bg_tint": "#f0fdfa",
             "images": [
                 "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=700&q=80",
                 "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=700&q=80",
@@ -263,7 +131,7 @@ def build_real_verified_database():
                 (
                     "24-7 English Story: The Last Train from Zurich (Everyday Travel & Conversation)",
                     "Follow a suspenseful evening journey across Europe while practicing natural travel expressions, prepositions of movement, and past continuous structures.",
-                    "The station clock at Zurich Hauptbahnhof read 11:58 PM. Clara sprinted along Platform 4, her heavy leather suitcase rattling against the stone floor. Snowflakes drifted through the cold night air under the yellow glow of the station lamps. Just as the conductor blew his whistle, she stepped aboard the sleeper train bound for Vienna. Catching her breath in the narrow corridor, she realized she had accidentally boarded the wrong carriage. An elderly gentleman sitting by the window smiled warmly and offered her a cup of hot chamomile tea from his thermos. Over the next two hours, as the train glided past dark alpine lakes and snow-covered pines, they shared stories about their childhood travels, missed connections, and the unexpected friendships that only happen when plans go wrong."
+                    "The station clock at Zurich Hauptbahnhof read 11:58 PM. Clara sprinted along Platform 4, her heavy leather suitcase rattling against the stone floor. Snowflakes drifted through the cold night air under the yellow glow of the station lamps. Just as the conductor blew his whistle, she stepped aboard the sleeper train bound for Vienna. Catching her breath in the narrow corridor, she realized she had accidentally boarded the wrong carriage. An elderly gentleman sitting by the window smiled warmly and offered her a cup of hot chamomile tea from his thermos. Over the next two hours, as the train glided past dark alpine lakes and snow-covered pines, they shared stories about their childhood travels,missed connections, and the unexpected friendships that only happen when plans go wrong."
                 ),
                 (
                     "24-7 English Story: The Silent Lighthouse Keeper (Advanced Vocabulary & Idioms)",
@@ -284,8 +152,6 @@ def build_real_verified_database():
         },
         "English Pulse": {
             "color": "#e11d48",
-            "gradient": "linear-gradient(135deg, #e11d48 0%, #f97316 100%)",
-            "bg_tint": "#fff1f2",
             "images": [
                 "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=700&q=80",
                 "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=700&q=80",
@@ -314,7 +180,7 @@ def build_real_verified_database():
                     "Clear English pronunciation is not about erasing your identity; it is about mastering word stress, sentence rhythm, and linking sounds. English is a stress-timed language, meaning content words (nouns, main verbs, adjectives) are spoken louder and longer, while function words (to, for, of, the) are reduced using the schwa sound. Use the 'Shadowing Technique' for 15 minutes daily: listen to a native speaker from 24-7 English or English Pulse, and repeat what they say with a half-second delay, matching their melody, pauses, and mouth movements."
                 ),
                 (
-                    "English Pulse Structure: The 5 Core Sentence Patterns in English",
+                    "English Pulse Structure:The 5 Core Sentence Patterns in English",
                     "Build rock-solid grammatical accuracy by mastering the 5 fundamental building blocks of every English sentence.",
                     "Every complex sentence in the English language is built from five basic patterns: 1) Subject + Verb (S+V): 'The system works.' 2) Subject + Verb + Object (S+V+O): 'The team tested the generator.' 3) Subject + Verb + Complement (S+V+C): 'The test results look promising.' 4) Subject + Verb + Indirect Object + Direct Object (S+V+IO+DO): 'The manager sent the client the updated schedule.' 5) Subject + Verb + Object + Object Complement (S+V+O+C): 'This new workflow makes documentation easier.' Once you master these five skeletons, you can expand any thought clearly without grammatical errors."
                 )
@@ -322,8 +188,6 @@ def build_real_verified_database():
         },
         "Technology": {
             "color": "#059669",
-            "gradient": "linear-gradient(135deg, #059669 0%, #10b981 100%)",
-            "bg_tint": "#ecfdf5",
             "images": [
                 "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=700&q=80",
                 "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=700&q=80",
@@ -345,8 +209,6 @@ def build_real_verified_database():
         },
         "Live News": {
             "color": "#0284c7",
-            "gradient": "linear-gradient(135deg, #0284c7 0%, #3b82f6 100%)",
-            "bg_tint": "#f0f9ff",
             "images": [
                 "https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=700&q=80",
                 "https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=700&q=80",
@@ -363,8 +225,6 @@ def build_real_verified_database():
         },
         "Business": {
             "color": "#d97706",
-            "gradient": "linear-gradient(135deg, #d97706 0%, #eab308 100%)",
-            "bg_tint": "#fffbeb",
             "images": [
                 "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=700&q=80",
                 "https://images.unsplash.com/photo-1526367790999-0150786686a2?auto=format&fit=crop&w=700&q=80"
@@ -379,8 +239,6 @@ def build_real_verified_database():
         },
         "AI": {
             "color": "#db2777",
-            "gradient": "linear-gradient(135deg, #db2777 0%, #9333ea 100%)",
-            "bg_tint": "#fdf2f8",
             "images": [
                 "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=700&q=80",
                 "https://images.unsplash.com/photo-1531746790731-6f087fffd65a?auto=format&fit=crop&w=700&q=80"
@@ -395,8 +253,6 @@ def build_real_verified_database():
         },
         "Science": {
             "color": "#4f46e5",
-            "gradient": "linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%)",
-            "bg_tint": "#eef2ff",
             "images": [
                 "https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&fit=crop&w=700&q=80",
                 "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=700&q=80"
@@ -439,8 +295,6 @@ def build_real_verified_database():
                 "title": f"{base_title} — Vol. #{i}",
                 "category": category,
                 "color": data["color"],
-                "gradient": data["gradient"],
-                "bg_tint": data["bg_tint"],
                 "time_ago": f"{(i * 3) % 55 + 2} mins ago",
                 "views": f"{i * 210:,} views",
                 "likes": (i * 5) % 40 + 8,
@@ -454,7 +308,7 @@ def build_real_verified_database():
     return db
 
 # ---------- TRUE REAL-TIME STATE INITIALIZATION ----------
-if "master_db" not in st.session_state or len(st.session_state.master_db) < 320 or "gradient" not in st.session_state.master_db[0]:
+if "master_db" not in st.session_state or len(st.session_state.master_db) < 320:
     st.session_state.master_db = build_real_verified_database()
 
 if "bookmarks" not in st.session_state:
@@ -473,7 +327,7 @@ else:
 real_active_users = 1
 real_adsense_revenue = (st.session_state.page_views / 1000.0) * 1.50
 
-# ---------- Helper Function (Colorful Cards) ----------
+# ---------- Helper Function ----------
 def render_article_feed(articles_list, prefix_key="feed"):
     if not articles_list:
         st.warning("No matching articles found. Try another keyword or category.")
@@ -498,29 +352,26 @@ def render_article_feed(articles_list, prefix_key="feed"):
 
     for idx, item in enumerate(current_batch):
         cat_color = item.get("color", "#0284c7")
-        cat_grad = item.get("gradient", "linear-gradient(135deg, #0284c7, #6366f1)")
-        cat_tint = item.get("bg_tint", "#f8fafc")
         story_text = item.get("story_preview", item.get("content", ""))
 
         st.markdown(f"""
-        <div class="horizontal-card" style="border-left: 6px solid {cat_color};">
+        <div class="horizontal-card">
             <img src="{item['image']}" class="h-card-img">
             <div class="h-card-content">
-                <div style="display:flex; align-items:center; gap:8px;">
-                    <span style="background:{cat_grad}; color:#fff; padding:3px 10px; border-radius:20px; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; box-shadow: 0 2px 8px rgba(0,0,0,0.12);">{item['category']}</span>
-                    <span style="background:{cat_tint}; color:{cat_color}; border:1px solid {cat_color}40; padding:2px 8px; border-radius:12px; font-size:9.5px; font-weight:700;">★ Featured Module</span>
+                <div>
+                    <span style="background:{cat_color}; color:#fff; padding:2px 8px; border-radius:10px; font-size:9.5px; font-weight:750; text-transform:uppercase; letter-spacing:0.04em;">{item['category']}</span>
                 </div>
                 <div class="h-card-title">{item['title']}</div>
                 <div class="h-card-summary">{item['summary']}</div>
-                <div class="h-card-story-box" style="background:{cat_tint}; border-left:4px solid {cat_color};">
-                    <b style="color:{cat_color};">📖 Story Text &amp; English Practice:</b> {story_text}
+                <div class="h-card-story-box">
+                    <b>📖 Story Text & English Practice:</b> {story_text}
                 </div>
                 <div class="h-card-meta">
-                    <span style="color:{cat_color}; font-weight:800;">📄 ID: {item['id']}</span> &nbsp;&bull;&nbsp;
+                    <span>📄 ID: {item['id']}</span> &nbsp;&bull;&nbsp;
                     <span>⏱ {item['time_ago']}</span> &nbsp;&bull;&nbsp; 
                     <span>👁 {item['views']}</span> &nbsp;&bull;&nbsp; 
-                    <span style="color:#e11d48;">❤️ {item['likes']} likes</span> &nbsp;&bull;&nbsp;
-                    <span style="color: #059669; font-weight: 700;">✓ 100% English &amp; Verified Data</span>
+                    <span>❤️ {item['likes']} likes</span> &nbsp;&bull;&nbsp;
+                    <span style="color: #059669; font-weight: 700;">✓ 100% English & Verified Data</span>
                 </div>
             </div>
         </div>
@@ -547,15 +398,13 @@ def render_article_feed(articles_list, prefix_key="feed"):
 
 # ---------- Sidebar ----------
 with st.sidebar:
-    st.markdown(f"""
+    st.markdown("""
     <div class="q-brand-sidebar">
         <div class="q-brand-top">
-            {SIDEBAR_LOGO_SVG}
-            <div>
-                <div class="q-brand-title">QELVYQ</div>
-                <div class="q-brand-sub">Knowledge in Real Time</div>
-            </div>
+            <div class="q-brand-logo">⚡</div>
+            <div class="q-brand-title">QELVYQ</div>
         </div>
+        <div class="q-brand-sub" style="padding-left: 42px;">Knowledge in Real Time.</div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -591,10 +440,10 @@ with st.sidebar:
         st.rerun()
 
     st.markdown("---")
-    st.markdown("<p style='font-size:12px; font-weight:800; color:#4338ca; margin-bottom:4px;'>🔍 Search</p>", unsafe_allow_html=True)
+    st.markdown("<p style='font-size:12px; font-weight:700; color:#0f2942; margin-bottom:4px;'>🔍 Search</p>", unsafe_allow_html=True)
     search_query = st.text_input("Search topics...", placeholder="Search 24-7 English, Tenses, Stories...", label_visibility="collapsed")
 
-    st.markdown("<p style='font-size:12px; font-weight:800; color:#db2777; margin-bottom:4px; margin-top:8px;'>🎨 Category Filter (40 per topic)</p>", unsafe_allow_html=True)
+    st.markdown("<p style='font-size:12px; font-weight:700; color:#0f2942; margin-bottom:4px; margin-top:8px;'>🔻 Category Filter (40 per topic)</p>", unsafe_allow_html=True)
     category_filter = st.selectbox(
         "Category Filter",
         ["All Categories", "24-7 English", "English Pulse", "Stories", "Technology", "Live News", "Business", "AI", "Science"],
@@ -608,21 +457,20 @@ with st.sidebar:
         st.rerun()
 
     st.markdown("""
-    <div style="background:linear-gradient(135deg, #ffffff 0%, #f5f3ff 100%); border:1px solid #c7d2fe; border-radius:14px; padding:12px 14px; margin-top:10px; margin-bottom:10px; box-shadow: 0 4px 14px rgba(99,102,241,0.06);">
-        <div style="font-size:11.5px; font-weight:900; color:#6366f1; margin-bottom:6px; display:flex; align-items:center; gap:5px;">🌈 Vibrant Quick Highlights</div>
-        <div style="font-size:12px; font-weight:700; color:#1e293b; margin:4px 0;">🔥 320+ Verified Articles</div>
-        <div style="font-size:12px; font-weight:700; color:#0d9488; margin:4px 0;">🎧 24-7 English Stories</div>
-        <div style="font-size:12px; font-weight:700; color:#e11d48; margin:4px 0;">💬 English Pulse Fluency</div>
+    <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:12px; padding:10px 12px; margin-top:8px; margin-bottom:8px; box-shadow: 0 4px 12px rgba(0,0,0,0.02);">
+        <div style="font-size:11px; font-weight:800; color:#0284c7; margin-bottom:6px; display:flex; align-items:center; gap:5px;">⚡ Quick Access</div>
+        <div style="font-size:12px; font-weight:600; color:#1e293b; margin:4px 0;">🔥 320+ Verified Articles</div>
+        <div style="font-size:12px; font-weight:600; color:#1e293b; margin:4px 0;">🎧 24-7 English & Pulse Included</div>
     </div>
     """, unsafe_allow_html=True)
 
     st.markdown("""
-    <div style="background: linear-gradient(135deg, #4338ca 0%, #be185d 100%); color:white; border-radius:14px; padding:14px; margin-top:8px; box-shadow:0 8px 20px rgba(190,24,93,0.25);">
-        <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
-            <span style="font-size:18px;">🤖</span>
-            <span style="font-size:12px; font-weight:800;">QELVYQ AI Coach</span>
+    <div style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color:white; border-radius:12px; padding:12px; margin-top:8px; box-shadow:0 6px 16px rgba(2,132,199,0.25);">
+        <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px;">
+            <span style="font-size:15px;">🤖</span>
+            <span style="font-size:11.5px; font-weight:800;">QELVYQ AI Assistant</span>
         </div>
-        <p style="font-size:10.5px; color:#fce7f3; line-height:1.35; margin:0 0 8px 0;">Your colorful smart companion for live insights &amp; English mastery.</p>
+        <p style="font-size:10px; color:#e0f2fe; line-height:1.3; margin:0 0 8px 0;">Your smart companion for live insights & English practice.</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -706,18 +554,13 @@ elif st.session_state.current_page == "Bookmarks":
     render_article_feed(saved_items, prefix_key="bookmarks_page")
 
 else:
-    # ---------- HOME PAGE DASHBOARD (With Custom 3D SVG Logo in Hero) ----------
+    # ---------- HOME PAGE DASHBOARD ----------
     st.markdown(f"""
     <div class="hero">
-        <div style="position:absolute; right:22px; top:14px; font-size:11px; color:#fdf4ff; font-weight:600;">{datetime.now().strftime('%a, %d %b %Y %H:%M:%S')} &bull; <span style="color:#4ade80; font-weight:800;">● Live Real-Time</span></div>
-        <div style="display:flex; align-items:center; gap:18px;">
-            {HERO_LOGO_SVG}
-            <div>
-                <div class="usp-badge">🌈 320+ Verified Stories &bull; 24-7 English &amp; English Pulse &bull; 100% English Text</div>
-                <h1 style="margin:2px 0 6px 0; color:#ffffff;">QELVYQ — Stories, English Mastery &amp; Real-Time Updates.</h1>
-                <p style="margin:0; color:#e0e7ff;">Read complete folklore tales, 24-7 English stories, English Pulse grammar guides, and real-world engineering reports directly in the feed.</p>
-            </div>
-        </div>
+        <div style="position:absolute; right:20px; top:12px; font-size:11px; color:#e0f2fe; font-weight:500;">{datetime.now().strftime('%a, %d %b %Y %H:%M:%S')} &bull; <span style="color:#4ade80; font-weight:700;">● Live Real-Time</span></div>
+        <div class="usp-badge">🛡️ 320+ Verified Stories &bull; 24-7 English &amp; English Pulse &bull; 100% English Text</div>
+        <h1>QELVYQ — Stories, English Mastery &amp; Real-Time Updates.</h1>
+        <p>Read complete folklore tales, 24-7 English stories, English Pulse grammar guides, and real-world engineering reports directly in the feed.</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -734,9 +577,9 @@ else:
 
     st.markdown(f"""
     <div class="section-head">
-        <h3>✨ Latest Stories, English Lessons &amp; Real Reports ({len(filtered_articles)} Available)</h3>
+        <h3>Latest Stories, English Lessons &amp; Real Reports ({len(filtered_articles)} Available)</h3>
     </div>
-    <div class="section-sub">🎨 Showing vibrant color-coded cards and complete story text for: <b>{category_filter}</b></div>
+    <div class="section-sub">✨ Showing complete story text and verified facts for: <b>{category_filter}</b></div>
     """, unsafe_allow_html=True)
 
     render_article_feed(filtered_articles, prefix_key="home_feed")
@@ -753,6 +596,6 @@ with m5: st.metric("Saved Bookmarks", f"{len(st.session_state.bookmarks)} saved"
 
 st.markdown("""
 <div class="footer">
-    QELVYQ &bull; Knowledge in Real Time &bull; Vibrant Multi-Color &amp; 3D Logo Edition
+    QELVYQ &bull; Knowledge in Real Time &bull; 24-7 English &amp; English Pulse Integrated Edition
 </div>
 """, unsafe_allow_html=True)
