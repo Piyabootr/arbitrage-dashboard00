@@ -7,23 +7,24 @@ st.set_page_config(
     page_title="Pro Card Shoe Predictor Dashboard", page_icon="🃏", layout="wide"
 )
 
-# Professional Modern UI Styling & Custom CSS (Dashboard Branding)
+# Professional Modern Blue & Sky Blue Gradient Theme Styling
 st.markdown(
     """
 <style>
-    /* Main Background & Font */
+    /* Main Background: Gradient Mix of Deep Blue and Soft Sky Blue */
     .stApp {
-        background-color: #0e1117;
+        background: linear-gradient(135deg, #0f172a 0%, #1d4ed8 50%, #38bdf8 100%);
         color: #ffffff;
     }
     
-    /* Professional Card Containers */
+    /* Professional Glassmorphism Metric Cards */
     .metric-card {
-        background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
-        border: 1px solid #374151;
+        background: rgba(15, 23, 42, 0.65);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(56, 189, 248, 0.3);
         padding: 20px;
         border-radius: 12px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
         text-align: center;
         margin-bottom: 15px;
     }
@@ -37,12 +38,12 @@ st.markdown(
         text-align: center;
         margin-top: 15px;
         margin-bottom: 15px;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.4);
     }
     .red-win { background: linear-gradient(135deg, #ef4444 0%, #991b1b 100%); color: white; border: 1px solid #f87171; }
-    .blue-win { background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%); color: white; border: 1px solid #60a5fa; }
-    .tie-win { background: linear-gradient(135deg, #10b981 0%, #047857 100%); color: white; border: 1px solid #34d399; }
-    .wait-signal { background: linear-gradient(135deg, #4b5563 0%, #1f2937 100%); color: #e5e7eb; border: 1px solid #6b7280; }
+    .blue-win { background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); color: white; border: 1px solid #60a5fa; }
+    .tie-win { background: linear-gradient(135deg, #059669 0%, #047857 100%); color: white; border: 1px solid #34d399; }
+    .wait-signal { background: rgba(30, 41, 59, 0.85); color: #e2e8f0; border: 1px solid rgba(148, 163, 184, 0.4); }
     
     /* Roadmap History Dots */
     .history-dot {
@@ -56,13 +57,13 @@ st.markdown(
         color: white;
         margin: 4px;
         font-size: 14px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+        box-shadow: 0 2px 6px rgba(0,0,0,0.4);
     }
     
     /* Sidebar Styling */
     section[data-testid="stSidebar"] {
-        background-color: #111827;
-        border-right: 1px solid #1f2937;
+        background-color: #0b1329;
+        border-right: 1px solid rgba(56, 189, 248, 0.2);
     }
 </style>
 """,
@@ -402,17 +403,17 @@ final_probs = run_multi_algorithm_engine(processed_rounds, game_mode, num_sims)
 m1, m2, m3 = st.columns(3)
 with m1:
     st.markdown(
-        f'<div class="metric-card"><h3>{t["red_prob"]}</h3><h1 style="color: #ef4444;">{final_probs["Red"]:.2f}%</h1></div>',
+        f'<div class="metric-card"><h3>{t["red_prob"]}</h3><h1 style="color: #f87171;">{final_probs["Red"]:.2f}%</h1></div>',
         unsafe_allow_html=True,
     )
 with m2:
     st.markdown(
-        f'<div class="metric-card"><h3>{t["blue_prob"]}</h3><h1 style="color: #3b82f6;">{final_probs["Blue"]:.2f}%</h1></div>',
+        f'<div class="metric-card"><h3>{t["blue_prob"]}</h3><h1 style="color: #60a5fa;">{final_probs["Blue"]:.2f}%</h1></div>',
         unsafe_allow_html=True,
     )
 with m3:
     st.markdown(
-        f'<div class="metric-card"><h3>{t["tie_prob"]}</h3><h1 style="color: #10b981;">{final_probs["Tie"]:.2f}%</h1></div>',
+        f'<div class="metric-card"><h3>{t["tie_prob"]}</h3><h1 style="color: #34d399;">{final_probs["Tie"]:.2f}%</h1></div>',
         unsafe_allow_html=True,
     )
 
