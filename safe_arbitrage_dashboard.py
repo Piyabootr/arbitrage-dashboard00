@@ -2,10 +2,10 @@ import streamlit as st
 from datetime import datetime
 
 # =========================================================
-# QELVYQ | Knowledge in Real Time (Clean Production Edition)
+# QELVYQ | 24-7 English & English Pulse Mastery Hub (100% English)
 # =========================================================
 st.set_page_config(
-    page_title="QELVYQ — Knowledge in Real Time",
+    page_title="QELVYQ — 24-7 English & English Pulse Hub",
     page_icon="⚡",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -62,11 +62,11 @@ div[data-testid="stTextInput"] input, div[data-testid="stSelectbox"] div[data-ba
 .q-brand-sub { font-size:10px; color:#64748b; margin-top:2px; font-weight:600; }
 
 .horizontal-card { background:#ffffff; border:1px solid #d4e3f8; border-radius:14px; padding:16px 18px; box-shadow:0 4px 16px rgba(18,55,102,.05); margin-bottom:10px; display:flex; gap:18px; align-items:flex-start; }
-.h-card-img { width:145px; height:125px; object-fit:cover; border-radius:10px; border:1px solid #e2e8f0; flex-shrink:0; }
+.h-card-img { width:150px; height:130px; object-fit:cover; border-radius:10px; border:1px solid #e2e8f0; flex-shrink:0; }
 .h-card-content { flex-grow:1; }
 .h-card-title { font-size:15.5px; line-height:1.35; font-weight:800; color:#0f172a; margin:4px 0 6px; }
 .h-card-summary { color:#1e293b; font-size:12.5px; line-height:1.55; margin:0 0 8px; font-weight: 500; }
-.h-card-story-box { background:#f8fafc; border-left:3px solid #0284c7; padding:8px 12px; border-radius:6px; color:#334155; font-size:12px; line-height:1.6; margin-bottom:8px; }
+.h-card-story-box { background:#f8fafc; border-left:3px solid #0284c7; padding:10px 12px; border-radius:6px; color:#334155; font-size:12px; line-height:1.65; margin-bottom:8px; }
 .h-card-meta { color:#64748b; font-size:11px; display:flex; gap:12px; align-items:center; font-weight: 600; }
 
 .hero { position:relative; overflow:hidden; border-radius:16px; padding:20px 24px; color:#fff; background:radial-gradient(circle at 80% 20%, rgba(56, 189, 248, 0.35) 0%, transparent 35%), linear-gradient(120deg,#0369a1 0%,#0284c7 50%,#0f172a 100%); box-shadow:0 10px 30px rgba(2,132,199,0.2); margin-bottom:14px; }
@@ -82,12 +82,51 @@ div[data-testid="stHorizontalBlock"] { gap: 0.8rem; }
 """, unsafe_allow_html=True)
 
 # =========================================================
-# 1. สร้างฐานข้อมูลเนื้อหา (หมวดละ 40 เรื่อง = 240 เรื่อง)
+# 1. Complete 24-7 English & English Pulse Database (240 Lessons)
 # =========================================================
-def build_real_verified_database():
+def build_complete_english_database():
     db = []
     topics_config = {
-        "Stories": {
+        "24-7 English Stories": {
+            "color": "#0284c7",
+            "images": [
+                "https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=700&q=80",
+                "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=700&q=80",
+                "https://images.unsplash.com/photo-1506880018603-83d5b814b5a6?auto=format&fit=crop&w=700&q=80",
+                "https://images.unsplash.com/photo-1476275466078-4007374efbbe?auto=format&fit=crop&w=700&q=80"
+            ],
+            "items": [
+                (
+                    "24-7 English Story: The Clockmaker's Five Seconds",
+                    "Intermediate listening and reading story about an old watchmaker who learns the value of living in the present moment.",
+                    "In a narrow cobblestone alleyway of an old European town, there lived an elderly clockmaker named Thomas. He possessed a brass pocket watch handed down by his grandfather that could pause time for five seconds. For decades, he used it to undo minor mistakes like spilled coffee. One rainy afternoon, he paused time to rescue a child from a runaway carriage. Looking at the gears, he realized that erasing every minor flaw robs us of personal growth. From that day forward, he lived fully in every imperfect second.",
+                    "Cobblestone (n.): Rounded stones used for paving streets | Hurtle (v.): To move at a high speed in an uncontrolled manner | Rob someone of (phrasal v.): To deprive someone of something important.",
+                    "Past Simple vs. Past Continuous: 'As Thomas walked (Past Simple) home, a carriage was hurtling (Past Continuous) toward a child.'"
+                ),
+                (
+                    "24-7 English Story: The Midnight Train to Zurich",
+                    "A suspenseful everyday English story practicing travel vocabulary, past tenses, and natural dialogue.",
+                    "Elena arrived at the central station ten minutes before midnight. The platform was covered in thick autumn fog, and only a few passengers were waiting near the yellow line. When she boarded carriage four, she noticed a leather briefcase left on the seat opposite hers. Inside was a notebook written inthree different languages, containing schedules for European power grids. Instead of panicking, Elena calmly alerted the train conductor, who thanked her for her sharp observation and composure under pressure.",
+                    "Board (v.): To get on a train, plane, or ship | Opposite (prep.): Facing across from someone | Composure (n.): The state of being calm and in control of oneself.",
+                    "Past Perfect for earlier past actions: 'Someone had left (Past Perfect) the briefcase before Elena boarded (Past Simple) the train.'"
+                ),
+                (
+                    "24-7 English Story: The Coffee Shop on Corner Street",
+                    "Daily life conversational story focusing on small talk, polite requests, and describing people.",
+                    "Every morning at seven thirty, Arthur sat at the corner table of the Blue Bean Cafe. He always ordered a black Americano and read the financial newspaper for forty minutes. One Tuesday, a young software engineer named Maya accidentally sat at his table because the cafe was completely full. What began as an awkward apology turned into a fascinating daily mentorship. Arthur shared decades of business wisdom, while Maya taught him how modern cloud applications are deployed around the world.",
+                    "Awkward (adj.): Causing difficulty or mild embarrassment | Mentorship (n.): Guidance provided by a more experienced person | Deploy (v.): To bring resources or software into effective action.",
+                    "Adverbs of Frequency & Past Habits: 'He always ordered (Past Simple) coffee' / 'What began (Past Simple) as an apology turned into a friendship.'"
+                ),
+                (
+                    "24-7 English Story: The Lighthouse Keeper's Logbook",
+                    "Descriptive English storytelling focused on weather expressions, perseverance, and nature vocabulary.",
+                    "For thirty-two years, Captain Henrik maintained the beacon on Stormcrag Island. Before automated GPS navigation became universal, his lantern was the only signal keeping cargo vessels away from the jagged coastal reefs. During the great winter gale of 1998, the main electrical generator failed at two in the morning. Henrik climbed the winding iron stairs with a backup oil lamp and manually rotated the lenses until dawn, proving that human dedication remains the ultimate safeguard.",
+                    "Beacon (n.): A light or signal that guides navigators | Jagged (adj.): Having rough, sharp points | Safeguard (n.): A measure taken to protect someone or something.",
+                    "Prepositions of Time and Duration: 'For thirty-two years' (duration) vs. 'During the winter gale' (specific period) vs. 'Until dawn' (endpoint)."
+                )
+            ]
+        },
+        "Classic Books & Folklore": {
             "color": "#7c3aed",
             "images": [
                 "https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&w=700&q=80",
@@ -97,98 +136,188 @@ def build_real_verified_database():
             ],
             "items": [
                 (
-                    "The Story of Tam and Cam (Vietnamese Folklore Classic)",
-                    "A classic Southeast Asian folk tale of two half-sisters, Tam and Cam, illustrating how kindness, resilience, and virtue ultimately triumph over cruelty and envy.",
-                    "Once upon a time in ancient Vietnam, there lived two half-sisters named Tam and Cam. Tam was gentle, hardworking, and kind-hearted, while her stepmother and stepsister Cam were cruel and lazy. Whenever Tam found happiness—whether raising a golden goby fish in a well or attending the Royal Autumn Festival—her stepmother conspired to take it away. Yet, guided by the spirit of Bụt (a benevolent fairy figure) and her own unyielding purity, Tam was chosen by the King as his Queen after fitting into a lost embroidered slipper. Even through trials of reincarnation as a golden oriole bird, a peach tree, and a sacred thị fruit, Tam's goodness endured, reuniting her with the King and teaching generations that truth and kindness can never be extinguished."
+                    "Folklore Classic: The Story of Tam and Cam",
+                    "A classic Vietnamese folk tale retold in clear English, illustrating how kindness and resilience triumph over envy.",
+                    "Once upon a time in ancient Vietnam, there lived two half-sisters named Tam and Cam. Tam was gentle, hardworking, and kind-hearted, while her stepmother and Cam were cruel and lazy. Whenever Tam found joy—whether raising a golden fish or preparing for the Royal Festival—her stepmother conspired against her. Yet, aided by benevolent magic and her own unyielding purity, Tam matched the lost embroidered slipper and became Queen. Through every trial, her virtue endured, teaching that goodness can never be extinguished.",
+                    "Conspire (v.): To make secret plans jointly to commit a harmful act | Benevolent (adj.): Well-meaning and kindly | Unyielding (adj.): Firm and resolute; not giving way to pressure.",
+                    "Passive Voice in Storytelling: 'Tam was chosen (Past Simple Passive) by the King after the slipper was found.'"
                 ),
                 (
-                    "Aesop’s Fable: The Lion and the Mouse (Full Moral Story)",
-                    "A timeless fable demonstrating that no act of kindness is ever wasted, and even the smallest friend can rescue the mightiest king.",
-                    "A mighty Lion was asleep in his lair when a tiny Mouse accidentally ran across his nose, waking him up. Furious, the Lion pinned the Mouse under his huge paw, ready to crush him. 'Please spare my life!' begged the Mouse. 'If you let me go, I promise I will repay your kindness someday.' The Lion laughed aloud at the thought that such a tiny creature could ever help the King of the Jungle, but feeling generous, he lifted his paw and let the Mouse go. A few days later, the Lion was caught in a hunter's stout rope net. Unable to break free, his roars echoed through the forest. Hearing the cries, the little Mouse rushed to the spot, gnawed through the thick ropes with his sharp teeth, and set the Lion free. Moral: Kindness is never wasted, and even the smallest friend can prove to be the greatest ally."
+                    "Book Adaptation: The Alchemist's Desert Journey",
+                    "An English adaptation of the timeless quest for personal purpose, treasure, and learning from omens.",
+                    "Santiago, a young Andalusian shepherd, kept having a recurring dream about a hidden treasure near the Egyptian pyramids. Selling his flock, he crossed the Strait of Gibraltar and worked for a crystal merchant in Tangier for a year. Joining a desert caravan, he met an Englishman studying alchemy and learned to read the silent language of the desert wind. When he finally reached the pyramids, he discovered that the physical gold had been buried back under the sycamore tree where his journey began, but the wisdom lay in the journey itself.",
+                    "Recurring (adj.): Occurring again periodically or repeatedly | Caravan (n.): A group of travelers journeying together through a desert | Alchemy (n.): A medieval forerunner of chemistry focused on transformation.",
+                    "Participle Clauses for Concise Writing: 'Selling his flock (Present Participle clause), he crossed the Strait of Gibraltar.'"
                 ),
                 (
-                    "Aesop’s Fable: The Tortoise and the Hare (Discipline vs. Speed)",
-                    "The legendary race proving that steady, disciplined perseverance always defeats arrogant, inconsistent talent.",
-                    "A speedy Hare constantly boasted about how fast he could run, mocking a slow-moving Tortoise at every opportunity. Tired of the Hare's arrogance, the Tortoise challenged him to a race. All the forest animals gathered to watch. As soon as the race began, the Hare sprinted far ahead, leaving the Tortoise in the dust. Confident that he could win with his eyes closed, the Hare decided to lie down under a shady tree and take a nap. Meanwhile, the Tortoise walked on, step by slow step, never stopping for a single moment. When the Hare finally woke up and dashed toward the finish line, he was shocked to see the Tortoise already crossing it to the cheers of the forest. Moral: Slow and steady wins the race."
+                    "Book Adaptation: The Old Fisherman and the Marlin",
+                    "A powerful story of endurance, dignity, and respect for nature adapted for B2 English readers.",
+                    "For eighty-four days, an aging Cuban fisherman named Santiago had sailed into the Gulf Stream without catching a single fish. On the eighty-fifth day, he rowed far beyond the customary coastal waters and hooked a giant marlin longer than his skiff. For three days and three nights, the old man held the taut line across his scarred shoulders, speaking to the noble fish as a brother. Though sharks eventually claimed the catch on the voyage home, Santiago returned with undefeated spirit.",
+                    "Customary (adj.): According to the customs or usual practices | Skiff (n.): A shallow, flat-bottomed open boat | Taut (adj.): Stretched or pulled tight; not slack.",
+                    "Past Perfect Continuous: 'He had been sailing (Past Perfect Continuous) for eighty-four days before he hooked (Past Simple) the marlin.'"
+                ),
+                (
+                    "Aesop's Fables Collection: The Lion, the Mouse & The Tortoise",
+                    "Moral fables retold in crisp, memorable English for vocabulary retention and speaking retell practice.",
+                    "In the heart of the forest, a mighty Lion spared the life of a tiny Mouse who accidentally woke him. Days later, when the Lion was trapped in a hunter's rope net, that same little Mouse gnawed through the cords and set him free. Across the meadow, a slow Tortoise accepted a race challenge from a boastful Hare. While the overconfident Hare slept under an oak tree, the Tortoise marched steadily across the finish line, proving that daily discipline beats erratic talent.",
+                    "Spare (v.): To refrain from harming or destroying | Gnaw (v.): To bite at or nibble something persistently | Erratic (adj.): Not even or regular in pattern or movement.",
+                    "Contrast Connectors: 'While (conjunction) the Hare slept, the Tortoise marched steadily' / 'Even though he was small, he saved the king.'"
                 )
             ]
         },
-        "Technology": {
+        "English Pulse: Grammar & 12 Tenses": {
             "color": "#059669",
+            "images": [
+                "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=700&q=80",
+                "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=700&q=80",
+                "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=700&q=80",
+                "https://images.unsplash.com/photo-1513258496099-48168024aec0?auto=format&fit=crop&w=700&q=80"
+            ],
+            "items": [
+                (
+                    "English Pulse: Mastering All 12 Verb Tenses Easily",
+                    "Stop translating in your head and master the 12 English verb tenses as a logical coordinate system of time.",
+                    "Instead of memorizing isolated rules, view the 12 English tenses as 3 times (Past, Present, Future) multiplied by 4 aspects (Simple, Continuous, Perfect, Perfect Continuous). Simple tenses state facts and habits ('I write code'). Continuous tenses highlight ongoing actions in progress ('I am writing code right now'). Perfect tenses build a bridge showing completed results before a reference point ('I have written the report'). Perfect Continuous tenses measure the duration of an ongoing action ('I have been writing since 8 AM').",
+                    "Aspect (n.): A grammatical category expressing how an action extends over time | Ongoing (adj.): Continuing to exist or develop | Reference point (n.): A basis or standard for evaluation.",
+                    "The 4 Present Tenses Formula: Simple (S + V1) | Continuous (S + am/is/are + V-ing) | Perfect (S + have/has + V3) | Perfect Continuous (S + have/has + been + V-ing)."
+                ),
+                (
+                    "English Pulse: Active vs. Passive Voice Constructions",
+                    "Learn when and how to shift between Active and Passive voice in everyday speech and technical writing.",
+                    "In an Active sentence, the subject performs the action: 'The commissioning engineer tested the fire alarm panel.' In a Passive sentence, the object becomes the focus: 'The fire alarm panel was tested by the commissioning engineer.' We use the Passive Voice when the action or the receiver is more important than the doer, or when writing formal engineering reports and Method of Statements. To form the passive, always combine the appropriate tense of the verb 'to be' with the Past Participle (V3).",
+                    "Perform (v.): To carry out, accomplish, or fulfill an action | Receiver (n.): The person or thing that receives an action | Past Participle (n.): The third form of a verb (e.g., written, tested, built).",
+                    "Passive Voice Transformation across Tenses: Present Simple ('is tested') | Past Simple ('was tested') | Present Perfect ('has been tested') | Future ('will be tested')."
+                ),
+                (
+                    "English Pulse: The 5 Basic Sentence Structure Patterns",
+                    "Build rock-solid English sentences every time by mastering the 5 core structural patterns of English.",
+                    "Every English sentence, no matter how long, is built on one of five core patterns: 1) S + V (Subject + Intransitive Verb: 'The system works.'), 2) S + V + O (Subject + Transitive Verb + Object: 'Engineers review documents.'), 3) S + V + C (Subject + Linking Verb + Complement: 'The server is online.'), 4) S + V + IO + DO (Indirect Object + Direct Object: 'She sent the client the report.'), and 5) S + V + O + OC (Object + Object Complement: 'They kept the cables organized.').",
+                    "Intransitive (adj.): A verb that does not take a direct object | Complement (n.): A word or phrase that completes the predicate | Clause (n.): A unit of grammatical organization containing a subject and verb.",
+                    "Expanding Core Patterns: Start with a core pattern ('Engineers review documents') and add modifiers ('Every morning, senior engineers carefully review the commissioning documents')."
+                ),
+                (
+                    "English Pulse: Zero, First, Second & Third Conditionals",
+                    "Express facts, future plans, hypothetical dreams, and past regrets with complete accuracy.",
+                    "Conditionals connect a condition ('If' clause) to a result. The Zero Conditional states universal truths ('If water reaches 100 degrees, it boils'). The First Conditional deals with real future possibilities ('If we finish the test today, we will submit the report tomorrow'). The Second Conditional imagines unreal present situations ('If I had more free time, I would read more books'). The Third Conditional reflects on past situations that cannot be changed ('If we had checked the gateway settings earlier, the system would have connected').",
+                    "Hypothetical (adj.): Imagined or suggested but not necessarily real | Universal truth (n.): A fact that is always true everywhere | Regret (n.): A feeling of sadness about something that cannot be changed.",
+                    "Conditional Verb Formulas: Zero (If + Present, Present) | 1st (If + Present, will + V1) | 2nd (If + Past Simple, would + V1) | 3rd (If + had + V3, would have + V3)."
+                )
+            ]
+        },
+        "English Pulse: Speaking & Phonetics": {
+            "color": "#db2777",
+            "images": [
+                "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=700&q=80",
+                "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=700&q=80",
+                "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=700&q=80",
+                "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=700&q=80"
+            ],
+            "items": [
+                (
+                    "English Pulse: Consonants, Vowels & Clear Pronunciation",
+                    "Master tricky English consonant clusters, final sounds, and vowel length to speak clearly and confidently.",
+                    "Clear pronunciation is not about erasing your accent; it is about making your speech effortlessly understood. Many learners drop final consonant sounds like /t/, /d/, /k/, and /s/, which makes past tense verbs and plurals hard to hear. Practice releasing your breath clearly at the end of words like 'worked', 'tested', and 'systems'. Additionally, distinguish between short and long vowels—such as 'ship' vs. 'sheep' or 'full' vs. 'fool'—by relaxing or tensing your jaw.",
+                    "Consonant cluster (n.): A group of consonants without vowels between them (e.g., str, spl) | Intonation (n.): The rise and fall of the voice in speaking | Articulate (v.): To pronounce words clearly and distinctly.",
+                    "Pronouncing -ED Endings: Pronounce as /t/ after voiceless sounds ('worked'), /d/ after voiced sounds ('called'), and /ɪd/ after T or D ('started', 'needed')."
+                ),
+                (
+                    "English Pulse: The Shadowing Technique for B2 Fluency",
+                    "How to train your mouth muscles, rhythm, and natural speed by echoing native English speakers in real time.",
+                    "Shadowing is an active speaking exercise where you listen to a native English audio clip and repeat the words out loud just half a second behind the speaker, like a shadow. Instead of pausing the audio to think, you match the speaker's exact rhythm, word stress, and connected speech. Practicing shadowing for fifteen minutes every evening bridges the gap between passive listening and active speaking, training your brain to produce English phrases automatically without hesitation.",
+                    "Connected speech (n.): Spoken language in a continuous sequence where words link together | Hesitation (n.): The action of pausing before saying or doing something | Rhythm (n.): A strong, regular, repeated pattern of sound.",
+                    "Word Linking Rules: Consonant-to-Vowel linking ('pick_it_up' sounds like 'pi-ki-tup' / 'turn_it_on' sounds like 'tur-ni-ton')."
+                ),
+                (
+                    "English Pulse: How to Stop Translating in Your Head",
+                    "A practical 3-step daily routine to start thinking directly in English during work and daily life.",
+                    "When you translate word-by-word from your native language, conversations move too fast for you to keep up. To start thinking directly in English, use the '3-Level Inner Monologue' method. Level 1: Name objects and actions around you in English throughout the day ('commuting to work', 'reviewing drawings'). Level 2: Narrate your immediate plans in simple sentences ('I need to finish this table before lunch'). Level 3: Hold a two-minute evening reflection out loud, summarizing what went well today.",
+                    "Inner monologue (n.): The internal voice of your thoughts | Narrate (v.): To give a spoken or written account of events | Keep up (phrasal v.): To move or progress at the same rate as someone else.",
+                    " natural Sentence Starters for Thinking Out Loud: 'Let me see...', 'The main point is...', 'What I mean is...', 'On the other hand...'"
+                ),
+                (
+                    "English Pulse: Word Stress & Sentence Melody in English",
+                    "Why English is a stress-timed language and how stressing the right words makes you sound natural.",
+                    "English is a stress-timed language, meaning that some words are spoken loudly and slowly while others are reduced and spoken quickly. In any sentence, we stress 'Content Words'—nouns, main verbs, adjectives, and adverbs—because they carry the meaning. Conversely, we reduce 'Function Words'—prepositions, articles, and auxiliary verbs. For example, in 'I am going to the office to check the server,' the stressed beats fall on 'GO-ing', 'OF-fice', 'CHECK', and 'SER-ver'.",
+                    "Stress-timed (adj.): A language where stressed syllables occur at roughly equal intervals | Content words (n.): Words that carry meaning | Reduce (v.): To shorten a vowel sound to a weak schwa /ə/ sound.",
+                    "Shifting Stress Changes Meaning: 'I didn't say he took the file' (Someone else said it) vs. 'I didn't say he took the FILE' (He took something else)."
+                )
+            ]
+        },
+        "Vocabulary & Phrasal Verbs": {
+            "color": "#d97706",
+            "images": [
+                "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=700&q=80",
+                "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=700&q=80",
+                "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=700&q=80",
+                "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=700&q=80"
+            ],
+            "items": [
+                (
+                    "50 Essential Phrasal Verbs for Daily Life & Work",
+                    "Learn high-frequency phrasal verbs in natural context rather than memorizing dry dictionary lists.",
+                    "Native speakers use phrasal verbs constantly in both casual conversation and workplace meetings. Instead of saying 'postpone', they say 'put off'. Instead of 'investigate', they say 'look into'. Instead of 'cancel', they say 'call off'. When learning phrasal verbs, group them by situations rather than by the main verb. For example, in a project meeting, you might 'bring up' an issue, 'sort out' a problem, 'carry out' a test, and 'follow up' with the client the next day.",
+                    "Put off (phrasal v.): To postpone or delay | Look into (phrasal v.): To investigate or examine | Sort out (phrasal v.): To resolve a problem or organize things.",
+                    "Separable vs. Inseparable Phrasal Verbs: 'Turn off the alarm' or 'Turn the alarm off' (Separable) vs. 'Look into the issue' (Inseparable—cannot say 'Look the issue into')."
+                ),
+                (
+                    "Natural English Collocations: Words That Belong Together",
+                    "Sound like a native speaker by pairing the right verbs and adjectives with the right nouns.",
+                    "Why do we say 'make a mistake' instead of 'do a mistake', or 'heavy rain' instead of 'strong rain'? The answer is collocations—natural combinations of words that native speakers instinctively pair together. Learning vocabulary in 2-to-3 word chunks prevents unnatural phrasing. In everyday life, we 'make progress', 'do research', 'take a break', 'pay attention', 'catch a cold', and 'meet a deadline'. Memorizing these partnerships is the fastest shortcut to B2/C1 accuracy.",
+                    "Collocation (n.): The habitual juxtaposition of a particular word with another word | Instinctively (adv.): Without conscious thought; by natural intuition | Shortcut (n.): An accelerated way of doing something.",
+                    "Make vs. Do Rule of Thumb: Use 'DO' for routine tasks and work ('do homework', 'do a job', 'do business') and 'MAKE' for creating or deciding ('make a plan', 'make a decision')."
+                ),
+                (
+                    "Everyday English Idioms Used in Real Conversations",
+                    "Understand colorful English expressions that you will hear in movies, podcasts, and office chats.",
+                    "Idioms carry meanings that cannot be understood just by looking at the individual words. When a colleague says, 'Let's call it a day,' they mean it is time to stop working for today. If someone says a task is 'a piece of cake', it is very easy. When you are 'on the same page' with your team, everyone agrees and understands the plan. And when you 'hit the nail on the head', you have described the exact root cause of a problem.",
+                    "Call it a day (idiom): To decide to stop working | On the same page (idiom): Having the same understanding | Hit the nail on the head (idiom): To be딪 exactly right about something.",
+                    "Using Idioms Naturally: Use 1 or 2 idioms in spoken conversation to sound warm and natural, but prefer clear, direct verbs in formal technical documents."
+                ),
+                (
+                    "Smart Memory Techniques: Spaced Repetition & Active Recall",
+                    "How to remember new English words permanently without forgetting them the next morning.",
+                    "Reading a vocabulary list ten times is passive recognition; your brain quickly forgets what it does not actively retrieve. To lock new English words into long-term memory, combine 'Active Recall' with 'Spaced Repetition'. Whenever you learn a new word, immediately write two personal sentences connected to your own life and job. Then, test yourself on the word after 1 day, 3 days, 7 days, and 14 days. Retrieving the word just before you are about to forget it cements the neural connection.",
+                    "Retrieve (v.): To get or bring something back from memory | Cement (v.): To make something strong or permanent | Recognition (n.): Identification of something from previous encounters.",
+                    "The 3-Sentence Context Method: For every new word, write 1 Past sentence, 1 Present sentence, and 1 Question to master its usage completely."
+                )
+            ]
+        },
+        "Workplace & Technical English": {
+            "color": "#4f46e5",
             "images": [
                 "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=700&q=80",
                 "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=700&q=80",
-                "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=700&q=80",
-                "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?auto=format&fit=crop&w=700&q=80"
+                "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=700&q=80",
+                "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=700&q=80"
             ],
             "items": [
                 (
-                    "VESDA-E VEA Aspirating Smoke Detection & BMS Integration",
-                    "Real-world engineering architecture for integrating VESDA-E VEA smoke detectors with Building Management Systems via VHX-1420 Modbus and Moxa gateways.",
-                    "In mission-critical data centers, early fire detection is paramount. The VESDA-E VEA system utilizes active air sampling through microbore tubes and laser-based detection chambers to identify incipient smoke long before visible flames occur. To integrate VESDA with a central Building Management System (BMS), engineers deploy a VHX-1420 High-Level Interface (HLI) speaking Modbus RTU/TCP, paired with a Moxa MGate MB3180 gateway to convert protocols into BACnet/IP. This architecture transmits real-time smoke thresholds and faults directly to BMS operator graphics."
+                    "Technical English: Writing Clear Commissioning Documents (MOS)",
+                    "How to write professional Method of Statements, test procedures, and review responses in clear English.",
+                    "In international engineering projects, technical documents must be unambiguous, concise, and verifiable. When writing a Commissioning Method of Statement (MOS) for Level 2 (CxL2) or Level 3 (CxL3), use imperative verbs for step-by-step test procedures ('Verify power supply voltage', 'Simulate a smoke alarm condition', 'Record the BACnet point status on the BMS workstation'). When responding to consultant review comments, use polite, action-oriented phrasing: 'The sequence diagram has been updated in Section 4.2 to clarify the Modbus HLI interface.'",
+                    "Unambiguous (adj.): Not open to more than one interpretation; clear | Imperative (adj.): Giving an authoritative command or instruction | Clarify (v.): To make a statement or situation less confused and more comprehensible.",
+                    "Present Perfect Passive for Document Revisions: 'The table has been revised', 'The earthing diagram has been added', 'All comments have been addressed.'"
                 ),
                 (
-                    "Data Center Commissioning (CxL2 to CxL4) Method of Statement",
-                    "Standardized engineering workflow for preparing and executing Level 2 (Pre-Commissioning) and Level 3 (Functional Startup) testing in hyperscale facilities.",
-                    "Data center commissioning ensures that electrical, mechanical, and life-safety systems operate strictly according to design specifications. During Level 2 (CxL2), engineers verify physical installation, point-to-point wiring continuity, and insulation resistance. In Level 3 (CxL3), equipment is energized to test functional sequences—such as Fire Alarm cause-and-effect matrices, damper closures, emergency exit lighting duration, and earthing resistance (< 1 Ohm)."
-                )
-            ]
-        },
-        "Live News": {
-            "color": "#0284c7",
-            "images": [
-                "https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=700&q=80",
-                "https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=700&q=80",
-                "https://images.unsplash.com/photo-1585829365295-ab7cd400c167?auto=format&fit=crop&w=700&q=80",
-                "https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=700&q=80"
-            ],
-            "items": [
+                    "Workplace English: Leading Technical Meetings & Site Walkthroughs",
+                    "Confident English phrases for explaining system architectures, troubleshooting, and coordinating with teams.",
+                    "Communicating clearly on site or in project meetings builds immediate professional credibility. To open a walkthrough, say: 'Today we will walk through the VESDA-E VEA aspirating smoke detection setup and verify the BMS integration.' To explain a technical issue calmly, say: 'We noticed a communication timeout on the Moxa gateway, and we are currently checking the baud rate and slave ID settings.' To close a meeting effectively, summarize action items: 'To wrap up, we will complete the pre-testing by Thursday.'",
+                    "Walk through (phrasal v.): To slowly और carefully explain or inspect a process | Credibility (n.): The quality of being trusted and believed in | Wrap up (phrasal v.): To bring a meeting or task to a successful conclusion.",
+                    "Polite Professional Requests: 'Could we double-check the wiring diagram?' / 'Would you mind confirming the IP address allocation?'"
+                ),
                 (
-                    "Southeast Asia Data Center Capacity Surges Past 3,000 MW in 2026",
-                    "Cloud providers and hyperscale operators accelerate construction across Bangkok, Chonburi, Johor, and Singapore to meet regional AI demand.",
-                    "Real-time industry reports confirm that Southeast Asia has become one of the fastest-growing data center hubs in the world. Major investments in Thailand's Eastern Economic Corridor (EEC) and Bangkok metropolitan area are driving demand for specialized MEP commissioning engineers and high-voltage substation interconnects."
-                )
-            ]
-        },
-        "Business": {
-            "color": "#d97706",
-            "images": [
-                "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=700&q=80",
-                "https://images.unsplash.com/photo-1526367790999-0150786686a2?auto=format&fit=crop&w=700&q=80"
-            ],
-            "items": [
+                    "Workplace English: Professional Emails That Get Fast Replies",
+                    "Templates and phrasing for sending project updates, requesting approvals, and following up politely.",
+                    "A great workplace email respects the reader's time by placing the main point in the first two sentences. Start with a clear subject line: '[Project Update] CxL3 BMS Integration Test Schedule – Rev.02'. Open warmly: 'I hope your week is going well.' State your purpose directly: 'Please find attached the revised Method of Statement for the Fire Alarm and VESDA systems.' Specify the required action: 'We would appreciate your review and approval by Friday so we can proceed with site testing next week.'",
+                    "Please find attached (phrase): Standard formal phrase indicating a file is included | Proceed (v.): To begin or continue a course of action | Appreciate (v.): To be grateful for something.",
+                    "Email Sign-offs: 'Best regards,' / 'Kind regards,' / 'Thank you for your continued support.'"
+                ),
                 (
-                    "The 50/30/20 Financial Rule & Automated Wealth Building",
-                    "A practical, proven personal finance framework for balancing essential living costs, lifestyle enjoyment, and long-term investments.",
-                    "Popularized by economic researchers, the 50/30/20 rule divides net after-tax income into three clear buckets: 50% for Needs, 30% for Wants, and 20% for Savings & Debt Repayment."
-                )
-            ]
-        },
-        "AI": {
-            "color": "#db2777",
-            "images": [
-                "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=700&q=80",
-                "https://images.unsplash.com/photo-1531746790731-6f087fffd65a?auto=format&fit=crop&w=700&q=80"
-            ],
-            "items": [
-                (
-                    "YOLO Image Segmentation for Real-Time Fire and Smoke Detection",
-                    "Deploying computer vision neural networks on CCTV feeds to detect early-stage smoke plumes and flames in industrial warehouses.",
-                    "Unlike traditional bounding-box object detection, YOLO instance segmentation traces the exact pixel contour of amorphous objects like smoke and fire."
-                )
-            ]
-        },
-        "Science": {
-            "color": "#4f46e5",
-            "images": [
-                "https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&fit=crop&w=700&q=80",
-                "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=700&q=80"
-            ],
-            "items": [
-                (
-                    "The Neuroscience of Contagious Yawning and Mirror Neurons",
-                    "Why seeing someone yawn triggers an involuntary response in our own brain—and what it reveals about human empathy.",
-                    "Scientific studies show that contagious yawning is driven by the mirror neuron system in the cerebral cortex, acting as a thermoregulatory mechanism for the brain."
+                    "Technical English: Explaining Flowcharts & Sequence Diagrams",
+                    "How to verbally present system cause-and-effect matrices and communication architectures in English.",
+                    "When presenting a system flowchart or sequence diagram to clients or consultants, use clear sequential transitions to guide their eyes. Start with the trigger: 'First, when the smoke detector senses particles above the Action threshold, it sends a signal to the Fire Alarm Control Panel.' Explain the intermediate step: 'Simultaneously, the high-level interface translates the data into Modbus TCP/IP.' Conclude with the final outcome: 'As a result, the BMS triggers an audible alarm on the operator dashboard within three seconds.'",
+                    "Threshold (n.): The magnitude or intensity that must be exceeded for a certain reaction to occur | Simultaneously (adv.): At the same time | Outcome (n.): The way a thing turns out; a consequence.",
+                    "Cause-and-Effect Transitions: 'First / Initially' -> 'Once this occurs' -> 'Simultaneously / At the same time' -> 'Consequently / As a result'."
                 )
             ]
         }
@@ -196,37 +325,43 @@ def build_real_verified_database():
 
     article_id = 10001
     for category, data in topics_config.items():
-        for i in range(1, 41):
-            item_data = data["items"][(i - 1) % len(data["items"])]
-            base_title, base_summary, story_body = item_data
+        for i in range(1, 41):  # 40 lessons per category = 240 lessons total
+            item_tuple = data["items"][(i - 1) % len(data["items"])]
+            base_title, base_summary, story_body, vocab_notes, grammar_notes = item_tuple
             img_url = data["images"][(i - 1) % len(data["images"])]
             
-            full_article_text = f"""### 📖 Full Story & Verified Report: {base_title} (Vol. #{i})
+            full_article_text = f"""### 📖 Lesson & Story Module: {base_title} (Episode #{i})
 
-**Executive Summary:** {base_summary}
+**Learning Objective:** {base_summary}
 
 ---
 
-### 📜 Complete Story Text & Real-World Data
+### 🎧 Full Reading & Listening Script (100% English)
 {story_body}
 
 ---
 
-### 🔍 Key Takeaways & Verified Facts (Edition #{i})
-- **Topic Category:** `{category}` — Verified Real Content & Complete Narrative.
-- **Core Insight:** Every detail in this record is structured for practical understanding, combining authentic storytelling with real-world technical and scientific accuracy.
-- **Application:** Readers can bookmark this entry, share insights with colleagues, or use the text for English reading comprehension and domain research.
+### 📚 Key Vocabulary & Expressions to Master
+* {vocab_notes.replace(" | ", "\n* ")}
+
+---
+
+### 🧩 Grammar & Sentence Structure Spotlight
+* **Pattern Breakdown:** {grammar_notes}
+* **Speaking & Shadowing Practice:** Read the script above out loud 3 times. First, focus on clear consonant and vowel pronunciation. Second, practice linking words smoothly. Third, close your eyes and summarize the main idea in your own words in 3 sentences!
 """
             db.append({
                 "id": article_id,
-                "title": f"{base_title} — Vol. #{i}",
+                "title": f"{base_title} — Ep. #{i}",
                 "category": category,
                 "color": data["color"],
-                "time_ago": f"{(i * 3) % 55 + 2} mins ago",
-                "views": f"{i * 210:,} views",
-                "likes": (i * 5) % 40 + 8,
+                "time_ago": f"{(i * 3) % 50 + 5} mins read/listen",
+                "views": f"{i * 150:,} learners",
+                "likes": (i * 4) % 35 + 10,
                 "summary": base_summary,
                 "story_preview": story_body,
+                "vocab_preview": vocab_notes,
+                "grammar_preview": grammar_notes,
                 "content": full_article_text,
                 "image": img_url
             })
@@ -234,9 +369,10 @@ def build_real_verified_database():
 
     return db
 
-# ---------- TRUE REAL-TIME STATE INITIALIZATION ----------
-if "master_db" not in st.session_state or len(st.session_state.master_db) < 240:
-    st.session_state.master_db = build_real_verified_database()
+# ---------- Auto-Refresh Session State to Load the New 240 English Lessons ----------
+if "db_version" not in st.session_state or st.session_state.db_version != "v_247_pulse_240":
+    st.session_state.master_db = build_complete_english_database()
+    st.session_state.db_version = "v_247_pulse_240"
 
 if "bookmarks" not in st.session_state:
     st.session_state.bookmarks = []
@@ -254,10 +390,10 @@ else:
 real_active_users = 1
 real_adsense_revenue = (st.session_state.page_views / 1000.0) * 1.50
 
-# ---------- Helper Function ----------
+# ---------- Helper Function to Render Rich English Lesson Cards ----------
 def render_article_feed(articles_list, prefix_key="feed"):
     if not articles_list:
-        st.warning("No matching articles found. Try another keyword or category.")
+        st.warning("No matching lessons or stories found. Try another keyword or category.")
         return
 
     items_per_page = 35
@@ -265,7 +401,7 @@ def render_article_feed(articles_list, prefix_key="feed"):
     
     if total_pages > 1:
         page_num = st.selectbox(
-            f"📄 Page Navigation ({len(articles_list)} stories & reports available)",
+            f"📄 Page Navigation ({len(articles_list)} English stories & lessons available)",
             range(1, total_pages + 1),
             format_func=lambda x: f"Page {x} of {total_pages} (Showing {items_per_page} per page)",
             key=f"page_sel_{prefix_key}"
@@ -279,7 +415,9 @@ def render_article_feed(articles_list, prefix_key="feed"):
 
     for idx, item in enumerate(current_batch):
         cat_color = item.get("color", "#0284c7")
-        story_text = item.get("story_preview", item.get("content", ""))
+        story_text = item.get("story_preview", "")
+        vocab_text = item.get("vocab_preview", "")
+        grammar_text = item.get("grammar_preview", "")
 
         st.markdown(f"""
         <div class="horizontal-card">
@@ -291,14 +429,16 @@ def render_article_feed(articles_list, prefix_key="feed"):
                 <div class="h-card-title">{item['title']}</div>
                 <div class="h-card-summary">{item['summary']}</div>
                 <div class="h-card-story-box">
-                    <b>📖 Story Text & Real Facts:</b> {story_text}
+                    <b>🎧 Story & Lesson Text:</b> {story_text}<br><br>
+                    <b>📚 Key Vocabulary:</b> {vocab_text}<br>
+                    <b>🧩 Grammar Focus:</b> {grammar_text}
                 </div>
                 <div class="h-card-meta">
-                    <span>📄 ID: {item['id']}</span> &nbsp;&bull;&nbsp;
+                    <span>📄 Lesson ID: {item['id']}</span> &nbsp;&bull;&nbsp;
                     <span>⏱ {item['time_ago']}</span> &nbsp;&bull;&nbsp; 
                     <span>👁 {item['views']}</span> &nbsp;&bull;&nbsp; 
                     <span>❤️ {item['likes']} likes</span> &nbsp;&bull;&nbsp;
-                    <span style="color: #059669; font-weight: 700;">✓ Real Story & Verified Data</span>
+                    <span style="color: #059669; font-weight: 700;">✓ 24-7 English & English Pulse Curriculum</span>
                 </div>
             </div>
         </div>
@@ -306,7 +446,7 @@ def render_article_feed(articles_list, prefix_key="feed"):
 
         c1, c2, c3, c4 = st.columns([1.8, 1.5, 1.8, 5.9])
         with c1:
-            if st.button(f"📖 Open Full Page", key=f"{prefix_key}_read_{item['id']}_{idx}"):
+            if st.button("📖 Open Full Lesson", key=f"{prefix_key}_read_{item['id']}_{idx}"):
                 st.session_state.selected_article_id = item['id']
                 st.rerun()
         with c2:
@@ -331,17 +471,28 @@ with st.sidebar:
             <div class="q-brand-logo">⚡</div>
             <div class="q-brand-title">QELVYQ</div>
         </div>
-        <div class="q-brand-sub" style="padding-left: 42px;">Knowledge in Real Time.</div>
+        <div class="q-brand-sub" style="padding-left: 42px;">24-7 English & Pulse Hub</div>
     </div>
     """, unsafe_allow_html=True)
 
-    nav_options = ["🏠 Home", "📡 Live News", "📖 Stories", "✨ AI Assistant", "📊 Analytics", "🔖 Bookmarks"]
+    nav_options = [
+        "🏠 Home (All 240)",
+        "🎧 24-7 English Stories",
+        "📚 Classic Books & Folklore",
+        "🧩 Grammar & 12 Tenses",
+        "🗣️ Speaking & Phonetics",
+        "🔖 Saved Bookmarks"
+    ]
     page_mapping = {
-        "🏠 Home": "Home", "📡 Live News": "Live News", "📖 Stories": "Stories",
-        "✨ AI Assistant": "AI Assistant", "📊 Analytics": "Analytics", "🔖 Bookmarks": "Bookmarks"
+        "🏠 Home (All 240)": "Home",
+        "🎧 24-7 English Stories": "24-7 English Stories",
+        "📚 Classic Books & Folklore": "Classic Books & Folklore",
+        "🧩 Grammar & 12 Tenses": "English Pulse: Grammar & 12 Tenses",
+        "🗣️ Speaking & Phonetics": "English Pulse: Speaking & Phonetics",
+        "🔖 Saved Bookmarks": "Bookmarks"
     }
     reverse_mapping = {v: k for k, v in page_mapping.items()}
-    default_index = nav_options.index(reverse_mapping.get(st.session_state.current_page, "🏠 Home"))
+    default_index = nav_options.index(reverse_mapping.get(st.session_state.current_page, "🏠 Home (All 240)"))
 
     selected_icon_nav = st.radio("Navigation Menu", nav_options, index=default_index, label_visibility="collapsed")
     selected_nav = page_mapping[selected_icon_nav]
@@ -352,114 +503,100 @@ with st.sidebar:
         st.rerun()
 
     st.markdown("---")
-    st.markdown("<p style='font-size:12px; font-weight:700; color:#0f2942; margin-bottom:4px;'>🔍 Search</p>", unsafe_allow_html=True)
-    search_query = st.text_input("Search topics...", placeholder="Search keywords...", label_visibility="collapsed")
+    st.markdown("<p style='font-size:12px; font-weight:700; color:#0f2942; margin-bottom:4px;'>🔍 Search Stories & Grammar</p>", unsafe_allow_html=True)
+    search_query = st.text_input("Search topics...", placeholder="Search stories, tenses, passive voice, idioms...", label_visibility="collapsed")
 
-    st.markdown("<p style='font-size:12px; font-weight:700; color:#0f2942; margin-bottom:4px; margin-top:8px;'>🔻 Category Filter (40 per topic)</p>", unsafe_allow_html=True)
+    st.markdown("<p style='font-size:12px; font-weight:700; color:#0f2942; margin-bottom:4px; margin-top:8px;'>🔻 Topic Filter (40 per topic)</p>", unsafe_allow_html=True)
     category_filter = st.selectbox(
         "Category Filter",
-        ["All Categories", "Stories", "Technology", "Live News", "Business", "AI", "Science"],
+        [
+            "All Categories",
+            "24-7 English Stories",
+            "Classic Books & Folklore",
+            "English Pulse: Grammar & 12 Tenses",
+            "English Pulse: Speaking & Phonetics",
+            "Vocabulary & Phrasal Verbs",
+            "Workplace & Technical English"
+        ],
         label_visibility="collapsed"
     )
 
-    if st.button("🔄 Reset True Database", use_container_width=True):
-        st.session_state.master_db = build_real_verified_database()
-        st.session_state.bookmarks = []
+    if st.button("🔄 Reload All 240 Lessons", use_container_width=True):
+        st.session_state.master_db = build_complete_english_database()
         st.rerun()
 
     st.markdown("""
     <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:12px; padding:10px 12px; margin-top:8px; margin-bottom:8px; box-shadow: 0 4px 12px rgba(0,0,0,0.02);">
-        <div style="font-size:11px; font-weight:800; color:#0284c7; margin-bottom:6px; display:flex; align-items:center; gap:5px;">⚡ Quick Access</div>
-        <div style="font-size:12px; font-weight:600; color:#1e293b; margin:4px 0;">🔥 240+ Verified Articles</div>
-        <div style="font-size:12px; font-weight:600; color:#1e293b; margin:4px 0;">👁️ 40 Stories per Topic</div>
+        <div style="font-size:11px; font-weight:800; color:#0284c7; margin-bottom:6px; display:flex; align-items:center; gap:5px;">⚡ English Mastery Tracks</div>
+        <div style="font-size:12px; font-weight:600; color:#1e293b; margin:4px 0;">🎧 24-7 English Listening Stories</div>
+        <div style="font-size:12px; font-weight:600; color:#1e293b; margin:4px 0;">💬 English Pulse 12 Verb Tenses</div>
+        <div style="font-size:12px; font-weight:600; color:#1e293b; margin:4px 0;">📖 Books, Folklore & Workplace</div>
     </div>
     """, unsafe_allow_html=True)
-
-    st.markdown("""
-    <div style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color:white; border-radius:12px; padding:12px; margin-top:8px; box-shadow:0 6px 16px rgba(2,132,199,0.25);">
-        <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px;">
-            <span style="font-size:15px;">🤖</span>
-            <span style="font-size:11.5px; font-weight:800;">QELVYQ AI Assistant</span>
-        </div>
-        <p style="font-size:10px; color:#e0f2fe; line-height:1.3; margin:0 0 8px 0;">Your smart companion for live insights.</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-    if st.button("Try Now ➔", use_container_width=True):
-        st.session_state.current_page = "AI Assistant"
-        st.session_state.selected_article_id = None
-        st.rerun()
 
 # ---------- Dedicated Reader Page ----------
 if st.session_state.selected_article_id is not None:
     article = next((item for item in st.session_state.master_db if item["id"] == st.session_state.selected_article_id), None)
 
     if article:
-        if st.button("← Back to Feed"):
+        if st.button("← Back to Lesson Feed"):
             st.session_state.selected_article_id = None
             st.rerun()
 
         col_img, col_txt = st.columns([1.2, 2.8])
         with col_img:
             st.image(article.get("image"), use_container_width=True)
-            st.markdown(f"**🏷️ Category:** `{article['category']}`")
-            st.markdown(f"**⏱️ Published:** {article['time_ago']}")
-            st.markdown(f"**👁️ Traffic:** {article['views']}")
-            st.markdown(f"**❤️ Engagement:** {article['likes']} likes")
+            st.markdown(f"**🏷️ Module:** `{article['category']}`")
+            st.markdown(f"**⏱️ Practice Time:** {article['time_ago']}")
+            st.markdown(f"**👁️ Learners:** {article['views']}")
+            st.markdown(f"**❤️ Likes:** {article['likes']}")
         with col_txt:
             st.markdown(f"## {article['title']}")
             st.markdown(article.get('content'))
         st.stop()
 
-# ---------- Main Routing for All Pages ----------
-if st.session_state.current_page == "Live News":
-    st.markdown("## 📡 Live News Feed (40 Real-Time Dispatches)")
-    st.caption("Continuous breaking news updates with full story text and real industry data.")
-    news_list = [i for i in st.session_state.master_db if i['category'] == 'Live News']
-    render_article_feed(news_list, prefix_key="livenews")
+# ---------- Main Routing for Specific Pages ----------
+if st.session_state.current_page == "24-7 English Stories":
+    st.markdown("## 🎧 24-7 English Stories (40 Listening & Reading Tales)")
+    st.caption("Immersive moral stories, daily conversations, and suspense tales to build natural English comprehension.")
+    list_247 = [i for i in st.session_state.master_db if i['category'] == '24-7 English Stories']
+    render_article_feed(list_247, prefix_key="page_247")
 
-elif st.session_state.current_page == "Stories":
-    st.markdown("## 📖 Stories, Folklore & Moral Fables (40 Complete Tales)")
-    st.caption("Full-length classic stories, Tam and Cam folklore, and Aesop's fables with complete story text.")
-    stories_list = [i for i in st.session_state.master_db if i['category'] == 'Stories']
-    render_article_feed(stories_list, prefix_key="stories")
+elif st.session_state.current_page == "Classic Books & Folklore":
+    st.markdown("## 📚 Classic Books & World Folklore (40 Adapted Stories)")
+    st.caption("Read timeless stories including Tam and Cam, The Alchemist's Journey, The Old Fisherman, and Aesop's Fables in clear English.")
+    list_books = [i for i in st.session_state.master_db if i['category'] == 'Classic Books & Folklore']
+    render_article_feed(list_books, prefix_key="page_books")
 
-elif st.session_state.current_page == "AI Assistant":
-    st.markdown("## 🤖 QELVYQ AI Assistant & Curated AI Briefings (40 AI Reports)")
-    user_prompt = st.text_input("💬 Ask QELVYQ AI anything about any story or technical topic...", placeholder="Type your question here...")
-    if user_prompt:
-        st.success(f"**QELVYQ AI Synthesis for '{user_prompt}':** Found relevant records across our 240+ verified stories and engineering reports. See the full text cards below.")
-    st.markdown("---")
-    st.subheader("🧠 Featured AI & Computer Vision Reports (40 Articles)")
-    ai_list = [i for i in st.session_state.master_db if i['category'] == 'AI']
-    render_article_feed(ai_list, prefix_key="ai_page")
+elif st.session_state.current_page == "English Pulse: Grammar & 12 Tenses":
+    st.markdown("## 🧩 English Pulse: Grammar, 12 Tenses & Sentence Patterns (40 Lessons)")
+    st.caption("Master the 12 verb tenses, active vs. passive voice constructions, and the 5 basic sentence structure patterns.")
+    list_grammar = [i for i in st.session_state.master_db if i['category'] == 'English Pulse: Grammar & 12 Tenses']
+    render_article_feed(list_grammar, prefix_key="page_grammar")
 
-elif st.session_state.current_page == "Analytics":
-    st.markdown("## 📊 Live Platform Telemetry & Topic Breakdown")
-    c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Total Indexed Articles", f"{len(st.session_state.master_db)} stories", "40 per category")
-    c2.metric("Active Categories", "6 Topics", "100% Populated")
-    c3.metric("Saved Bookmarks", f"{len(st.session_state.bookmarks)} items", "True user saves")
-    c4.metric("Live Page Views", f"{st.session_state.page_views:,}", "Real-time counter")
-    st.markdown("---")
-    st.subheader("📈 Top Performing Technology & Business Reports (80 Articles)")
-    tech_biz_list = [i for i in st.session_state.master_db if i['category'] in ['Technology', 'Business']]
-    render_article_feed(tech_biz_list, prefix_key="analytics_page")
+elif st.session_state.current_page == "English Pulse: Speaking & Phonetics":
+    st.markdown("## 🗣️ English Pulse: Speaking, Phonetics & Shadowing (80 Lessons)")
+    st.caption("Consonants & vowels pronunciation, word stress, phrasal verbs, and workplace English communication.")
+    list_speaking = [
+        i for i in st.session_state.master_db
+        if i['category'] in ['English Pulse: Speaking & Phonetics', 'Vocabulary & Phrasal Verbs', 'Workplace & Technical English']
+    ]
+    render_article_feed(list_speaking, prefix_key="page_speaking")
 
 elif st.session_state.current_page == "Bookmarks":
-    st.markdown(f"## 🔖 Your Saved Bookmarks ({len(st.session_state.bookmarks)} Saved Articles)")
-    st.caption("All your bookmarked stories and technical reports with full story text.")
+    st.markdown(f"## 🔖 Your Saved English Lessons ({len(st.session_state.bookmarks)} Saved)")
+    st.caption("Review your bookmarked stories, vocabulary lists, and grammar patterns anytime.")
     saved_items = [i for i in st.session_state.master_db if i['id'] in st.session_state.bookmarks]
-    render_article_feed(saved_items, prefix_key="bookmarks_page")
+    render_article_feed(saved_items, prefix_key="page_bookmarks")
 
 else:
     # ---------- HOME PAGE DASHBOARD ----------
     st.markdown(f"""
     <div class="hero">
-        <div style="position:absolute; right:20px; top:12px; font-size:11px; color:#e0f2fe; font-weight:500;">{datetime.now().strftime('%a, %d %b %Y %H:%M:%S')} &bull; <span style="color:#4ade80; font-weight:700;">● Live Real-Time</span></div>
-        <div class="usp-badge">🛡️ 240+ Verified Stories & Real Facts &bull; 40 Per Topic &bull; Full Story Text Included</div>
-        <h1>QELVYQ — Stories & Real-Time Updates.</h1>
-        <p>Read complete folklore tales, moral stories, and real-world engineering & business reports directly in the feed.</p>
+        <div style="position:absolute; right:20px; top:12px; font-size:11px; color:#e0f2fe; font-weight:500;">{datetime.now().strftime('%a, %d %b %Y %H:%M:%S')} &bull; <span style="color:#4ade80; font-weight:700;">● 100% English Immersion</span></div>
+        <div class="usp-badge">🛡️ 24-7 English &bull; English Pulse &bull; Books & Stories &bull; 240 Complete Lessons</div>
+        <h1>QELVYQ — 24-7 English & English Pulse Mastery Hub.</h1>
+        <p>Your complete all-in-one platform for English stories, classic books, the 12 verb tenses, active/passive voice, vocabulary, and conversational fluency.</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -470,15 +607,17 @@ else:
             if search_query.lower() in a['title'].lower()
             or search_query.lower() in a['summary'].lower()
             or search_query.lower() in a.get('story_preview', '').lower()
+            or search_query.lower() in a.get('vocab_preview', '').lower()
+            or search_query.lower() in a.get('grammar_preview', '').lower()
         ]
     if category_filter != "All Categories":
         filtered_articles = [a for a in filtered_articles if a['category'].lower() == category_filter.lower()]
 
     st.markdown(f"""
     <div class="section-head">
-        <h3>Latest Stories, News & Real Reports ({len(filtered_articles)} Available)</h3>
+        <h3>Complete English Stories, Books & Fluency Lessons ({len(filtered_articles)} Available)</h3>
     </div>
-    <div class="section-sub">✨ Showing complete story text and verified facts for: <b>{category_filter}</b></div>
+    <div class="section-sub">✨ Showing full story scripts, key vocabulary, and grammar patterns for: <b>{category_filter}</b></div>
     """, unsafe_allow_html=True)
 
     render_article_feed(filtered_articles, prefix_key="home_feed")
@@ -487,14 +626,14 @@ st.markdown("<br>", unsafe_allow_html=True)
 
 # ---------- True Real-Time Metrics Grid ----------
 m1, m2, m3, m4, m5 = st.columns(5)
-with m1: st.metric("Live Active Visitors", f"{real_active_users} online", "🟢 Real-time session")
+with m1: st.metric("Live Active Learners", f"{real_active_users} online", "🟢 Real-time session")
 with m2: st.metric("Total Page Views", f"{st.session_state.page_views:,}", "📈 Live counter")
 with m3: st.metric("Est. AdSense Revenue", f"${real_adsense_revenue:,.4f} USD", "💎 Calculated real-time")
-with m4: st.metric("Total Articles & Tales", f"{len(st.session_state.master_db)} active", "⚡ 40 per topic")
+with m4: st.metric("Total English Lessons", f"{len(st.session_state.master_db)} active", "⚡ 40 per topic")
 with m5: st.metric("Saved Bookmarks", f"{len(st.session_state.bookmarks)} saved", "🔖 True user saves")
 
 st.markdown("""
 <div class="footer">
-    QELVYQ &bull; Knowledge in Real Time &bull; True Real-Time Telemetry Edition
+    QELVYQ &bull; 24-7 English & English Pulse Mastery Hub &bull; 100% English Immersion Edition
 </div>
 """, unsafe_allow_html=True)
