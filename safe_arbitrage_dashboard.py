@@ -82,7 +82,7 @@ div[data-testid="stHorizontalBlock"] { gap: 0.8rem; }
 """, unsafe_allow_html=True)
 
 # =========================================================
-# 1. สร้างฐานข้อมูลเนื้อหาจริงและนิทานฉบับเต็ม (หมวดละ 40 เรื่อง = 240 เรื่อง)
+# 1. สร้างฐานข้อมูลเนื้อหาจริง (หมวดละ 40 เรื่อง = 240 เรื่อง)
 # =========================================================
 def build_real_verified_database():
     db = []
@@ -99,7 +99,7 @@ def build_real_verified_database():
                 (
                     "The Story of Tam and Cam (Vietnamese Folklore Classic)",
                     "A classic Southeast Asian folk tale of two half-sisters, Tam and Cam, illustrating how kindness, resilience, and virtue ultimately triumph over cruelty and envy.",
-                    "Once upon a time in ancient Vietnam, there lived two half-sisters named Tam and Cam. Tam was gentle, hardworking, and kind-hearted, while her stepmother and stepsister Cam were cruel and lazy. Whenever Tam found happiness—whether raising a golden goby fish in a well or attending the Royal Autumn Festival—her stepmother conspired to take it away. Yet, guided by the spirit of Bụt (a benevolent fairy figure) and her own unyielding purity, Tam was chosen by the King as his Queen after fitting into a lost embroidered slipper. Even through trials of reincarnation as a golden orioles bird, a peach tree, and a sacred thị fruit, Tam's goodness endured, reuniting her with the King and teaching generations that truth and kindness can never be extinguished."
+                    "Once upon a time in ancient Vietnam, there lived two half-sisters named Tam and Cam. Tam was gentle, hardworking, and kind-hearted, while her stepmother and stepsister Cam were cruel and lazy. Whenever Tam found happiness—whether raising a golden goby fish in a well or attending the Royal Autumn Festival—her stepmother conspired to take it away. Yet, guided by the spirit of Bụt (a benevolent fairy figure) and her own unyielding purity, Tam was chosen by the King as his Queen after fitting into a lost embroidered slipper. Even through trials of reincarnation as a golden oriole bird, a peach tree, and a sacred thị fruit, Tam's goodness endured, reuniting her with the King and teaching generations that truth and kindness can never be extinguished."
                 ),
                 (
                     "Aesop’s Fable: The Lion and the Mouse (Full Moral Story)",
@@ -238,7 +238,7 @@ def build_real_verified_database():
 if "master_db" not in st.session_state or len(st.session_state.master_db) < 240:
     st.session_state.master_db = build_real_verified_database()
 
-# Bookmarks เริ่มต้นเป็น 0 ตามความจริง (ไม่มีการยัดค่าปลอม)
+# Bookmarks เริ่มต้นเป็น 0 ตามความจริง
 if "bookmarks" not in st.session_state:
     st.session_state.bookmarks = []
 
@@ -495,6 +495,7 @@ with m3: st.metric("Est. AdSense Revenue", f"${real_adsense_revenue:,.4f} USD", 
 with m4: st.metric("Total Articles & Tales", f"{len(st.session_state.master_db)} active", "⚡ 40 per topic")
 with m5: st.metric("Saved Bookmarks", f"{len(st.session_state.bookmarks)} saved", "🔖 True user saves")
 
+# Footer (แก้ไขปัญหาเครื่องหมายคำพูดคร่อมบรรทัดเพื่อให้โค้ดรันผ่าน 100%)
 st.markdown("""
 <div class="footer">
     QELVYQ &bull; Knowledge in Real Time &bull; True Real-Time Telemetry Edition
