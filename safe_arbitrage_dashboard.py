@@ -4,7 +4,7 @@ import streamlit as st
 
 # Page Configuration
 st.set_page_config(
-    page_title="Card Shoe Advanced Analytics Simulator",
+    page_title="Card Shoe Multi-Algorithm Simulator",
     page_icon="🃏",
     layout="wide",
 )
@@ -49,31 +49,30 @@ lang = st.sidebar.selectbox(
     "Select Language / เลือกภาษา", ["English", "ไทย"], index=0
 )
 
-# Dictionary for Multi-language Support
 translations = {
     "English": {
         "title": (
-            "🃏 Advanced Card Shoe Simulator (Monte Carlo + HMM + Bayesian)"
+            "🃏 Card Shoe Multi-Algorithm Predictor (Monte Carlo + HMM +"
+            " Bayesian)"
         ),
         "subtitle": (
-            "Predicting outcomes using **50-Round Editable Grid Table**, **Hidden"
-            " Markov Models (HMM)**, **Bayesian Inference**, and **Monte"
-            " Carlo**."
+            "Advanced prediction using **Monte Carlo Simulation**, **Hidden"
+            " Markov Models (HMM)**, **Bayesian Inference**, and **50-Round"
+            " Grid Analytics**."
         ),
         "grid_title": "1️⃣ Editable Grid Table (50 Rounds Historical Data Entry)",
         "grid_desc": (
             "💡 **50-Round Grid Table:** Click or check the boxes (Red, Blue,"
             " Tie) to record historical data directly like Excel for analysis."
         ),
-        "roadmap_title": (
-            "2️⃣ Roadmap & Advanced Algorithm Analytics (HMM & Bayesian)"
-        ),
+        "roadmap_title": "2️⃣ Roadmap & Last 30-Round Trend Analytics",
         "pred_title": (
-            "3️⃣ Multi-Model Next Round Prediction & Strict Betting Decision"
+            "3️⃣ Multi-Algorithm Next Round Prediction & Strict Betting"
+            " Decision"
         ),
-        "red_prob": "🔴 Red Win Probability (Integrated)",
-        "blue_prob": "🔵 Blue Win Probability (Integrated)",
-        "tie_prob": "🟢 Tie Probability (Integrated)",
+        "red_prob": "🔴 Red Win Probability",
+        "blue_prob": "🔵 Blue Win Probability",
+        "tie_prob": "🟢 Tie Probability",
         "rec_title": "🎯 Betting Recommendation (Strict 90% Rule):",
         "bet_on": "✅ Recommendation: Bet on 【",
         "confirmed": "】 — Absolutely Confirmed! (Confidence: ",
@@ -98,29 +97,27 @@ translations = {
         "ties": "Ties",
         "no_data": (
             "Please enter round outcomes in the 50-round grid table above to"
-            " start advanced analytics."
+            " start analytics."
         ),
     },
     "ไทย": {
         "title": (
-            "🃏 ระบบจำลองขั้นสูง (Monte Carlo + HMM + Bayesian สำหรับขอนไพ่)"
+            "🃏 ระบบพยากรณ์ไพ่หลายอัลกอริทึม (Monte Carlo + HMM + Bayesian)"
         ),
         "subtitle": (
-            "พยากรณ์ผลลัพธ์ด้วย **ตารางกริดแก้ไขได้ 50 รอบ**, **Hidden Markov"
-            " Models (HMM)**, **Bayesian Inference**, และ **Monte Carlo**"
+            "วิเคราะห์ขั้นสูงด้วย **Monte Carlo**, **Hidden Markov Models"
+            " (HMM)**, **Bayesian Inference**, และ **ตารางกริด 50 รอบ**"
         ),
         "grid_title": "1️⃣ ตารางกริดบันทึกข้อมูลย้อนหลัง (50 รอบ)",
         "grid_desc": (
             "💡 **ตารางกริด 50 รอบ:** คลิกติ๊กเลือกผลย้อนหลัง (Red, Blue, Tie)"
             " หรือพิมพ์บันทึกข้อมูลได้โดยตรงเหมือน Excel"
         ),
-        "roadmap_title": (
-            "2️⃣ แผนภูมิ Roadmap และการวิเคราะห์เชิงลึก (HMM & Bayesian)"
-        ),
-        "pred_title": "3️⃣ พยากรณ์ตาถัดไป & เกณฑ์คุมเข้มการเดิมพัน 90%",
-        "red_prob": "🔴 โอกาสฝ่ายแดงชนะ (รวมทุกอัลกอริทึม)",
-        "blue_prob": "🔵 โอกาสฝ่ายน้ำเงินชนะ (รวมทุกอัลกอริทึม)",
-        "tie_prob": "🟢 โอกาสเสมอ (รวมทุกอัลกอริทึม)",
+        "roadmap_title": "2️⃣ แผนภูมิ Roadmap และวิเคราะห์เทรนด์ 30 ตาล่าสุด",
+        "pred_title": "3️⃣ พยากรณ์ตาถัดไป (Multi-Algorithm) & เกณฑ์ความมั่นใจ 90%",
+        "red_prob": "🔴 โอกาสฝ่ายแดงชนะ",
+        "blue_prob": "🔵 โอกาสฝ่ายน้ำเงินชนะ",
+        "tie_prob": "🟢 โอกาสเสมอ",
         "rec_title": "🎯 คำแนะนำการเดิมพัน (กฎความมั่นใจ 90%):",
         "bet_on": "✅ คำแนะนำ: ควรลงเดิมพันฝั่ง 【",
         "confirmed": "】 — ยืนยันความมั่นใจเต็มร้อย! (ความน่าจะเป็น: ",
@@ -227,7 +224,7 @@ for idx, row in edited_grid_df.iterrows():
             "notes": str(row.get("Notes / Card Ranks", "")),
         })
 
-# --- Section 2: Display Roadmap & Analytics ---
+# --- Section 2: Display Roadmap & Last 30-Round Analytics ---
 st.markdown("---")
 st.subheader(t["roadmap_title"])
 
@@ -248,6 +245,28 @@ if processed_rounds:
 
     st.markdown(badges_html, unsafe_allow_html=True)
 
+    last_30_rounds = processed_rounds[-30:]
+    recent_winners = [r["winner"] for r in last_30_rounds]
+
+    r_count_30 = recent_winners.count("Red")
+    b_count_30 = recent_winners.count("Blue")
+    t_count_30 = recent_winners.count("Tie")
+    total_30 = len(recent_winners)
+
+    col_p1, col_p2, col_p3 = st.columns(3)
+    col_p1.metric(
+        f"Last 30 - {t['red_wins']}",
+        f"{r_count_30} ({r_count_30/total_30*100:.1f}%)",
+    )
+    col_p2.metric(
+        f"Last 30 - {t['blue_wins']}",
+        f"{b_count_30} ({b_count_30/total_30*100:.1f}%)",
+    )
+    col_p3.metric(
+        f"Last 30 - {t['ties']}",
+        f"{t_count_30} ({t_count_30/total_30*100:.1f}%)",
+    )
+
     total_r = len(processed_rounds)
     red_wins = sum(1 for r in processed_rounds if r["winner"] == "Red")
     blue_wins = sum(1 for r in processed_rounds if r["winner"] == "Blue")
@@ -261,9 +280,9 @@ else:
     st.info(t["no_data"])
 
 
-# --- Advanced Multi-Model Analytics Engine (Monte Carlo + HMM + Bayesian) ---
-def advanced_multi_model_analysis(rounds_history, game_mode, num_simulations):
-    # 1. Monte Carlo Base Simulation (Shoe Composition)
+# --- Multi-Algorithm Engine: Monte Carlo + HMM + Bayesian Inference ---
+def run_multi_algorithm_engine(rounds_history, game_mode, num_simulations):
+    # 1. Monte Carlo Shoe Composition Simulation
     possible_decks = [2, 3]
     valid_deck_results = {}
 
@@ -273,6 +292,9 @@ def advanced_multi_model_analysis(rounds_history, game_mode, num_simulations):
         for rank in range(1, 14):
             max_cards = 4 * d_count
             remaining_shoe.extend([rank] * max_cards)
+
+        if len(remaining_shoe) < 6:
+            continue
 
         sim_counts = {"Red": 0, "Blue": 0, "Tie": 0}
         cards_per_side = 2 if "Baccarat" in game_mode else 1
@@ -297,62 +319,55 @@ def advanced_multi_model_analysis(rounds_history, game_mode, num_simulations):
                 sim_counts["Tie"] += 1
 
         valid_deck_results[d_count] = {
-            k: (v / num_simulations) for k, v in sim_counts.items()
+            k: (v / num_simulations) * 100 for k, v in sim_counts.items()
         }
 
-    mc_probs = {"Red": 0.33, "Blue": 0.33, "Tie": 0.34}
+    mc_probs = {"Red": 33.3, "Blue": 33.3, "Tie": 33.4}
     if valid_deck_results:
+        avg_mc = {"Red": 0.0, "Blue": 0.0, "Tie": 0.0}
         for d_res in valid_deck_results.values():
-            for k in mc_probs:
-                mc_probs[k] += d_res[k] / len(valid_deck_results)
+            for k in avg_mc:
+                avg_mc[k] += d_res[k] / len(valid_deck_results)
+        mc_probs = avg_mc
 
-    # 2. Hidden Markov Models (HMM) Approximation for Pattern Transition
-    # วิเคราะห์สถานะเบื้องหลัง (Hidden States เช่น เค้ามังกร หรือ เค้าสลับ) จาก 15 ตาล่าสุด
-    hmm_probs = {"Red": 0.33, "Blue": 0.33, "Tie": 0.34}
+    # 2. Hidden Markov Models (HMM) Trend & State Transition Analysis
+    hmm_probs = {"Red": 33.3, "Blue": 33.3, "Tie": 33.4}
     if len(rounds_history) >= 2:
-        recent = [r["winner"] for r in rounds_history[-15:]]
         transitions = {
-            "Red": {"Red": 0, "Blue": 0, "Tie": 0},
-            "Blue": {"Red": 0, "Blue": 0, "Tie": 0},
-            "Tie": {"Red": 0, "Blue": 0, "Tie": 0},
+            "Red": {"Red": 1, "Blue": 1, "Tie": 1},
+            "Blue": {"Red": 1, "Blue": 1, "Tie": 1},
+            "Tie": {"Red": 1, "Blue": 1, "Tie": 1},
         }
-        for i in range(len(recent) - 1):
-            curr_state = recent[i]
-            next_state = recent[i + 1]
-            if curr_state in transitions and next_state in transitions[curr_state]:
-                transitions[curr_state][next_state] += 1
+        for i in range(len(rounds_history) - 1):
+            curr_w = rounds_history[i]["winner"]
+            next_w = rounds_history[i + 1]["winner"]
+            if curr_w in transitions and next_w in transitions[curr_w]:
+                transitions[curr_w][next_w] += 1
 
-        last_state = recent[-1]
-        total_trans = sum(transitions[last_state].values())
-        if total_trans > 0:
-            for k in hmm_probs:
-                hmm_probs[k] = transitions[last_state][k] / total_trans
+        last_w = rounds_history[-1]["winner"]
+        if last_w in transitions:
+            total_trans = sum(transitions[last_w].values())
+            hmm_probs = {
+                k: (v / total_trans) * 100 for k, v in transitions[last_w].items()
+            }
 
-    # 3. Bayesian Inference (Updating Prior with Likelihood from Last 30 Rounds)
-    # Prior = Monte Carlo + HMM, Likelihood = Last 30 Rounds Frequency
-    bayes_probs = {
-        k: (mc_probs[k] * 0.4 + hmm_probs[k] * 0.4) for k in ["Red", "Blue", "Tie"]
+    # 3. Bayesian Inference (Updating Prior Beliefs with Likelihood Evidence)
+    # Prior = Monte Carlo Probs | Likelihood = HMM Trend Probs
+    prior_weight = 0.50
+    likelihood_weight = 0.50
+
+    bayesian_posterior = {}
+    total_posterior = 0
+    for k in ["Red", "Blue", "Tie"]:
+        posterior_val = (mc_probs.get(k, 33.3) * prior_weight) + (
+            hmm_probs.get(k, 33.3) * likelihood_weight
+        )
+        bayesian_posterior[k] = posterior_val
+        total_posterior += posterior_val
+
+    final_probs = {
+        k: (v / total_posterior) * 100 for k, v in bayesian_posterior.items()
     }
-    if len(rounds_history) > 0:
-        last_30 = rounds_history[-30:]
-        h_red = sum(1 for r in last_30 if r["winner"] == "Red")
-        h_blue = sum(1 for r in last_30 if r["winner"] == "Blue")
-        h_tie = sum(1 for r in last_30 if r["winner"] == "Tie")
-        h_total = len(last_30)
-
-        likelihood = {
-            "Red": h_red / h_total,
-            "Blue": h_blue / h_total,
-            "Tie": h_tie / h_total,
-        }
-
-        # Posterior Probs via Bayesian Updating
-        for k in bayes_probs:
-            bayes_probs[k] = (bayes_probs[k] * 0.6) + (likelihood[k] * 0.4)
-
-    # Normalize to 100%
-    total_score = sum(bayes_probs.values())
-    final_probs = {k: (v / total_score) * 100 for k, v in bayes_probs.items()}
     return final_probs
 
 
@@ -360,9 +375,7 @@ def advanced_multi_model_analysis(rounds_history, game_mode, num_simulations):
 st.markdown("---")
 st.subheader(t["pred_title"])
 
-final_probs = advanced_multi_model_analysis(
-    processed_rounds, game_mode, num_sims
-)
+final_probs = run_multi_algorithm_engine(processed_rounds, game_mode, num_sims)
 
 m1, m2, m3 = st.columns(3)
 m1.metric(t["red_prob"], f"{final_probs['Red']:.2f}%")
