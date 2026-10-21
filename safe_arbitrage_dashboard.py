@@ -4,39 +4,65 @@ import streamlit as st
 
 # Page Configuration
 st.set_page_config(
-    page_title="Card Shoe Multi-Algorithm Simulator",
-    page_icon="🃏",
-    layout="wide",
+    page_title="Pro Card Shoe Predictor Dashboard", page_icon="🃏", layout="wide"
 )
 
-# Custom CSS Styling
+# Professional Modern UI Styling & Custom CSS (Dashboard Branding)
 st.markdown(
     """
 <style>
-    .big-badge {
-        font-size: 22px;
-        font-weight: bold;
-        padding: 15px;
-        border-radius: 10px;
+    /* Main Background & Font */
+    .stApp {
+        background-color: #0e1117;
+        color: #ffffff;
+    }
+    
+    /* Professional Card Containers */
+    .metric-card {
+        background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+        border: 1px solid #374151;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
         text-align: center;
         margin-bottom: 15px;
     }
-    .red-win { background-color: #ff4b4b; color: white; }
-    .blue-win { background-color: #1f77b4; color: white; }
-    .tie-win { background-color: #2ca02c; color: white; }
-    .wait-signal { background-color: #6c757d; color: white; }
+    
+    /* Big Betting Recommendation Badges */
+    .big-badge {
+        font-size: 22px;
+        font-weight: bold;
+        padding: 20px;
+        border-radius: 12px;
+        text-align: center;
+        margin-top: 15px;
+        margin-bottom: 15px;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+    }
+    .red-win { background: linear-gradient(135deg, #ef4444 0%, #991b1b 100%); color: white; border: 1px solid #f87171; }
+    .blue-win { background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%); color: white; border: 1px solid #60a5fa; }
+    .tie-win { background: linear-gradient(135deg, #10b981 0%, #047857 100%); color: white; border: 1px solid #34d399; }
+    .wait-signal { background: linear-gradient(135deg, #4b5563 0%, #1f2937 100%); color: #e5e7eb; border: 1px solid #6b7280; }
+    
+    /* Roadmap History Dots */
     .history-dot {
         display: inline-block;
-        width: 35px;
-        height: 35px;
-        line-height: 35px;
+        width: 38px;
+        height: 38px;
+        line-height: 38px;
         border-radius: 50%;
         text-align: center;
         font-weight: bold;
         color: white;
-        margin: 3px;
-        font-size: 13px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        margin: 4px;
+        font-size: 14px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+    }
+    
+    /* Sidebar Styling */
+    section[data-testid="stSidebar"] {
+        background-color: #111827;
+        border-right: 1px solid #1f2937;
     }
 </style>
 """,
@@ -44,21 +70,18 @@ st.markdown(
 )
 
 # --- Sidebar Settings & Multi-language Selector ---
-st.sidebar.header("🌐 Language / ภาษา")
+st.sidebar.markdown("### 🌐 Language / ภาษา")
 lang = st.sidebar.selectbox(
     "Select Language / เลือกภาษา", ["English", "ไทย"], index=0
 )
 
 translations = {
     "English": {
-        "title": (
-            "🃏 Card Shoe Multi-Algorithm Predictor (Monte Carlo + HMM +"
-            " Bayesian)"
-        ),
+        "title": "🃏 PRO CARD SHOE MULTI-ALGORITHM PREDICTOR",
         "subtitle": (
-            "Advanced prediction using **Monte Carlo Simulation**, **Hidden"
-            " Markov Models (HMM)**, **Bayesian Inference**, and **50-Round"
-            " Grid Analytics**."
+            "Professional Analytics Dashboard powered by **Monte Carlo"
+            " Simulation**, **HMM**, **Bayesian Inference**, and **50-Round Grid"
+            " Table**."
         ),
         "grid_title": "1️⃣ Editable Grid Table (50 Rounds Historical Data Entry)",
         "grid_desc": (
@@ -73,12 +96,13 @@ translations = {
         "red_prob": "🔴 Red Win Probability",
         "blue_prob": "🔵 Blue Win Probability",
         "tie_prob": "🟢 Tie Probability",
-        "rec_title": "🎯 Betting Recommendation (Strict 90% Rule):",
-        "bet_on": "✅ Recommendation: Bet on 【",
-        "confirmed": "】 — Absolutely Confirmed! (Confidence: ",
+        "rec_title": "🎯 Professional Betting Recommendation (Strict 90% Rule):",
+        "bet_on": "✅ RECOMMENDATION: Bet on 【",
+        "confirmed": "】 — CONFIRMED & SECURE! (Confidence: ",
         "wait": (
-            "⛔ Recommendation: 【DO NOT BET / WAIT】 — Confidence is {prob:.2f}%"
-            " (Below strict 90% requirement). Skip this round!"
+            "⛔ RECOMMENDATION: 【DO NOT BET / WAIT】 — Confidence is"
+            " {prob:.2f}% (Below strict 90% professional requirement). Skip"
+            " this round!"
         ),
         "reset": "🗑️ Reset Grid Data & Clear History",
         "mode": "Game Scoring Mode:",
@@ -88,7 +112,7 @@ translations = {
         "mode_single": "Single Card High Value (A=1 to K=13)",
         "sims": "Monte Carlo Iterations (per deck)",
         "threshold_info": (
-            "🔒 Strict Decision Threshold: **90%**\n\n(Will advise to bet"
+            "🔒 Risk Management Threshold: **90%**\n\n(Will advise to bet"
             " **ONLY** if confidence reaches 90%+)"
         ),
         "total_valid": "Total Valid Rounds Recorded:",
@@ -97,33 +121,32 @@ translations = {
         "ties": "Ties",
         "no_data": (
             "Please enter round outcomes in the 50-round grid table above to"
-            " start analytics."
+            " start professional analytics."
         ),
     },
     "ไทย": {
-        "title": (
-            "🃏 ระบบพยากรณ์ไพ่หลายอัลกอริทึม (Monte Carlo + HMM + Bayesian)"
-        ),
+        "title": "🃏 แดชบอร์ดพยากรณ์ไพ่ระดับมืออาชีพ (MULTI-ALGORITHM)",
         "subtitle": (
-            "วิเคราะห์ขั้นสูงด้วย **Monte Carlo**, **Hidden Markov Models"
-            " (HMM)**, **Bayesian Inference**, และ **ตารางกริด 50 รอบ**"
+            "ระบบวิเคราะห์ขอนไพ่ขั้นสูงผสาน **Monte Carlo**, **HMM**, **Bayesian"
+            " Inference**, และ **ตารางกริด 50 รอบ**"
         ),
         "grid_title": "1️⃣ ตารางกริดบันทึกข้อมูลย้อนหลัง (50 รอบ)",
         "grid_desc": (
             "💡 **ตารางกริด 50 รอบ:** คลิกติ๊กเลือกผลย้อนหลัง (Red, Blue, Tie)"
-            " หรือพิมพ์บันทึกข้อมูลได้โดยตรงเหมือน Excel"
+            " หรือพิมพ์บันทึกข้อมูลได้โดยตรงเหมือนใช้งาน Excel"
         ),
         "roadmap_title": "2️⃣ แผนภูมิ Roadmap และวิเคราะห์เทรนด์ 30 ตาล่าสุด",
-        "pred_title": "3️⃣ พยากรณ์ตาถัดไป (Multi-Algorithm) & เกณฑ์ความมั่นใจ 90%",
+        "pred_title": "3️⃣ พยากรณ์ตาถัดไป & เกณฑ์คุมเข้มการเดิมพัน 90%",
         "red_prob": "🔴 โอกาสฝ่ายแดงชนะ",
         "blue_prob": "🔵 โอกาสฝ่ายน้ำเงินชนะ",
         "tie_prob": "🟢 โอกาสเสมอ",
-        "rec_title": "🎯 คำแนะนำการเดิมพัน (กฎความมั่นใจ 90%):",
+        "rec_title": "🎯 คำแนะนำการเดิมพันระดับมืออาชีพ (กฎความมั่นใจ 90%):",
         "bet_on": "✅ คำแนะนำ: ควรลงเดิมพันฝั่ง 【",
-        "confirmed": "】 — ยืนยันความมั่นใจเต็มร้อย! (ความน่าจะเป็น: ",
+        "confirmed": "】 — สัญญาณยืนยันความมั่นใจสูงสุด! (ความน่าจะเป็น: ",
         "wait": (
             "⛔ คำแนะนำ: 【ห้ามลงเดิมพัน / รอจังหวะ (DO NOT BET / WAIT)】"
-            " — ความน่าจะเป็น {prob:.2f}% (ยังไม่ถึงเกณฑ์ 90%) ข้ามตานี้ไปก่อน!"
+            " — ความน่าจะเป็น {prob:.2f}% (ยังไม่ถึงเกณฑ์ 90% ตามมาตรฐานความปลอดภัย)"
+            " ข้ามตานี้ไปก่อน!"
         ),
         "reset": "🗑️ ล้างข้อมูลกริด & เริ่มขอนใหม่",
         "mode": "รูปแบบการคิดแต้ม:",
@@ -131,7 +154,7 @@ translations = {
         "mode_single": "วัดแต้มหน้าไพ่เดี่ยว (A=1 ถึง K=13)",
         "sims": "จำนวนรอบจำลอง Monte Carlo (ต่อสำรับ)",
         "threshold_info": (
-            "🔒 เกณฑ์การตัดสินใจ: **90%**\n\n(จะแนะนำให้ลงแทงก็ต่อเมื่อความมั่นใจ"
+            "🔒 เกณฑ์บริหารความเสี่ยง: **90%**\n\n(ระบบจะแนะนำให้ลงแทงก็ต่อเมื่อความมั่นใจ"
             " ถึง 90% ขึ้นไปเท่านั้น)"
         ),
         "total_valid": "จำนวนตาทั้งหมดที่บันทึก:",
@@ -146,8 +169,9 @@ translations = {
 
 t = translations[lang]
 
-st.title(t["title"])
+st.markdown(f"# {t['title']}")
 st.markdown(t["subtitle"])
+st.markdown("---")
 
 # Initialize Session State for Grid Table History (Total 50 Rounds)
 if "grid_history" not in st.session_state:
@@ -163,7 +187,7 @@ if "grid_history" not in st.session_state:
     st.session_state.grid_history = pd.DataFrame(initial_data)
 
 # --- Sidebar Settings ---
-st.sidebar.header("⚙️ Simulation Parameters")
+st.sidebar.markdown("### ⚙️ Simulation Parameters")
 
 game_mode = st.sidebar.radio(
     t["mode"], [t["mode_bacc"], t["mode_single"]]
@@ -191,7 +215,7 @@ if st.sidebar.button(t["reset"], use_container_width=True):
     st.rerun()
 
 # --- Section 1: Editable Grid Table for Historical Data Analysis (50 Rounds) ---
-st.subheader(t["grid_title"])
+st.markdown(f"### {t['grid_title']}")
 st.markdown(t["grid_desc"])
 
 edited_grid_df = st.data_editor(
@@ -226,19 +250,19 @@ for idx, row in edited_grid_df.iterrows():
 
 # --- Section 2: Display Roadmap & Last 30-Round Analytics ---
 st.markdown("---")
-st.subheader(t["roadmap_title"])
+st.markdown(f"### {t['roadmap_title']}")
 
 if processed_rounds:
     badges_html = ""
     for r in processed_rounds:
         if r["winner"] == "Red":
-            bg = "#ff4b4b"
+            bg = "#ef4444"
             txt = "R"
         elif r["winner"] == "Blue":
-            bg = "#1f77b4"
+            bg = "#3b82f6"
             txt = "B"
         else:
-            bg = "#2ca02c"
+            bg = "#10b981"
             txt = "T"
         round_num = r["round"]
         badges_html += f'<span class="history-dot" style="background-color:{bg};" title="Round {round_num}">{txt}</span>'
@@ -254,18 +278,21 @@ if processed_rounds:
     total_30 = len(recent_winners)
 
     col_p1, col_p2, col_p3 = st.columns(3)
-    col_p1.metric(
-        f"Last 30 - {t['red_wins']}",
-        f"{r_count_30} ({r_count_30/total_30*100:.1f}%)",
-    )
-    col_p2.metric(
-        f"Last 30 - {t['blue_wins']}",
-        f"{b_count_30} ({b_count_30/total_30*100:.1f}%)",
-    )
-    col_p3.metric(
-        f"Last 30 - {t['ties']}",
-        f"{t_count_30} ({t_count_30/total_30*100:.1f}%)",
-    )
+    with col_p1:
+        st.markdown(
+            f'<div class="metric-card"><h4>{t["red_wins"]} (Last 30)</h4><h2>{r_count_30} ({r_count_30/total_30*100:.1f}%)</h2></div>',
+            unsafe_allow_html=True,
+        )
+    with col_p2:
+        st.markdown(
+            f'<div class="metric-card"><h4>{t["blue_wins"]} (Last 30)</h4><h2>{b_count_30} ({b_count_30/total_30*100:.1f}%)</h2></div>',
+            unsafe_allow_html=True,
+        )
+    with col_p3:
+        st.markdown(
+            f'<div class="metric-card"><h4>{t["ties"]} (Last 30)</h4><h2>{t_count_30} ({t_count_30/total_30*100:.1f}%)</h2></div>',
+            unsafe_allow_html=True,
+        )
 
     total_r = len(processed_rounds)
     red_wins = sum(1 for r in processed_rounds if r["winner"] == "Red")
@@ -282,13 +309,11 @@ else:
 
 # --- Multi-Algorithm Engine: Monte Carlo + HMM + Bayesian Inference ---
 def run_multi_algorithm_engine(rounds_history, game_mode, num_simulations):
-    # 1. Monte Carlo Shoe Composition Simulation
     possible_decks = [2, 3]
     valid_deck_results = {}
 
     for d_count in possible_decks:
         remaining_shoe = []
-        is_possible = True
         for rank in range(1, 14):
             max_cards = 4 * d_count
             remaining_shoe.extend([rank] * max_cards)
@@ -330,7 +355,6 @@ def run_multi_algorithm_engine(rounds_history, game_mode, num_simulations):
                 avg_mc[k] += d_res[k] / len(valid_deck_results)
         mc_probs = avg_mc
 
-    # 2. Hidden Markov Models (HMM) Trend & State Transition Analysis
     hmm_probs = {"Red": 33.3, "Blue": 33.3, "Tie": 33.4}
     if len(rounds_history) >= 2:
         transitions = {
@@ -351,8 +375,6 @@ def run_multi_algorithm_engine(rounds_history, game_mode, num_simulations):
                 k: (v / total_trans) * 100 for k, v in transitions[last_w].items()
             }
 
-    # 3. Bayesian Inference (Updating Prior Beliefs with Likelihood Evidence)
-    # Prior = Monte Carlo Probs | Likelihood = HMM Trend Probs
     prior_weight = 0.50
     likelihood_weight = 0.50
 
@@ -373,14 +395,26 @@ def run_multi_algorithm_engine(rounds_history, game_mode, num_simulations):
 
 # --- Section 3: Prediction & Strict 90% Confidence Decision ---
 st.markdown("---")
-st.subheader(t["pred_title"])
+st.markdown(f"### {t['pred_title']}")
 
 final_probs = run_multi_algorithm_engine(processed_rounds, game_mode, num_sims)
 
 m1, m2, m3 = st.columns(3)
-m1.metric(t["red_prob"], f"{final_probs['Red']:.2f}%")
-m2.metric(t["blue_prob"], f"{final_probs['Blue']:.2f}%")
-m3.metric(t["tie_prob"], f"{final_probs['Tie']:.2f}%")
+with m1:
+    st.markdown(
+        f'<div class="metric-card"><h3>{t["red_prob"]}</h3><h1 style="color: #ef4444;">{final_probs["Red"]:.2f}%</h1></div>',
+        unsafe_allow_html=True,
+    )
+with m2:
+    st.markdown(
+        f'<div class="metric-card"><h3>{t["blue_prob"]}</h3><h1 style="color: #3b82f6;">{final_probs["Blue"]:.2f}%</h1></div>',
+        unsafe_allow_html=True,
+    )
+with m3:
+    st.markdown(
+        f'<div class="metric-card"><h3>{t["tie_prob"]}</h3><h1 style="color: #10b981;">{final_probs["Tie"]:.2f}%</h1></div>',
+        unsafe_allow_html=True,
+    )
 
 best_side = max(final_probs, key=final_probs.get)
 best_side_name = (
@@ -390,7 +424,7 @@ best_side_name = (
 )
 best_prob = final_probs[best_side]
 
-st.markdown(f"### {t['rec_title']}")
+st.markdown(f"#### {t['rec_title']}")
 
 if best_prob >= confidence_threshold:
     if best_side == "Tie":
